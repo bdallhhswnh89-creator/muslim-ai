@@ -493,6 +493,21 @@ app.put('/api/global', adminAuth, (req, res) => {
   dbSave();
   res.json({ ok: true, saved: n });
 });
+app.use(['/data','/.env','/server.js','/package.json'],(req,res)=>res.status(404).end());
+app.use(express.static(__dirname, {
+  maxAge: '1h',
+  setHeaders(res, fp) {
+    if (fp.endsWith('.html')) res.setHeader('Cache-Control', 'no-store');
+  },
+}));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'Muslim.html')));
+app.use((req, res) => res.status(404).json({ error: 'غير موجود' }));
+app.use((err, req, res, next) => {
+  if (err && err.type === 'entity.too.large') return res.status(413).json({ error: 'حجم الطلب كبير جداً' });
+  if (err && err.type === 'entity.parse.failed') return res.status(400).json({ error: 'JSON غير صالح' });
+  console.error('unhandled:', err && err.message);
+  res.status(500).json({ error: 'خطأ داخلي في الخادم' });
+});
 
 app.listen(PORT, () => {
   console.log('OK: مسلم AI يعمل على http://localhost:' + PORT);
