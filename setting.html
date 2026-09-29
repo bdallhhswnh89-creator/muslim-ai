@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta name="theme-color" id="metaThemeColor" content="#157a55">
+<!--
+  ملاحظة إنتاجية (CSP):
+  القيمة الحالية مصممة للعمل كملف واحد أثناء التطوير. عند النشر، انقل السكربت
+  والأنماط إلى ملفات خارجية واستخدم nonce بدلاً من 'unsafe-inline'.
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' data: blob: https://cdn.islamic.network; connect-src 'self' https://cdn.islamic.network; base-uri 'none'; form-action 'self'">
+<title>الإعدادات — مسلم AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════════
+   صفحة الإعدادات — الإصدار المعاد هيكلته
+   الأنماط مبنية بالكامل على لوحة الألوان المحايدة لكود الواجهة الرئيسي
+   (--bg / --surface / --border / --text ...) دون أي لون مخصص إضافي.
+   ════════════════════════════════════════════════════════════════════ */
+:root{--bg:#f6f7f6;--sidebar:#eff1ef;--surface:#fff;--surface-2:#f0f2f0;--surface-3:#e7eae7;--border:#e2e5e2;--border-strong:#cfd4cf;--text:#1b1e1c;--text-2:#5f665f;--text-3:#91978f;--accent:#157a55;--accent-hover:#0f6646;--accent-soft:#e3f1ea;--accent-text:#0d5c3f;--user-bubble:#eceeec;--danger:#b3423a;--gold:#c9a227;--shadow:0 1px 3px rgba(15,25,20,.06);color-scheme:light}
+[data-theme="dark"]{--bg:#131615;--sidebar:#0e1110;--surface:#1a1e1c;--surface-2:#212624;--surface-3:#2a302d;--border:#262c29;--border-strong:#37403c;--text:#e7e9e7;--text-2:#a2a8a2;--text-3:#6f766f;--accent:#3fb984;--accent-hover:#57c795;--accent-soft:rgba(63,185,132,.13);--accent-text:#72d3a6;--user-bubble:#252a28;--shadow:0 1px 3px rgba(0,0,0,.35);color-scheme:dark}
+
+*{margin:0;padding:0;box-sizing:border-box;scrollbar-width:none}
+*::-webkit-scrollbar{width:0;height:0;display:none}
+body,input,textarea,button{font-family:'Quicksand','IBM Plex Sans Arabic',sans-serif;background:var(--bg);color:var(--text)}
+body{min-height:100vh;font-size:var(--fs,15px);transition:background-color .3s,color .3s}
+input,textarea{caret-color:var(--accent);color:var(--text)}
+button{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit;-webkit-tap-highlight-color:transparent;transition:background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .25s ease,transform .15s ease}
+[hidden]{display:none!important}
+.material-symbols-outlined{font-size:22px;line-height:1;user-select:none}
+
+/* ══ الهيكل العام ══ */
+.page{display:none;min-height:100vh;flex-direction:column}
+.page.active{display:flex;animation:pageIn .28s ease}
+@keyframes pageIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+.topbar{position:sticky;top:0;z-index:50;height:58px;display:flex;align-items:center;gap:4px;padding:0 10px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);border-bottom:1px solid var(--border)}
+.topbar h1{font-size:1rem;font-weight:700}
+.tb-btn{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;color:var(--text-2);transition:.2s;flex-shrink:0}
+.tb-btn:hover{background:var(--surface-2);color:var(--accent)}
+.tb-spacer{flex:1}
+.wrap{width:100%;max-width:620px;margin:0 auto;padding:20px 16px 60px;display:flex;flex-direction:column;gap:14px}
+
+/* ══ تسمية المجموعة ══ */
+.grp{font-size:.8rem;font-weight:600;color:var(--text-2);padding:0 10px}
+
+/* ══ البطاقات ══ */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
+.card>.acc+.acc .row,.card>.row+.row,.card>.acc+.row,.card>.row+.acc>.row{border-top:1px solid var(--border)}
+
+/* ══ صف الإعداد ══ */
+.row{display:flex;align-items:center;gap:12px;width:100%;padding:15px 16px;text-align:right;font-size:.93rem;font-weight:500;color:var(--text);transition:background-color .2s}
+.row:hover{background:var(--surface-2)}
+.row .t{flex:1;min-width:0}
+.row .t small{display:block;font-size:.72rem;color:var(--text-3);font-weight:400;margin-top:3px;line-height:1.7}
+.row .rv{font-size:.8rem;color:var(--text-3);font-weight:400;flex-shrink:0;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc.open .row .rv{color:var(--accent-text);font-weight:600}
+.row .chev{font-size:20px;color:var(--text-3);transition:transform .25s;flex-shrink:0}
+.row:hover .chev{color:var(--accent)}
+.acc.open .chev{transform:rotate(180deg)}
+.count{font-size:.68rem;font-weight:600;background:var(--accent-soft);color:var(--accent-text);border-radius:50px;padding:3px 11px;flex-shrink:0}
+
+/* ══ جسم الأكورديون ══ */
+.acc-body{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.3,.8,.3,1)}
+.acc.open .acc-body{max-height:640px}
+.acc-inner{padding:12px 16px 14px;display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--border);background:var(--surface-2)}
+.opt{display:flex;align-items:center;gap:10px;width:100%;text-align:right;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface);font-size:.86rem;color:var(--text-2);transition:.2s}
+.opt:hover{border-color:var(--accent);color:var(--accent)}
+.opt .t{flex:1;min-width:0}
+.opt .t small{display:block;font-size:.7rem;font-weight:400;color:var(--text-3);margin-top:3px;line-height:1.7}
+.opt>.material-symbols-outlined{font-size:18px;color:var(--accent);opacity:0;flex-shrink:0;transition:.2s}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-text);font-weight:600}
+.opt.sel .t small{color:var(--accent-text);opacity:.85}
+.opt.sel>.material-symbols-outlined{opacity:1}
+
+/* ══ أيقونة الصف ══ */
+.ric{width:32px;height:32px;border-radius:9px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;flex-shrink:0}
+.ric .material-symbols-outlined{font-size:17px}
+.ric.danger{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger)}
+
+/* ══ الحقول والأزرار ══ */
+.f-field{margin-bottom:12px;text-align:right}
+.f-field label{font-size:.78rem;color:var(--text-2);display:block;margin-bottom:6px}
+.f-field input,.f-field textarea{width:100%;border:1px solid var(--border-strong);background:var(--surface);border-radius:12px;padding:12px 14px;font-size:.9rem;outline:none;transition:.25s;font-family:inherit;resize:vertical}
+.f-field input:focus,.f-field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.m-btn{padding:11px 20px;border-radius:12px;font-size:.85rem;font-weight:600;transition:.2s;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.m-btn .material-symbols-outlined{font-size:17px}
+.m-btn.pri{background:var(--accent);color:#fff}
+.m-btn.pri:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 6px 18px color-mix(in srgb,var(--accent) 30%,transparent)}
+.m-btn.ghost{border:1px solid var(--border-strong);color:var(--text-2);background:var(--surface)}
+.m-btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.m-btn.danger{background:var(--danger);color:#fff}
+.m-btn.danger:hover{transform:translateY(-1px);box-shadow:0 6px 18px color-mix(in srgb,var(--danger) 30%,transparent)}
+
+/* ══ منزلق حجم الخط ══ */
+.slider-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
+.slider-top{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--text-2);margin-bottom:8px}
+.slider-top b{color:var(--accent-text);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent);height:26px;cursor:pointer}
+.font-demo{margin-top:10px;font-size:1rem;line-height:2;color:var(--text);border-top:1px dashed var(--border-strong);padding-top:10px}
+
+/* ══ بطاقات العناصر (تعليمات / ذكريات) ══ */
+.item-card{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);animation:pageIn .28s ease}
+.item-card.off{opacity:.55}
+.item-card .tx{flex:1;font-size:.86rem;line-height:1.9;color:var(--text);min-width:0;overflow-wrap:break-word;word-break:break-word}
+.item-card .tools{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.mini-btn{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:var(--text-2);transition:.2s}
+.mini-btn:hover{background:var(--surface-3);color:var(--accent)}
+.mini-btn.del:hover{color:var(--danger)}
+.mini-btn .material-symbols-outlined{font-size:17px}
+.empty-note{text-align:center;font-size:.8rem;color:var(--text-3);padding:28px 10px;line-height:2;background:var(--surface);border:1px dashed var(--border-strong);border-radius:12px}
+.empty-note .material-symbols-outlined{font-size:32px;color:var(--text-3);margin-bottom:4px}
+
+/* ══ الصوت (أصوات المتصفح) ══ */
+.voice-row{display:flex;align-items:center;gap:10px;width:100%;text-align:right;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface);box-shadow:var(--shadow);font-size:.85rem;color:var(--text-2);transition:.2s}
+.voice-row:hover{border-color:var(--accent);color:var(--accent)}
+.voice-row.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-text);font-weight:600}
+.voice-row .vn{flex:1;text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.voice-row .vl{font-size:.66rem;color:var(--text-3);font-weight:400;flex-shrink:0}
+.voice-row>.material-symbols-outlined{font-size:19px;flex-shrink:0}
+.voice-row.sel>.material-symbols-outlined{color:var(--accent)}
+.voice-row:not(.sel)>.material-symbols-outlined{color:var(--text-3)}
+
+/* ══ منطقة الخطر ══ */
+.danger-card{background:var(--surface);border:1px solid color-mix(in srgb,var(--danger) 32%,var(--border));border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
+.danger-card .row .t small{color:color-mix(in srgb,var(--danger) 75%,var(--text-3))}
+.danger-card .row+.row{border-top:1px solid var(--border)}
+
+/* ══ النافذة المنبثقة والتنبيه ══ */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;display:none;place-items:center;padding:20px}
+.modal.open{display:grid}
+.modal-card{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;animation:pageIn .3s cubic-bezier(.26,1.32,.42,1)}
+.modal-card h3{font-size:1rem;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.modal-card h3 .material-symbols-outlined{color:var(--danger);font-size:20px}
+.modal-card p{font-size:.84rem;color:var(--text-2);line-height:1.9;margin-bottom:16px}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--text);color:var(--bg);padding:12px 24px;border-radius:12px;font-size:.85rem;z-index:600;transition:.35s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+/* ══ القارئ ══ */
+.reciter-row{display:flex;align-items:center;gap:10px;width:100%;text-align:right;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface);font-size:.86rem;color:var(--text-2);transition:.2s}
+.reciter-row:hover{border-color:var(--accent);color:var(--accent)}
+.reciter-row.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-text);font-weight:600}
+.reciter-row .rn{flex:1;text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reciter-row .rl{font-size:.68rem;color:var(--text-3);font-weight:400;flex-shrink:0}
+.reciter-row.sel .rl{color:var(--accent-text);opacity:.8}
+.reciter-row>.material-symbols-outlined{font-size:19px;flex-shrink:0}
+.reciter-row.sel>.material-symbols-outlined{color:var(--accent)}
+.reciter-row:not(.sel)>.material-symbols-outlined{color:var(--text-3)}
+.reciter-row .play-btn{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);flex-shrink:0;transition:.2s;border:none}
+.reciter-row .play-btn:hover{background:var(--accent);color:#fff}
+.reciter-row.playing{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,var(--surface))}
+.reciter-row.playing .play-btn{background:var(--gold);color:#fff;animation:recPulse 1.2s ease-in-out infinite}
+@keyframes recPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+.hint{font-size:.78rem;color:var(--text-3);line-height:1.9;margin-bottom:2px}
+@media(max-width:480px){.wrap{padding:16px 12px 50px}}
+</style>
+</head>
+<body>
+
+<!-- ══════════ الصفحة الرئيسية للإعدادات ══════════ -->
+<div class="page active" id="page-main">
+  <header class="topbar">
+    <button class="tb-btn" data-action="back" title="رجوع"><span class="material-symbols-outlined">arrow_forward</span></button>
+    <h1>الإعدادات</h1>
+  </header>
+  <div class="wrap">
+
+    <!-- الحساب -->
+    <div class="grp">الحساب</div>
+    <div class="card">
+      <div class="acc" data-set-acc>
+        <button class="row" data-action="toggle-acc">
+          <span class="ric"><span class="material-symbols-outlined">person</span></span>
+          <span class="t">الحساب<small id="accMailPreview"></small></span>
+          <span class="rv" id="accNamePreview"></span>
+          <span class="material-symbols-outlined chev">expand_more</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="f-field"><label for="setName">الاسم</label><input id="setName" maxlength="60" autocomplete="name"></div>
+          <div class="f-field"><label for="setMail">البريد الإلكتروني</label><input id="setMail" type="email" dir="ltr" style="text-align:left" maxlength="120" autocomplete="email"></div>
+          <div class="btn-row"><button class="m-btn pri" data-action="save-account"><span class="material-symbols-outlined">save</span> حفظ التعديلات</button></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- التخصيص -->
+    <div class="grp">التخصيص</div>
+    <div class="card">
+
+      <div class="acc" data-set="language">
+        <button class="row" data-action="toggle-acc">
+          <span class="ric"><span class="material-symbols-outlined">translate</span></span>
+          <span class="t">اللغة</span>
+          <span class="rv" data-val>العربية</span>
+          <span class="material-symbols-outlined chev">expand_more</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <button class="opt" data-v="ar"><span class="t">العربية</span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="en"><span class="t">English</span><span class="material-symbols-outlined">check</span></button>
+        </div></div>
+      </div>
+
+      <div class="acc" data-set="dialect">
+        <button class="row" data-action="toggle-acc">
+          <span class="ric"><span class="material-symbols-outlined">record_voice_over</span></span>
+          <span class="t">أسلوب اللغة</span>
+          <span class="rv" data-val>العربية الفصحى</span>
+          <span class="material-symbols-outlined chev">expand_more</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <button class="opt" data-v="fusha"><span class="t">العربية الفصحى</span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="ammiya"><span class="t">العامية<small>أسلوب قريب من الحياة اليومية</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="simple"><span class="t">العربية المبسطة<small>مفردات سهلة وجمل موجزة تناسب الجميع</small></span><span class="material-symbols-outlined">check</span></button>
+        </div></div>
+      </div>
+
+      <div class="acc" data-set="tone">
+        <button class="row" data-action="toggle-acc">
+          <span class="ric"><span class="material-symbols-outlined">attribution</span></span>
+          <span class="t">أسلوب الحوار</span>
+          <span class="rv" data-val>رسمي</span>
+          <span class="material-symbols-outlined chev">expand_more</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <button class="opt" data-v="formal"><span class="t">رسمي<small>أسلوب مهني هادئ ومقتضب</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="friendly"><span class="t">ودّي<small>أسلوب دافئ ومقارب</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="academic"><span class="t">أكاديمي<small>دقة وتحليل مع ذكر المصادر</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="educational"><span class="t">تعليمي<small>شرح تدريجي خطوة بخطوة</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="direct"><span class="t">مباشر<small>الخلاصة من السطر الأول</small></span><span class="material-symbols-outlined">check</span></button>
+        </div></div>
+      </div>
+
+      <div class="acc" data-set="persona">
+        <button class="row" data-action="toggle-acc">
+          <span class="ric"><span class="material-symbols-outlined">smart_toy</span></span>
+          <span class="t">شخصية المساعد</span>
+          <span class="rv" data-val>المعلّم</span>
+          <span class="material-symbols-outlined chev">expand_more</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <button class="opt" data-v="teacher"><span class="t">المعلّم<small>يشرح الدرس ثم يتحقق من الفهم</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="researcher"><span class="t">الباحث<small>يعتني بالمصادر والتوثيق والتفاصيل</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="companion"><span class="t">رفيق العلم<small>يساندك في الدراسة والمواظبة اليومية</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="fast"><span class="t">المساعد السريع<small>إجابات موجزة دون استطراد</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="debater"><span class="t">المناقش<small>يناقشك ويستفهم قبل تقديم الإجابة</small></span><span class="material-symbols-outlined">check</span></button>
+        </div></div>
+      </div>
+
+      <div class="acc" data-set="themeMode">
+        <button class="row" data-action="toggle-acc">
+          <span class="ric"><span class="material-symbols-outlined">contrast</span></span>
+          <span class="t">المظهر</span>
+          <span class="rv" data-val>النظام</span>
+          <span class="material-symbols-outlined chev">expand_more</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <button class="opt" data-v="system"><span class="t">النظام<small>يتبع مظهر الجهاز تلقائيًا</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="light"><span class="t">فاتح</span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="dark"><span class="t">داكن</span><span class="material-symbols-outlined">check</span></button>
+        </div></div>
+      </div>
+
+      <div class="acc" data-set-none>
+        <button class="row" data-action="toggle-acc">
+          <span class="ric"><span class="material-symbols-outlined">format_size</span></span>
+          <span class="t">حجم الخط</span>
+          <span class="rv" id="fontSizeVal">100%</span>
+          <span class="material-symbols-outlined chev">expand_more</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="slider-box">
+            <div class="slider-top"><span>صغير</span><b id="fontSizeNum">100%</b><span>كبير</span></div>
+            <input type="range" id="fontSizeRange" min="85" max="125" value="100">
+            <div class="font-demo">فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ — هكذا سيظهر النص في التطبيق.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="acc" data-set="khilaf">
+        <button class="row" data-action="toggle-acc">
+          <span class="ric"><span class="material-symbols-outlined">balance</span></span>
+          <span class="t">طريقة عرض الخلاف الفقهي</span>
+          <span class="rv" data-val>ذكر الخلاف وترجيحه</span>
+          <span class="material-symbols-outlined chev">expand_more</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <button class="opt" data-v="mention"><span class="t">ذكر الخلاف وترجيحه<small>عرض الأقوال مع بيان الراجح وأدلته</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="rajih"><span class="t">القول الراجح فقط<small>الإجابة بالراجح مباشرة دون استطراد</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="no-tarjih"><span class="t">عرض الأقوال دون ترجيح<small>ذكر الأقوال وترك الاختيار لك</small></span><span class="material-symbols-outlined">check</span></button>
+        </div></div>
+      </div>
+
+    </div>
+
+    <!-- النسخ والمشاركة -->
+    <div class="grp">النسخ والمشاركة</div>
+    <div class="card">
+
+      <div class="acc" data-set="copyMode">
+        <button class="row" data-action="toggle-acc">
+          <span class="ric"><span class="material-symbols-outlined">content_copy</span></span>
+          <span class="t">إعدادات النسخ<small>ما الذي يُنسخ عند الضغط على زر النسخ في المحادثة؟</small></span>
+          <span class="rv" data-val>نسخ الإجابة فقط</span>
+          <span class="material-symbols-outlined chev">expand_more</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <button class="opt" data-v="answer"><span class="t">نسخ الإجابة فقط<small>نسخ ردّ المساعد دون السؤال</small></span><span class="material-symbols-outlined">check</span></button>
+          <button class="opt" data-v="qa"><span class="t">نسخ السؤال والإجابة<small>نسخ السؤال أولًا ثم الإجابة كاملة</small></span><span class="material-symbols-outlined">check</span></button>
+        </div></div>
+      </div>
+
+      <div class="acc" data-set="reciter">
+        <button class="row" data-action="toggle-acc">
+          <span class="ric"><span class="material-symbols-outlined">mic</span></span>
+          <span class="t">قارئ الآيات<small>الصوت الذي تُقرأ به الآيات القرآنية في المحادثة</small></span>
+          <span class="rv" data-val>مشاري راشد العفاسي</span>
+          <span class="material-symbols-outlined chev">expand_more</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <div class="hint" style="padding:0 2px">اضغط على أيقونة التشغيل لتجربة القارئ قبل الاختيار.</div>
+          <div id="reciterList" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- أدوات -->
+    <div class="grp">أدوات</div>
+    <div class="card">
+      <button class="row" data-action="go-instructions">
+        <span class="ric"><span class="material-symbols-outlined">rule</span></span>
+        <span class="t">التعليمات الخاصة<small>تعليمات ثابتة يتبعها المساعد في كل إجابة</small></span>
+        <span class="count" id="instrCount">0</span>
+        <span class="material-symbols-outlined" style="color:var(--text-3)">chevron_left</span>
+      </button>
+      <button class="row" data-action="go-memory">
+        <span class="ric"><span class="material-symbols-outlined">neurology</span></span>
+        <span class="t">الذاكرة<small>اسم المناداة والذكريات المحفوظة</small></span>
+        <span class="count" id="memCount">0</span>
+        <span class="material-symbols-outlined" style="color:var(--text-3)">chevron_left</span>
+      </button>
+      <button class="row" data-action="go-voice">
+        <span class="ric"><span class="material-symbols-outlined">volume_up</span></span>
+        <span class="t">الصوت<small>اختيار صوت القراءة وتجربته</small></span>
+        <span class="material-symbols-outlined" style="color:var(--text-3)">chevron_left</span>
+      </button>
+    </div>
+
+    <!-- منطقة الخطر -->
+    <div class="grp" style="color:var(--danger)">منطقة الخطر</div>
+    <div class="danger-card">
+      <button class="row" data-action="ask-clear-chats">
+        <span class="ric danger"><span class="material-symbols-outlined">delete_sweep</span></span>
+        <span class="t">حذف جميع المحادثات<small>سيتم مسح جميع المحادثات نهائيًا — لا يمكن التراجع عن هذا الإجراء</small></span>
+        <span class="material-symbols-outlined" style="color:var(--danger)">chevron_left</span>
+      </button>
+      <button class="row" data-action="ask-delete-account">
+        <span class="ric danger"><span class="material-symbols-outlined">person_remove</span></span>
+        <span class="t">حذف الحساب<small>سيتم مسح الحساب وجميع البيانات المحفوظة على هذا الجهاز</small></span>
+        <span class="material-symbols-outlined" style="color:var(--danger)">chevron_left</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ التعليمات الخاصة ══════════ -->
+<div class="page" id="page-instructions">
+  <header class="topbar">
+    <button class="tb-btn" data-action="go-main"><span class="material-symbols-outlined">arrow_forward</span></button>
+    <h1>التعليمات الخاصة</h1>
+  </header>
+  <div class="wrap">
+    <p class="hint">أضف تعليمات ثابتة يتبعها المساعد في كل إجابة — مثل: «اذكر الدليل دائمًا» أو «اختصر الإجابات».</p>
+    <div class="f-field"><textarea id="instrInput" rows="3" maxlength="500" placeholder="مثال: اذكر درجة الحديث عند الاستشهاد به دائمًا..."></textarea></div>
+    <div class="btn-row" style="margin-bottom:14px"><button class="m-btn pri" data-action="add-instruction"><span class="material-symbols-outlined">add</span> إضافة تعليم</button></div>
+    <div id="instrList" style="display:flex;flex-direction:column;gap:8px"></div>
+  </div>
+</div>
+
+<!-- ══════════ الذاكرة ══════════ -->
+<div class="page" id="page-memory">
+  <header class="topbar">
+    <button class="tb-btn" data-action="go-main"><span class="material-symbols-outlined">arrow_forward</span></button>
+    <h1>الذاكرة</h1>
+  </header>
+  <div class="wrap">
+    <div class="card">
+      <div class="acc open" data-set-none>
+        <div class="acc-body" style="max-height:none"><div class="acc-inner" style="border-top:none">
+          <div class="f-field" style="margin-bottom:8px"><label for="nicknameInput" style="font-weight:600;color:var(--text)">ما الاسم الذي تفضّل أن يناديك به المساعد؟</label><input id="nicknameInput" maxlength="40" placeholder="مثال: أستاذي الكريم، أخي الفاضل"></div>
+          <div class="btn-row"><button class="m-btn pri" data-action="save-nickname"><span class="material-symbols-outlined">save</span> حفظ</button></div>
+        </div></div>
+      </div>
+      <button class="row" data-action="go-memories">
+        <span class="ric"><span class="material-symbols-outlined">bookmarks</span></span>
+        <span class="t">الذكريات المحفوظة<small>معلومات يحتفظ بها المساعد عنك ليقدّم خدمة أفضل</small></span>
+        <span class="count" id="memCount2">0</span>
+        <span class="material-symbols-outlined" style="color:var(--text-3)">chevron_left</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ الذكريات المحفوظة ══════════ -->
+<div class="page" id="page-memories">
+  <header class="topbar">
+    <button class="tb-btn" data-action="go-memory"><span class="material-symbols-outlined">arrow_forward</span></button>
+    <h1>الذكريات المحفوظة</h1>
+    <div class="tb-spacer"></div>
+    <button class="tb-btn" data-action="ask-clear-memories" title="مسح الكل"><span class="material-symbols-outlined">delete_sweep</span></button>
+  </header>
+  <div class="wrap">
+    <div class="f-field"><textarea id="memInput" rows="2" maxlength="300" placeholder="أضف ذكرى — مثال: أدرس الفقه المالكي — أفضّل الإجابات الموجزة"></textarea></div>
+    <div class="btn-row" style="margin-bottom:14px">
+      <button class="m-btn pri" data-action="add-memory"><span class="material-symbols-outlined">add</span> إضافة ذكرى</button>
+      <button class="m-btn ghost" data-action="ask-clear-memories"><span class="material-symbols-outlined">delete_sweep</span> مسح الكل</button>
+    </div>
+    <div id="memList" style="display:flex;flex-direction:column;gap:8px"></div>
+  </div>
+</div>
+
+<!-- ══════════ الصوت ══════════ -->
+<div class="page" id="page-voice">
+  <header class="topbar">
+    <button class="tb-btn" data-action="go-main"><span class="material-symbols-outlined">arrow_forward</span></button>
+    <h1>الصوت</h1>
+  </header>
+  <div class="wrap">
+    <p class="hint">اختر صوت القراءة المناسب، ثم اضغط على أي صوت لتجربته مباشرة.</p>
+    <div class="f-field"><label>سرعة القراءة</label>
+      <div class="slider-box"><div class="slider-top"><span>بطيء</span><b id="rateNum">1.0x</b><span>سريع</span></div>
+      <input type="range" id="rateRange" min="50" max="160" value="100"></div>
+    </div>
+    <div id="voiceList" style="display:flex;flex-direction:column;gap:8px"></div>
+  </div>
+</div>
+
+<!-- ══ نافذة التأكيد ══ -->
+<div class="modal" id="confirmModal"><div class="modal-card">
+  <h3><span class="material-symbols-outlined" id="cfIcon">warning</span> <span id="cfTitle">تأكيد</span></h3>
+  <p id="cfText"></p>
+  <div class="btn-row">
+    <button class="m-btn danger" id="cfYes" data-action="confirm-yes">تأكيد الحذف</button>
+    <button class="m-btn ghost" data-action="confirm-no">إلغاء</button>
+  </div>
+</div></div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+'use strict';
+/* ════════════════════════════════════════════════════════════════════
+   صفحة الإعدادات — الإصدار المعاد هيكلته
+   أبرز التحسينات عن النسخة السابقة:
+   1)  توحيد الأنماط بالكامل مع لوحة ألوان الواجهة الرئيسية (لا ألوان مخصصة).
+   2)  دالة esc() تهرب علامات الاقتباس أيضًا — إغلاق ثغرة XSS في السمات.
+   3)  لا معالجات أحداث مضمّنة (onclick) — تفويض مركزي عبر data-action.
+   4)  مزامنة المظهر مع مفتاح الواجهة الرئيسية (mai-theme) بقيم raw
+       لتبقى مبدّلة الشريط الجانبي وصفحة الإعدادات متطابقتين دائمًا.
+   5)  إصلاح فهرسة أصوات المتصفح (كانت تتكسر لأن الأصوات العربية
+       ليست متتالية في مصفوفة getVoices).
+   6)  إزالة إعدادات القرآن (quranDark) ومعاينة الآية وأنماطهما الخاصة.
+   7)  تغليف كل عمليات التخزين بمحاولة/التقاط — لا أعطال في الوضع الخاص.
+   8)  تنظيف موارد الصوت (Audio / speechSynthesis) عند مغادرة الصفحة.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── أدوات عامة ──────────────────────────────────────────────────── */
+const $=id=>document.getElementById(id);
+
+const ESC={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+/** تهريب HTML كامل يشمل علامات الاقتباس — آمن للنصوص والسمات معًا. */
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>ESC[c]);
+
+/** غلاف آمن للتخزين المحلي — يحتوي أخطاء الوضع الخاص وامتلاء المساحة. */
+const LS={
+ get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},
+ set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){return false;}},
+ raw(k){try{return localStorage.getItem(k);}catch(e){return null;}},
+ setRaw(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}},
+ del(k){try{localStorage.removeItem(k);}catch(e){}}
+};
+
+let toastT=null;
+function toast(msg){const el=$('toastEl');el.textContent=String(msg).slice(0,140);
+ el.classList.add('show');clearTimeout(toastT);
+ toastT=setTimeout(()=>el.classList.remove('show'),2500);}
+
+/* ── الإعدادات: التعريف والتحميل والحفظ ──────────────────────────── */
+const DEF={
+ language:'ar',dialect:'fusha',tone:'formal',persona:'teacher',
+ themeMode:'system',khilaf:'mention',copyMode:'answer',reciter:'ar.alafasy',
+ nickname:'',fontSize:100,voiceURI:'',voiceRate:1
+};
+/** حالة الإعدادات المحمّلة من التخزين مع قيم افتراضية لأي حقل ناقص. */
+const S={...DEF,...LS.get('mai_settings',{})};
+function saveSettings(){LS.set('mai_settings',S);}
+
+/* ── المظهر — مزامنة كاملة مع الواجهة الرئيسية ───────────────────── */
+const root=document.documentElement;
+const darkMedia=matchMedia('(prefers-color-scheme: dark)');
+
+/** المظهر الفعلي المطبّق (light/dark) بعد معالجة خيار «النظام». */
+function resolvedTheme(){
+ if(S.themeMode==='system')return darkMedia.matches?'dark':'light';
+ return S.themeMode==='dark'?'dark':'light';
+}
+function applyTheme(){
+ const t=resolvedTheme();
+ root.dataset.theme=t;
+ LS.setRaw('mai-theme',t); /* نفس المفتاح الذي تقرؤه الواجهة الرئيسية */
+ $('metaThemeColor').setAttribute('content',t==='dark'?'#3fb984':'#157a55');
+}
+if(darkMedia.addEventListener)darkMedia.addEventListener('change',()=>{if(S.themeMode==='system')applyTheme();});
+
+/* ── التنقل بين الصفحات ──────────────────────────────────────────── */
+function go(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ const el=$(id);if(el)el.classList.add('active');
+ window.scrollTo(0,0);
+ if(id==='page-memories')renderMemories();
+ if(id==='page-instructions')renderInstructions();
+ if(id==='page-voice')renderVoices();
+}
+function toggleAcc(btn){const acc=btn.closest('.acc');if(acc)acc.classList.toggle('open');}
+
+/* ── مكوّنات الاختيار (Accordions) ───────────────────────────────── */
+const RECITERS=[
+ {id:'ar.alafasy',name:'مشاري راشد العفاسي',style:'مرتل'},
+ {id:'ar.husary',name:'محمود خليل الحصري',style:'مرتل'},
+ {id:'ar.abdulsamad',name:'عبد الباسط عبد الصمد',style:'مرتل'},
+ {id:'ar.abdulbasitmurattal',name:'عبد الباسط عبد الصمد (مرتل)',style:'مرتل'},
+ {id:'ar.minshawi',name:'محمد صديق المنشاوي',style:'مرتل'},
+ {id:'ar.mahermuaiqly',name:'ماهر المعيقلي',style:'مرتل'},
+ {id:'ar.shuraym',name:'سعود الشريم',style:'مرتل'},
+ {id:'ar.sudais',name:'عبد الرحمن السديس',style:'مرتل'},
+ {id:'ar.ahmedajamy',name:'أحمد بن علي العجمي',style:'مرتل'},
+ {id:'ar.hanirifai',name:'هاني الرفاعي',style:'مرتل'},
+ {id:'ar.hudhaify',name:'علي الحذيفي',style:'مرتل'},
+ {id:'ar.shaatree',name:'أبو بكر الشاطري',style:'مرتل'}
+];
+const RECITER_CDN='https://cdn.islamic.network/quran/audio/128/';
+const SAMPLE_AYA=1; /* الفاتحة 1 — يتوفر التسجيل لجميع القراء */
+
+/** التسميات المعروضة بجانب كل إعداد — لغة رسمية موحدة. */
+const LABELS={
+ language:{ar:'العربية',en:'English'},
+ dialect:{fusha:'العربية الفصحى',ammiya:'العامية',simple:'العربية المبسطة'},
+ tone:{formal:'رسمي',friendly:'ودّي',academic:'أكاديمي',educational:'تعليمي',direct:'مباشر'},
+ persona:{teacher:'المعلّم',researcher:'الباحث',companion:'رفيق العلم',fast:'المساعد السريع',debater:'المناقش'},
+ themeMode:{system:'النظام',light:'فاتح',dark:'داكن'},
+ khilaf:{mention:'ذكر الخلاف وترجيحه',rajih:'القول الراجح فقط','no-tarjih':'عرض الأقوال دون ترجيح'},
+ copyMode:{answer:'نسخ الإجابة فقط',qa:'نسخ السؤال والإجابة'},
+ reciter:RECITERS.reduce((acc,r)=>{acc[r.id]=r.name;return acc;},{})
+};
+
+/** مزامنة واجهة إعداد واحد مع قيمته الحالية. */
+function syncSetUI(key){
+ document.querySelectorAll(`[data-set="${key}"]`).forEach(acc=>{
+  const valEl=acc.querySelector('[data-val]');
+  if(valEl)valEl.textContent=(LABELS[key]&&LABELS[key][S[key]])||'';
+  acc.querySelectorAll('.opt').forEach(o=>o.classList.toggle('sel',o.dataset.v===S[key]));
+ });
+}
+/** تفعيل اختيار داخل أحد مكونات الإعداد. */
+function pickOption(opt){
+ const key=opt.closest('[data-set]').dataset.set;
+ S[key]=opt.dataset.v;saveSettings();syncSetUI(key);
+ if(key==='themeMode')applyTheme();
+ toast('تم حفظ الإعداد');
+}
+
+/* ── القراء — العرض والتجربة والاختيار ───────────────────────────── */
+let reciterAudio=null,playingReciter=null;
+
+function renderReciters(){
+ const list=$('reciterList');if(!list)return;
+ list.innerHTML=RECITERS.map(r=>{
+  const sel=S.reciter===r.id,playing=playingReciter===r.id;
+  return `<div class="reciter-row${sel?' sel':''}${playing?' playing':''}" data-r="${esc(r.id)}">
+   <span class="material-symbols-outlined" style="font-size:18px">graphic_eq</span>
+   <span class="rn">${esc(r.name)}</span>
+   <span class="rl">${esc(r.style)}</span>
+   <button class="play-btn" data-play="${esc(r.id)}" title="تجربة القارئ">
+    <span class="material-symbols-outlined" style="font-size:16px">${playing?'stop':'play_arrow'}</span></button>
+   <span class="material-symbols-outlined" style="font-size:18px">${sel?'check_circle':'radio_button_unchecked'}</span>
+  </div>`;
+ }).join('');
+}
+function selectReciter(id){
+ stopReciter();
+ S.reciter=id;saveSettings();syncSetUI('reciter');renderReciters();
+ toast('تم اختيار القارئ');
+}
+function previewReciter(id){
+ if(playingReciter===id){stopReciter();return;}
+ stopReciter();
+ try{
+  reciterAudio=new Audio(RECITER_CDN+encodeURIComponent(id)+'/'+SAMPLE_AYA+'.mp3');
+ }catch(e){toast('تعذر تشغيل الصوت');return;}
+ playingReciter=id;renderReciters();
+ reciterAudio.addEventListener('ended',stopReciter,{once:true});
+ reciterAudio.addEventListener('error',()=>{stopReciter();toast('تعذر تحميل التلاوة — تحقق من الاتصال');},{once:true});
+ reciterAudio.play().catch(()=>{stopReciter();toast('تعذر تشغيل الصوت — تحقق من الاتصال');});
+}
+function stopReciter(){
+ if(reciterAudio){try{reciterAudio.pause();reciterAudio.src='';}catch(e){}reciterAudio=null;}
+ if(playingReciter){playingReciter=null;renderReciters();}
+}
+
+/* ── الحساب — نفس مفتاح الواجهة الرئيسية (mai_user) ──────────────── */
+let USER=LS.get('mai_user',null);
+function fillAccount(){
+ $('accNamePreview').textContent=USER?String(USER.name):'';
+ $('accMailPreview').textContent=USER?String(USER.email):'غير مسجّل';
+ $('setName').value=USER?String(USER.name):'';
+ $('setMail').value=USER?String(USER.email):'';
+}
+function saveAccount(){
+ const name=$('setName').value.trim();
+ const mail=$('setMail').value.trim();
+ if(!name){toast('يرجى إدخال الاسم');return;}
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){toast('يرجى إدخال بريد إلكتروني صحيح');return;}
+ USER={name:name.slice(0,60),email:mail.slice(0,120)};
+ LS.set('mai_user',USER);
+ fillAccount();
+ toast('تم حفظ بيانات الحساب');
+}
+
+/* ── حجم الخط ────────────────────────────────────────────────────── */
+function setFontSize(v){
+ v=Math.min(125,Math.max(85,parseInt(v,10)||100));
+ S.fontSize=v;saveSettings();
+ $('fontSizeNum').textContent=v+'%';
+ $('fontSizeVal').textContent=v+'%';
+ root.style.setProperty('--fs',(v/100*15)+'px');
+}
+
+/* ── التعليمات الخاصة ────────────────────────────────────────────── */
+let INSTR=LS.get('mai_custom_instructions',[]);
+if(!Array.isArray(INSTR))INSTR=[];
+function saveInstr(){LS.set('mai_custom_instructions',INSTR);updateCounts();}
+function renderInstructions(){
+ const list=$('instrList');
+ list.innerHTML=INSTR.length?INSTR.map((t,i)=>`<div class="item-card">
+  <div class="tx">${esc(t)}</div>
+  <div class="tools"><button class="mini-btn del" data-del-instr="${i}" title="حذف"><span class="material-symbols-outlined">delete</span></button></div>
+ </div>`).join('')
+ :'<div class="empty-note"><span class="material-symbols-outlined">rule</span>لا توجد تعليمات خاصة بعد<br>أضف أول تعليم من الأعلى</div>';
+}
+function addInstruction(){
+ const v=$('instrInput').value.trim();
+ if(!v){toast('يرجى كتابة التعليم أولاً');return;}
+ INSTR.push(v.slice(0,500));$('instrInput').value='';
+ saveInstr();renderInstructions();toast('تمت إضافة التعليم');
+}
+function delInstr(i){INSTR.splice(i,1);saveInstr();renderInstructions();toast('تم حذف التعليم');}
+
+/* ── الذاكرة: اسم المناداة والذكريات ─────────────────────────────── */
+let MEMS=LS.get('mai_memories',[]);
+if(!Array.isArray(MEMS))MEMS=[];
+function saveMems(){LS.set('mai_memories',MEMS);updateCounts();}
+function renderMemories(){
+ $('nicknameInput').value=S.nickname||'';
+ $('memList').innerHTML=MEMS.length?MEMS.map((m,i)=>`<div class="item-card${m.off?' off':''}">
+  <div class="tx">${esc(m.t)}</div>
+  <div class="tools">
+   <button class="mini-btn" data-toggle-mem="${i}" title="${m.off?'تفعيل':'إيقاف مؤقت'}"><span class="material-symbols-outlined">${m.off?'play_arrow':'pause'}</span></button>
+   <button class="mini-btn del" data-del-mem="${i}" title="حذف"><span class="material-symbols-outlined">delete</span></button>
+  </div></div>`).join('')
+ :'<div class="empty-note"><span class="material-symbols-outlined">bookmarks</span>لا توجد ذكريات محفوظة<br>أضف أول ذكرى من الأعلى</div>';
+}
+function saveNickname(){S.nickname=$('nicknameInput').value.trim().slice(0,40);saveSettings();toast('تم حفظ اسم المناداة');}
+function addMemory(){
+ const v=$('memInput').value.trim();
+ if(!v){toast('يرجى كتابة الذكرى أولاً');return;}
+ MEMS.push({t:v.slice(0,300),off:false});$('memInput').value='';
+ saveMems();renderMemories();toast('تمت إضافة الذكرى');
+}
+function toggleMem(i){
+ if(!MEMS[i])return;
+ MEMS[i].off=!MEMS[i].off;saveMems();renderMemories();
+ toast(MEMS[i].off?'تم إيقاف الذكرى مؤقتًا':'تم تفعيل الذكرى');
+}
+function delMem(i){MEMS.splice(i,1);saveMems();renderMemories();toast('تم حذف الذكرى');}
+
+/* ── أصوات المتصفح وسرعة القراءة ─────────────────────────────────── */
+let VOICES=[];
+/** قائمة موحّدة: (الأصوات العربية أولًا ثم غير العربية) — تُبنى مرة واحدة
+ *  وتُستخدم للفهرسة، فلا تنكسر الربطات عند تغيّر ترتيب getVoices(). */
+function buildVoiceList(){
+ const all=('speechSynthesis' in window)?speechSynthesis.getVoices():[];
+ const ar=all.filter(v=>(v.lang||'').toLowerCase().startsWith('ar'));
+ const rest=all.filter(v=>!(v.lang||'').toLowerCase().startsWith('ar'));
+ VOICES=[...ar,...rest.slice(0,12)];
+}
+function renderVoices(){
+ const list=$('voiceList');if(!list)return;
+ if(!VOICES.length){list.innerHTML='<div class="empty-note"><span class="material-symbols-outlined">volume_off</span>لا توجد أصوات متاحة في هذا المتصفح</div>';return;}
+ let h='<div class="grp" style="padding:0 2px">أصوات عربية</div>';
+ h+=VOICES.map((v,i)=>{
+  const isAr=(v.lang||'').toLowerCase().startsWith('ar');
+  if(!isAr&&h.indexOf('أصوات أخرى')===-1)h+='<div class="grp" style="padding:0 2px">أصوات أخرى</div>';
+  const sel=S.voiceURI===v.voiceURI;
+  return `<button class="voice-row${sel?' sel':''}" data-voice="${i}">
+   <span class="material-symbols-outlined" style="font-size:18px">${isAr?'graphic_eq':'volume_up'}</span>
+   <span class="vn">${esc(v.name)}</span>
+   <span class="vl">${esc(v.lang)}</span>
+   <span class="material-symbols-outlined">${sel?'check_circle':'play_circle'}</span></button>`;
+ }).join('');
+ list.innerHTML=h;
+}
+function pickVoice(i){
+ const v=VOICES[i];if(!v)return;
+ stopReciter();
+ S.voiceURI=v.voiceURI;saveSettings();renderVoices();
+ if(!('speechSynthesis' in window)){toast('المتصفح لا يدعم القراءة الصوتية');return;}
+ try{
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance('السلام عليكم، هكذا ستُقرأ لك الإجابات.');
+  u.voice=v;u.lang=v.lang;u.rate=S.voiceRate||1;
+  speechSynthesis.speak(u);
+ }catch(e){toast('تعذر تشغيل الصوت');}
+}
+function saveRate(){
+ S.voiceRate=parseInt($('rateRange').value,10)/100;saveSettings();
+ $('rateNum').textContent=(S.voiceRate).toFixed(1)+'x';
+}
+
+/* ── منطقة الخطر ─────────────────────────────────────────────────── */
+function askClearChats(){
+ askConfirm('حذف جميع المحادثات','سيتم مسح جميع المحادثات المحفوظة على هذا الجهاز نهائيًا — لا يمكن التراجع عن هذا الإجراء.','delete_sweep',()=>{
+  LS.del('mai_convs');
+  toast('تم حذف جميع المحادثات');
+ });
+}
+function askDeleteAccount(){
+ askConfirm('حذف الحساب','سيتم مسح الحساب وجميع البيانات المحفوظة على هذا الجهاز (المحادثات، الإعدادات، الذكريات) نهائيًا.','person_remove',()=>{
+  ['mai_user','mai_convs','mai_settings','mai_memories','mai_custom_instructions','mai_answer_prefs','mai_model','mai_auto','mai-theme','mai_theme_lock']
+   .forEach(k=>LS.del(k));
+  toast('تم حذف الحساب');
+  setTimeout(()=>{location.href='Muslim.html';},900);
+ });
+}
+function askClearMemories(){
+ askConfirm('مسح جميع الذكريات','سيتم حذف جميع الذكريات المحفوظة نهائيًا — لا يمكن التراجع عن هذا الإجراء.','delete_sweep',()=>{
+  MEMS=[];saveMems();renderMemories();toast('تم مسح جميع الذكريات');
+ });
+}
+
+/* ── نافذة التأكيد ───────────────────────────────────────────────── */
+let confirmCb=null;
+function askConfirm(title,text,icon,cb){
+ $('cfTitle').textContent=title;
+ $('cfText').textContent=text;
+ $('cfIcon').textContent=icon;
+ confirmCb=cb;
+ $('confirmModal').classList.add('open');
+}
+function closeConfirm(){$('confirmModal').classList.remove('open');confirmCb=null;}
+
+/* ── العدادات ────────────────────────────────────────────────────── */
+function updateCounts(){
+ $('instrCount').textContent=INSTR.length;
+ $('memCount').textContent=MEMS.length;
+ $('memCount2').textContent=MEMS.length;
+}
+
+/* ── خريطة الإجراءات المركزية (تفويض أحداث واحد) ─────────────────── */
+const ACTIONS={
+ 'back':()=>{if(history.length>1)history.back();else location.href='Muslim.html';},
+ 'toggle-acc':el=>toggleAcc(el),
+ 'save-account':()=>saveAccount(),
+ 'go-instructions':()=>go('page-instructions'),
+ 'go-memory':()=>go('page-memory'),
+ 'go-memories':()=>go('page-memories'),
+ 'go-voice':()=>go('page-voice'),
+ 'go-main':()=>go('page-main'),
+ 'add-instruction':()=>addInstruction(),
+ 'add-memory':()=>addMemory(),
+ 'save-nickname':()=>saveNickname(),
+ 'ask-clear-chats':()=>askClearChats(),
+ 'ask-delete-account':()=>askDeleteAccount(),
+ 'ask-clear-memories':()=>askClearMemories(),
+ 'confirm-yes':()=>{const cb=confirmCb;closeConfirm();if(cb)cb();},
+ 'confirm-no':()=>closeConfirm()
+};
+
+/* ── المستمع المركزي الواحد ──────────────────────────────────────── */
+document.addEventListener('click',e=>{
+ const actEl=e.target.closest('[data-action]');
+ if(actEl){
+  const fn=ACTIONS[actEl.dataset.action];
+  if(fn){fn(actEl,e);return;}
+ }
+ const opt=e.target.closest('.opt');
+ if(opt&&opt.closest('[data-set]')){pickOption(opt);return;}
+ const recRow=e.target.closest('.reciter-row');
+ if(recRow){selectReciter(recRow.dataset.r);return;}
+ const play=e.target.closest('[data-play]');
+ if(play){e.stopPropagation();previewReciter(play.dataset.play);return;}
+ const vrow=e.target.closest('[data-voice]');
+ if(vrow){pickVoice(+vrow.dataset.voice);return;}
+ const di=e.target.closest('[data-del-instr]');
+ if(di){delInstr(+di.dataset.delInstr);return;}
+ const dm=e.target.closest('[data-del-mem]');
+ if(dm){delMem(+dm.dataset.delMem);return;}
+ const tm=e.target.closest('[data-toggle-mem]');
+ if(tm){toggleMem(+tm.dataset.toggleMem);return;}
+});
+/* إغلاق نافذة التأكيد بالضغط على الخلفية أو Escape */
+document.addEventListener('click',e=>{
+ const m=e.target.closest?e.target.closest('.modal'):null;
+ if(m&&e.target===m)closeConfirm();
+});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape')closeConfirm();
+});
+
+/* ── الأحداث المباشرة لعناصر الإدخال ─────────────────────────────── */
+$('fontSizeRange').addEventListener('input',e=>setFontSize(e.target.value));
+$('rateRange').addEventListener('input',()=>{
+ $('rateNum').textContent=(parseInt($('rateRange').value,10)/100).toFixed(1)+'x';
+ saveRate();
+});
+
+/* ── تهيئة الأصوات ───────────────────────────────────────────────── */
+if('speechSynthesis' in window){
+ buildVoiceList();
+ speechSynthesis.onvoiceschanged=()=>{buildVoiceList();if($('page-voice').classList.contains('active'))renderVoices();};
+}
+
+/* ── التنظيف عند مغادرة الصفحة ───────────────────────────────────── */
+window.addEventListener('pagehide',()=>{
+ stopReciter();
+ try{if('speechSynthesis' in window)speechSynthesis.cancel();}catch(e){}
+});
+
+/* ── الإقلاع ─────────────────────────────────────────────────────── */
+(function init(){
+ /* المظهر أولًا لتفادي الوميض */
+ applyTheme();
+ root.style.setProperty('--fs',(S.fontSize/100*15)+'px');
+ $('fontSizeRange').value=S.fontSize;
+ $('fontSizeNum').textContent=S.fontSize+'%';
+ $('fontSizeVal').textContent=S.fontSize+'%';
+ $('rateRange').value=Math.round((S.voiceRate||1)*100);
+ $('rateNum').textContent=(S.voiceRate||1).toFixed(1)+'x';
+ ['language','dialect','tone','persona','themeMode','khilaf','copyMode','reciter'].forEach(syncSetUI);
+ renderReciters();
+ fillAccount();
+ updateCounts();
+})();
+</script>
+<script src="sync.js"></script>
+</body>
+</html>

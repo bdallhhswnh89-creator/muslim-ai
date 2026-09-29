@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta name="theme-color" id="metaThemeColor" content="#131615">
+<!--
+  ملاحظة إنتاجية (CSP):
+  القيمة الحالية مصممة للعمل كملف واحد أثناء التطوير. عند النشر، انقل السكربت
+  والأنماط إلى ملفات خارجية واستخدم nonce بدلاً من 'unsafe-inline'.
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; base-uri 'none'; form-action 'self'">
+<title>المجتمع — مسلم AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
+:root{--bg:#f6f7f6;--sidebar:#eff1ef;--surface:#fff;--surface-2:#f0f2f0;--surface-3:#e7eae7;--border:#e2e5e2;--border-strong:#cfd4cf;--text:#1b1e1c;--text-2:#5f665f;--text-3:#91978f;--accent:#157a55;--accent-hover:#0f6646;--accent-soft:#e3f1ea;--accent-text:#0d5c3f;--danger:#b3423a;--gold:#c9a227;--shadow:0 1px 3px rgba(15,25,20,.06);color-scheme:light}
+[data-theme="dark"]{--bg:#131615;--sidebar:#0e1110;--surface:#1a1e1c;--surface-2:#212624;--surface-3:#2a302d;--border:#262c29;--border-strong:#37403c;--text:#e7e9e7;--text-2:#a2a8a2;--text-3:#6f766f;--accent:#3fb984;--accent-hover:#57c795;--accent-soft:rgba(63,185,132,.13);--accent-text:#72d3a6;--danger:#b3423a;--shadow:0 1px 3px rgba(0,0,0,.35);color-scheme:dark}
+*{margin:0;padding:0;box-sizing:border-box}
+::selection{background:rgba(63,185,132,.5);color:#fff}
+body,input,button,textarea,select{font-family:'Quicksand','IBM Plex Sans Arabic',sans-serif}
+body{background:var(--bg);color:var(--text);font-size:15px}
+*{scrollbar-width:none}
+*::-webkit-scrollbar{width:0;height:0;display:none}
+button{cursor:pointer;border:none;background:none;color:inherit;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+.material-symbols-outlined{font-size:22px;line-height:1;user-select:none}
+
+/* ══ القائمة الجانبية — نفس التطبيق ══ */
+.app{display:flex;height:100vh;height:100dvh}
+.sidebar{width:280px;background:var(--sidebar);border-left:1px solid var(--border);display:flex;flex-direction:column;padding:14px 12px;flex-shrink:0;z-index:100;transition:background-color .3s,border-color .3s}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 10px;font-weight:700;font-size:1.05rem;user-select:none;color:var(--text);text-decoration:none;border-radius:12px}
+.brand-mark{width:36px;height:36px;display:grid;place-items:center;color:var(--accent)}
+.brand small{display:block;font-size:.66rem;font-weight:400;color:var(--text-3)}
+.brand-spacer{flex:1}
+.lib-frame{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:12px 4px 4px;background:var(--surface)}
+.lib-frame-sep{height:1px;background:var(--border);margin:0 12px}
+.lib-link{display:flex;align-items:center;gap:10px;padding:10px 12px;color:var(--text-2);font-size:.86rem;font-weight:600;text-decoration:none;transition:all .22s ease}
+.lib-link:hover{background:var(--surface-2);color:var(--text)}
+.lib-link .material-symbols-outlined:first-child{font-size:18px;color:var(--accent)}
+.lib-link .lib-spacer{flex:1}
+.lib-link.active{background:var(--accent-soft);color:var(--accent-text)}
+.sb-label{font-size:.7rem;color:var(--text-3);padding:10px 12px 6px;font-weight:600}
+.side-tabs{display:flex;flex-direction:column;gap:4px;padding:0 4px;flex:1;overflow-y:auto}
+.side-tabs .tab{flex-shrink:0;display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:10px;font-size:.86rem;color:var(--text-2);text-align:right;transition:all .22s ease;animation:popIn .28s ease both}
+.side-tabs .tab:hover{background:var(--surface-2);color:var(--text)}
+.side-tabs .tab.active{background:var(--surface-3);color:var(--text);font-weight:600}
+.side-tabs .tab .material-symbols-outlined{font-size:17px;flex-shrink:0}
+.side-tabs .tab .cnt{margin-inline-start:auto;font-size:.66rem;background:var(--surface-3);border-radius:50px;padding:1px 8px;color:var(--text-3);font-variant-numeric:tabular-nums}
+.side-tabs .tab.active .cnt{background:var(--surface);color:var(--text-2)}
+.conv-fade{position:sticky;height:26px;z-index:3;pointer-events:none;opacity:0;transition:opacity .25s;flex-shrink:0}
+.conv-fade.show{opacity:1}
+.conv-fade-top{top:0;margin-bottom:-30px;background:linear-gradient(to bottom,var(--sidebar),transparent)}
+.conv-fade-bottom{bottom:0;margin-top:-30px;background:linear-gradient(to top,var(--sidebar),transparent)}
+.sb-bottom{border-top:1px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.theme-seg{position:relative;display:flex;background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:3px}
+.theme-seg button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 4px;font-size:.8rem;color:var(--text-2);position:relative;z-index:1;transition:color .2s}
+.theme-seg button.active{color:var(--text);font-weight:600}
+.theme-seg .material-symbols-outlined{font-size:15px}
+.seg-thumb{position:absolute;top:3px;bottom:3px;width:calc(50% - 3px);background:var(--surface);border:1px solid var(--border-strong);border-radius:9px;transition:right .3s;pointer-events:none}
+.user-row{display:flex;align-items:center;gap:6px}
+.user-chip{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;flex:1;min-width:0;text-decoration:none;color:var(--text);transition:background-color .2s}
+.user-chip:hover{background:var(--surface-2)}
+.icon-pair{display:flex;align-items:center;border:1px solid var(--border);border-radius:12px;overflow:hidden;flex-shrink:0}
+.settings-btn{display:grid;place-items:center;width:38px;height:38px;color:var(--text-2);text-decoration:none;flex-shrink:0}
+.icon-pair .settings-btn{background:#1b1e1c;color:#fff}
+[data-theme="dark"] .icon-pair .settings-btn{background:#fff;color:#111}
+.icon-pair .settings-btn:hover{filter:brightness(1.15)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:600;font-size:.85rem;flex-shrink:0}
+.u-name{font-size:.86rem;font-weight:600}
+.u-plan{font-size:.7rem;color:var(--text-3)}
+.main{flex:1;min-width:0;height:100vh;height:100dvh;overflow-y:auto}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.3s;z-index:90}
+.overlay.show{opacity:1;pointer-events:auto}
+.burger{display:none;color:var(--text-2);padding:6px}
+@media(max-width:920px){
+ .sidebar{position:fixed;top:0;bottom:0;right:0;transform:translateX(100%);transition:transform .35s;box-shadow:0 0 40px rgba(0,0,0,.3)}
+ .sidebar.open{transform:none}
+ .burger{display:grid}
+}
+
+/* ══ الشريط العلوي ══ */
+.topbar{position:sticky;top:0;z-index:50;height:58px;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.tb-btn{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;color:var(--text-2);flex-shrink:0;text-decoration:none}
+.tb-btn:hover{background:var(--surface-2);color:var(--accent)}
+.tb-title{font-weight:700;font-size:1rem;flex:1;text-align:center}
+
+/* ══ البحث + زر النشر ══ */
+.search-wrap{display:flex;gap:8px;padding:10px 14px 8px;width:100%;position:sticky;top:58px;z-index:45;background:var(--bg)}
+.search-box{flex:1;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-strong);border-radius:12px;padding:0 12px;transition:.25s}
+.search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.search-box input{flex:1;border:none;background:none;outline:none;padding:11px 2px;font-size:.9rem;color:var(--text);font-family:inherit;min-width:0}
+.search-box .material-symbols-outlined{font-size:19px;color:var(--text-3);flex-shrink:0}
+
+/* ══ المنشورات ══ */
+.wrap{max-width:640px;margin:0 auto;padding:16px 14px 150px;display:flex;flex-direction:column;gap:18px}
+.post{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;animation:popIn .3s ease both;transition:transform .25s ease,box-shadow .25s ease}
+.post:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.post.no-anim{animation:none}
+.post-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.post-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;font-size:.9rem;flex-shrink:0}
+.post-who{flex:1;min-width:0}
+.post-name{font-weight:700;font-size:.86rem}
+.post-name .you{font-size:.62rem;background:var(--accent-soft);color:var(--accent-text);border-radius:50px;padding:2px 8px;margin-inline-start:6px;font-weight:600}
+.post-time{font-size:.68rem;color:var(--text-3)}
+.post-badge{font-size:.66rem;font-weight:700;border-radius:50px;padding:4px 12px;flex-shrink:0}
+.badge-quiz{background:rgba(63,185,132,.15);color:var(--accent-text)}
+.badge-book{background:rgba(201,162,39,.15);color:var(--gold)}
+.badge-fatwa{background:rgba(120,160,220,.15);color:#7aa2dc}
+.badge-general{background:var(--surface-3);color:var(--text-2)}
+.post-title{font-weight:700;font-size:1.05rem;line-height:2;margin-bottom:10px}
+.post-body{font-size:.9rem;color:var(--text-2);line-height:2.15;white-space:pre-wrap;word-break:break-word;margin-bottom:6px}
+.post-body.clamp{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.post-more{margin-top:6px;font-size:.74rem;color:var(--accent-text);font-weight:600;cursor:pointer}
+
+.post-actions{display:flex;align-items:center;gap:4px;margin-top:16px;border-top:1px solid var(--border);padding-top:12px}
+.pa-btn{display:flex;align-items:center;gap:5px;color:var(--text-3);font-size:.76rem;padding:7px 12px;border-radius:9px;transition:all .2s ease}
+.pa-btn:hover{background:var(--surface-2);color:var(--accent)}
+.pa-btn .material-symbols-outlined{font-size:17px}
+.pa-btn.saved{color:var(--accent)}
+.pa-btn.saved .material-symbols-outlined{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20}
+.pa-btn{font-variant-numeric:tabular-nums}
+.pa-spacer{flex:1}
+
+/* قالب الاختبار التفاعلي — نفس منطق التطبيق */
+.quiz-card{margin-top:14px;background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:18px}
+.quiz-start{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--accent);color:#fff;border-radius:12px;padding:12px;font-size:.88rem;font-weight:600;font-family:inherit;transition:all .2s ease}
+.quiz-start:hover{background:var(--accent-hover);transform:translateY(-1px)}
+.quiz-start .material-symbols-outlined{font-size:19px}
+.quiz-q{font-weight:600;margin-bottom:12px;font-size:.92rem;line-height:1.9}
+.quiz-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.quiz-opt{padding:11px 15px;border:1px solid var(--border-strong);border-radius:11px;font-size:.86rem;cursor:pointer;transition:all .2s ease;text-align:right;background:var(--surface)}
+.quiz-opt:hover{border-color:var(--accent);color:var(--accent)}
+.quiz-opt.selected{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text);font-weight:600}
+.quiz-essay{width:100%;min-height:90px;border:1px solid var(--border-strong);border-radius:11px;background:var(--surface);padding:11px;font-family:inherit;font-size:.86rem;color:var(--text);resize:vertical;outline:none}
+.quiz-essay:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.quiz-num{font-size:.74rem;color:var(--text-3);margin-bottom:10px}
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px}
+.quiz-nav button{padding:10px 20px;border-radius:10px;background:var(--surface);border:1px solid var(--border-strong);color:var(--text);font-weight:600;font-family:inherit;font-size:.8rem;transition:all .2s ease}
+.quiz-nav button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.quiz-nav button:disabled{opacity:.4;cursor:not-allowed}
+.quiz-progress{flex:1;height:6px;background:var(--surface-3);border-radius:10px;overflow:hidden;margin:0 10px}
+.quiz-progress-bar{height:100%;background:var(--accent);transition:width .3s}
+.quiz-result{text-align:center;padding:16px 8px}
+.quiz-score{font-size:2.6rem;font-weight:700;color:var(--accent-text);margin:10px 0}
+.quiz-result-text{font-size:.92rem;color:var(--text-2);margin-bottom:14px}
+.q-grade{text-align:right;margin-top:6px}
+.q-grade-item{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:10px 13px;margin-bottom:8px;font-size:.8rem;line-height:1.9}
+.q-grade-item b{display:block;margin-bottom:2px}
+
+/* الحالة الفارغة */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:60px 20px;color:var(--text-3)}
+.empty .e-ic{width:58px;height:58px;border-radius:18px;background:var(--surface-2);display:grid;place-items:center;color:var(--accent)}
+.empty .e-ic .material-symbols-outlined{font-size:26px}
+.empty .e-t{font-size:.95rem;font-weight:700;color:var(--text-2)}
+.empty .e-d{font-size:.78rem;line-height:2;max-width:300px}
+
+/* المودال */
+
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--text);color:var(--bg);padding:12px 24px;border-radius:12px;font-size:.85rem;z-index:300;transition:.35s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+@keyframes popIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="Muslim.html" title="الصفحة الرئيسية">
+      <div class="brand-mark"><svg viewBox="0 0 675 675" width="22" height="22" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="50" stroke-dasharray="300" d="m337.5 630c-161.75 0-292.5-130.75-292.5-292.5 0-161.75 130.75-292.5 292.5-292.5 161.75 0 292.5 130.75 292.5 292.5 0 161.75-130.75 292.5-292.5 292.5z"/></svg></div>
+      <div>مسلم AI<small>مساعدك الشرعي الذكي</small></div>
+      <div class="brand-spacer"></div>
+    </a>
+    <div class="lib-frame">
+      <a class="lib-link" href="quraan.html">
+        <span class="material-symbols-outlined">menu_book</span>
+        <span>القرآن</span><span class="lib-spacer"></span>
+        <span class="material-symbols-outlined" style="font-size:17px">chevron_left</span>
+      </a>
+      <div class="lib-frame-sep"></div>
+      <a class="lib-link" href="library.html">
+        <span class="material-symbols-outlined">auto_awesome_mosaic</span>
+        <span>المكتبة</span><span class="lib-spacer"></span>
+        <span class="material-symbols-outlined" style="font-size:17px">chevron_left</span>
+      </a>
+      <div class="lib-frame-sep"></div>
+      <a class="lib-link active" href="community.html">
+        <span class="material-symbols-outlined">diversity_3</span>
+        <span>المجتمع</span><span class="lib-spacer"></span>
+        <span class="material-symbols-outlined" style="font-size:17px">chevron_left</span>
+      </a>
+    </div>
+    <div class="sb-label">أقسام المجتمع</div>
+    <nav class="side-tabs" id="tabs"></nav>
+    <div class="sb-bottom">
+      <div class="theme-seg" id="themeSeg">
+        <button data-action="theme" data-t="light"><span class="material-symbols-outlined">light_mode</span> فاتح</button>
+        <button data-action="theme" data-t="dark"><span class="material-symbols-outlined">dark_mode</span> داكن</button>
+        <div class="seg-thumb" id="segThumb"></div>
+      </div>
+      <div class="user-row">
+        <a class="user-chip" href="setting.html"><div class="avatar" id="sbAvatar">ع</div>
+          <div><div class="u-name" id="sbName">عبدالله</div><div class="u-plan">حسابي</div></div></a>
+        <div class="icon-pair">
+          <a class="settings-btn" href="Muslim.html" title="محادثة جديدة"><span class="material-symbols-outlined">add</span></a>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="overlay" id="overlay" data-action="close-sidebar"></div>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="burger tb-btn" style="width:auto" data-action="open-sidebar"><span class="material-symbols-outlined">menu</span></button>
+      <div class="tb-title">مجتمع مسلم AI</div>
+      <a class="tb-btn" href="Muslim.html" title="مسلم AI" style="color:var(--accent)"><svg viewBox="0 0 675 675" width="22" height="22" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="50" stroke-dasharray="300" d="m337.5 630c-161.75 0-292.5-130.75-292.5-292.5 0-161.75 130.75-292.5 292.5-292.5 161.75 0 292.5 130.75 292.5 292.5 0 161.75-130.75 292.5-292.5 292.5z"/></svg></a>
+    </header>
+
+    <div class="search-wrap">
+      <div class="search-box">
+        <span class="material-symbols-outlined">search</span>
+        <input id="q" placeholder="ابحث في المنشورات..." maxlength="80">
+      </div>
+    </div>
+
+    <div class="wrap" id="feed"></div>
+  </main>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+'use strict';
+/* ════════════════════════════════════════════════════════════════════
+   صفحة المجتمع — الإصدار المعاد هيكلته
+   أبرز التغييرات عن النسخة السابقة:
+   1)  حذف البيانات التجريبية والتصحيحات المؤقتة المرتبطة بها بالكامل.
+   2)  حذف زر «محادثة جديدة» الكبير من القائمة الجانبية.
+   3)  دالة esc() تهرب علامات الاقتباس أيضًا — إغلاق ثغرة XSS في السمات.
+   4)  لا معالجات أحداث مضمّنة — تفويض مركزي واحد عبر data-action.
+   5)  تطهير (Sanitization) بيانات المنشورات والمسودات القادمة من
+       التخزين أو من المكتبة قبل عرضها أو حفظها.
+   6)  حدود أقصى لكل الحقول (العنوان 120 / المحتوى 4000 / السؤال 500...).
+   7)  حذف زر «نشر» ومودال النشر اليدوي — النشر يتم حصريًا من صفحة المكتبة.
+   9)  تصفية تلقائية لبذور البيانات التجريبية القديمة المحفوظة محليًا.
+   8)  إغلاق المودال والقائمة الجانبية بمفتاح Escape.
+   الألوان: مطابقة تمامًا للواجهة الرئيسية ولم تُمس.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── أدوات عامة ──────────────────────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const ESC={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+/** تهريب HTML كامل يشمل علامات الاقتباس — آمن للنصوص والسمات معًا. */
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>ESC[c]);
+
+const LS={
+ get(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}},
+ set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){toast('مساحة التخزين ممتلئة');return false;}},
+ raw(k){try{return localStorage.getItem(k);}catch(e){return null;}},
+ setRaw(k,v){try{localStorage.setItem(k,v);}catch(e){}},
+ del(k){try{localStorage.removeItem(k);}catch(e){}}
+};
+
+let toastT=null;
+function toast(msg){const el=$('toastEl');el.textContent=String(msg).slice(0,140);
+ el.classList.add('show');clearTimeout(toastT);
+ toastT=setTimeout(()=>el.classList.remove('show'),2400);}
+
+function ago(t){const s=Math.floor((Date.now()-t)/1000);
+ if(s<60)return 'الآن';const m=Math.floor(s/60);if(m<60)return 'منذ '+m+' دقيقة';
+ const h=Math.floor(m/60);if(h<24)return 'منذ '+h+' ساعة';
+ const d=Math.floor(h/24);if(d<30)return 'منذ '+d+' يوم';
+ return new Date(t).toLocaleDateString('ar-EG',{day:'numeric',month:'long'});}
+
+const AVCOLORS=['#157a55','#3fb984','#7aa2dc','#c9a227','#9b6ddc','#c46a9c','#5aa3b8','#b3713d'];
+function avColor(n){let h=0;for(const ch of String(n))h=(h*31+ch.charCodeAt(0))>>>0;return AVCOLORS[h%AVCOLORS.length];}
+
+/* ── الثيم — مزامنة مع الواجهة الرئيسية عبر مفتاح mai-theme ──────── */
+const root=document.documentElement;
+function setTheme(t){
+ root.dataset.theme=t;LS.setRaw('mai-theme',t);
+ $('metaThemeColor').setAttribute('content',t==='dark'?'#131615':'#157a55');
+ document.querySelectorAll('.theme-seg button').forEach(b=>b.classList.toggle('active',b.dataset.t===t));
+ $('segThumb').style.right=t==='light'?'3px':'50%';
+}
+
+/* ── القائمة الجانبية ────────────────────────────────────────────── */
+function openSidebar(){$('sidebar').classList.add('open');$('overlay').classList.add('show');}
+function closeSidebar(){$('sidebar').classList.remove('open');$('overlay').classList.remove('show');}
+
+(function fillUser(){
+ const u=LS.get('mai_user',null);
+ if(u&&typeof u.name==='string'&&u.name.trim()){
+  $('sbName').textContent=u.name.trim();
+  $('sbAvatar').textContent=(u.name.trim()[0])||'ع';
+ }
+})();
+
+/* ── أنواع المنشورات ─────────────────────────────────────────────── */
+const TYPE_META={quiz:{t:'اختبار',ic:'quiz',cls:'badge-quiz'},book:{t:'كتاب',ic:'auto_stories',cls:'badge-book'},
+ fatwa:{t:'فتوى',ic:'menu_book',cls:'badge-fatwa'},general:{t:'عام',ic:'chat',cls:'badge-general'}};
+
+/* ── تطهير البيانات الواردة من التخزين أو من المكتبة ───────────────── */
+function cleanQuizData(qd){
+ if(!Array.isArray(qd))return null;
+ const out=qd.slice(0,100).map(q=>{
+  if(!q||typeof q!=='object')return null;
+  const question=String(q.q||'').trim().slice(0,500);
+  const choices=Array.isArray(q.choices)?q.choices.slice(0,8).map(c=>String(c).slice(0,200)):[];
+  const answer=String(q.a??'').slice(0,1000);
+  if(!question)return null;
+  return {q:question,choices,a:answer};
+ }).filter(Boolean);
+ return out.length?out:null;
+}
+function cleanPost(p){
+ if(!p||typeof p!=='object')return null;
+ const type=TYPE_META[p.type]?p.type:'general';
+ const title=String(p.title??'').trim().slice(0,120);
+ const content=String(p.content??'').slice(0,8000);
+ if(!title)return null;
+ return {
+  id:Number.isFinite(+p.id)?+p.id:Date.now(),
+  type,title,content,
+  author:String(p.author??'مستخدم').trim().slice(0,60)||'مستخدم',
+  ts:Number.isFinite(+p.ts)?+p.ts:Date.now(),
+  mine:!!p.mine,
+  quizData:cleanQuizData(p.quizData),
+  quizCfg:(p.quizCfg&&typeof p.quizCfg==='object')?{diff:String(p.quizCfg.diff||'').slice(0,20)}:null,
+  up:Math.max(0,+p.up||0),down:Math.max(0,+p.down||0),
+  comments:Array.isArray(p.comments)?p.comments.slice(0,200).map(c=>({
+   author:String(c&&c.author||'').slice(0,60),
+   text:String(c&&c.text||'').slice(0,500),
+   ts:Number.isFinite(+((c||{}).ts))?+c.ts:Date.now()
+  })):[],
+  _expand:!!p._expand,_qstarted:!!p._qstarted,_saved:!!p._saved
+ };
+}
+
+/* ── تحميل المنشورات (بلا أي بيانات تجريبية) ─────────────────────── */
+/* عناوين البذور التجريبية القديمة — تُزال تلقائيًا من التخزين المحلي
+   حتى إن كانت قد حُفظت في زيارة سابقة للصفحة. */
+const SEED_TITLES=new Set([
+ 'حكم التعامل بالعملات الرقمية',
+ 'اختبار في السيرة النبوية — 10 أسئلة',
+ 'كتاب مبسط: أحكام الصيام',
+ 'خطة حفظ سورة البقرة في 60 يوماً',
+ 'حكم صلاة السنة قبل الجمعة'
+]);
+let posts=LS.get('mai_community_posts',[]);
+if(!Array.isArray(posts))posts=[];
+const before=posts.length;
+posts=posts.map(cleanPost).filter(Boolean)
+ .filter(p=>!SEED_TITLES.has(p.title));
+if(posts.length!==before)LS.set('mai_community_posts',posts);
+
+/* نشر مسودة قادمة من المكتبة (عبر sessionStorage) */
+(function publishFromLibrary(){
+ try{
+  const params=new URLSearchParams(location.search);
+  if(!params.get('pub'))return;
+  const draft=JSON.parse(sessionStorage.getItem('mai_pub_draft')||'{}');
+  sessionStorage.removeItem('mai_pub_draft');
+  history.replaceState(null,'','community.html');
+  const p=cleanPost({...draft,ts:Date.now(),mine:true,up:0,down:0,comments:[]});
+  if(!p||!p.content.trim())return;
+  posts.unshift(p);LS.set('mai_community_posts',posts);
+  toast('تم النشر في المجتمع');
+ }catch(e){/* مسودة غير صالحة — يُتجاهل بصمت */}
+})();
+
+/* ── التبويبات ───────────────────────────────────────────────────── */
+let curTab='all';
+const TABS=[
+ {id:'all',t:'الكل',ic:'apps'},
+ {id:'mine',t:'منشوراتي',ic:'person'},
+ {id:'quiz',t:'اختبارات',ic:'quiz'},
+ {id:'book',t:'كتب',ic:'auto_stories'},
+ {id:'fatwa',t:'فتاوى',ic:'menu_book'},
+ {id:'general',t:'عام',ic:'chat'}];
+function renderTabs(){
+ const cnt=id=>id==='all'?posts.length:id==='mine'?posts.filter(p=>p.mine).length:posts.filter(p=>p.type===id).length;
+ $('tabs').innerHTML=TABS.map(t=>`<button class="tab${curTab===t.id?' active':''}" data-action="tab" data-tab="${t.id}">
+  <span class="material-symbols-outlined">${t.ic}</span>${t.t}<span class="cnt">${cnt(t.id)}</span></button>`).join('');
+ if(!$('tabs').querySelector('.conv-fade-top')){
+  const ft=document.createElement('div');ft.className='conv-fade conv-fade-top';
+  const fb=document.createElement('div');fb.className='conv-fade conv-fade-bottom';
+  $('tabs').prepend(ft);$('tabs').append(fb);}
+ updateTabsFades();}
+function updateTabsFades(){
+ const ft=$('tabs').querySelector('.conv-fade-top'),fb=$('tabs').querySelector('.conv-fade-bottom');
+ if(!ft||!fb)return;
+ ft.classList.toggle('show',$('tabs').scrollTop>0.5);
+ fb.classList.toggle('show',($('tabs').scrollHeight-$('tabs').scrollTop-$('tabs').clientHeight)>8);}
+
+/* ── الاختبار التفاعلي داخل المنشور — نفس منطق التطبيق ────────────── */
+const quizStates={};
+function qTypeOf(q){if(!q.choices||!q.choices.length)return 'essay';if(q.choices.length===2)return 'tf';return 'mcq';}
+function normAr(s){return String(s||'').trim()
+ .replace(/[ً-ٰٟ]/g,'')
+ .replace(/[إأآا]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي')
+ .replace(/\s+/g,' ').replace(/[.,،؛:!؟?"'`]/g,'').toLowerCase();}
+function answersMatch(ua,ca){return ua!=null&&normAr(ua)===normAr(ca);}
+function essaySimilar(ua,ca){const a=normAr(ua).split(' ').filter(w=>w.length>2);
+ const b=normAr(ca).split(' ').filter(w=>w.length>2);
+ if(!a.length||!b.length)return false;
+ const setA=new Set(a);let hit=0;b.forEach(w=>{if(setA.has(w))hit++;});
+ return (hit/b.length)>=0.5;}
+function ensureQState(p){
+ if(!quizStates[p.id])quizStates[p.id]={qs:p.quizData,cfg:p.quizCfg||{},cur:0,answers:{},done:false};
+ return quizStates[p.id];}
+function drawCQuiz(pid){
+ const p=posts.find(x=>x.id===pid);if(!p||!p.quizData)return;
+ const st=ensureQState(p);const el=$('qc'+pid);if(!el)return;
+ if(st.done){drawCQuizResult(pid);return;}
+ const q=st.qs[st.cur];const ty=qTypeOf(q);
+ let h=`<div class="quiz-num">السؤال ${st.cur+1} من ${st.qs.length}${st.cfg.diff?' — مستوى '+esc(st.cfg.diff):''}</div>
+ <div class="quiz-progress"><div class="quiz-progress-bar" style="width:${((st.cur+1)/st.qs.length)*100}%"></div></div>
+ <div class="quiz-q">${esc(q.q)}</div>`;
+ if(ty==='essay'){h+=`<textarea class="quiz-essay" data-pid="${p.id}" placeholder="اكتب إجابتك هنا...">${esc(st.answers[st.cur]||'')}</textarea>`;}
+ else{h+=`<div class="quiz-opts">${(q.choices||[]).map((c,ci)=>`<div class="quiz-opt${st.answers[st.cur]===c?' selected':''}" data-action="cq-pick" data-pid="${p.id}" data-ci="${ci}">${esc(c)}</div>`).join('')}</div>`;}
+ h+=`<div class="quiz-nav">
+  <button data-action="cq-nav" data-pid="${p.id}" data-d="-1" ${st.cur===0?'disabled':''}>السابق</button>
+  <button data-action="cq-finish" data-pid="${p.id}">إنهاء وتصحيح</button>
+  <button data-action="cq-nav" data-pid="${p.id}" data-d="1" ${st.cur===st.qs.length-1?'disabled':''}>التالي</button></div>`;
+ el.innerHTML=h;}
+function cqPick(pid,ci){
+ const p=posts.find(x=>x.id===pid);if(!p)return;
+ const st=ensureQState(p);
+ if(!st.qs[st.cur]||!st.qs[st.cur].choices[ci])return;
+ st.answers[st.cur]=st.qs[st.cur].choices[ci];drawCQuiz(pid);}
+function cqEssay(pid,v){
+ const p=posts.find(x=>x.id===pid);if(!p)return;
+ ensureQState(p).answers[ensureQState(p).cur]=String(v).slice(0,1000);}
+function cqNav(pid,d){
+ const p=posts.find(x=>x.id===pid);if(!p)return;
+ const st=ensureQState(p);
+ st.cur=Math.max(0,Math.min(st.qs.length-1,st.cur+d));drawCQuiz(pid);}
+function cqFinish(pid){
+ const p=posts.find(x=>x.id===pid);if(!p)return;
+ ensureQState(p).done=true;drawCQuizResult(pid);}
+function drawCQuizResult(pid){
+ const p=posts.find(x=>x.id===pid);if(!p)return;
+ const st=ensureQState(p);const el=$('qc'+pid);if(!el)return;
+ let score=0,graded=0;const rows=[];
+ st.qs.forEach((q,idx)=>{
+  const ty=qTypeOf(q);const ua=st.answers[idx];
+  const ok=ty==='essay'?essaySimilar(ua,q.a):answersMatch(ua,q.a);
+  graded++;if(ok)score++;
+  rows.push({q:q.q,ua:(ua!=null&&String(ua).trim())?String(ua).slice(0,300):'—',ca:String(q.a||'—').slice(0,300),ok});});
+ const pct=graded?Math.round(score/graded*100):0;
+ el.innerHTML=`<div class="quiz-result">
+  <div class="quiz-score">${score} / ${graded}</div>
+  <div class="quiz-result-text">نسبتك ${pct}% — ${pct>=80?'ممتاز':pct>=50?'جيد':'تحتاج مراجعة'}</div>
+  <div class="q-grade">${rows.map((r,idx)=>`<div class="q-grade-item"><b>${idx+1}. ${esc(r.q)}</b>
+   إجابتك: ${esc(r.ua)}${r.ok?' <span style="color:#2d7d3d;font-weight:700">(صحيحة)</span>':' <span style="color:#9b2d2d;font-weight:700">(خاطئة)</span>'}<br>الصحيح: ${esc(r.ca)}</div>`).join('')}</div></div>`;}
+
+/* ── قالب المنشور ────────────────────────────────────────────────── */
+function postHTML(p){
+ const m=TYPE_META[p.type]||TYPE_META.general;
+ const me=p.mine||p.author===(LS.get('mai_user',{}).name||'أنا');
+ const bodyCls=p._expand?'post-body':'post-body clamp';
+ return `<article class="post" id="post${p.id}">
+  <div class="post-head">
+   <div class="post-avatar" style="background:${avColor(p.author)}">${esc(String(p.author||'م')[0])}</div>
+   <div class="post-who">
+    <div class="post-name">${esc(p.author)}${me?'<span class="you">أنت</span>':''}</div>
+    <div class="post-time">${ago(p.ts)}</div>
+   </div>
+   <span class="post-badge ${m.cls}">${m.t}</span>
+  </div>
+  <div class="post-title">${esc(p.title)}</div>
+  <div class="${bodyCls}" id="pb${p.id}">${esc(p.content)}</div>
+  ${p.quizData&&p.quizData.length?(p._qstarted
+   ?`<div class="quiz-card" id="qc${p.id}"></div>`
+   :`<div class="quiz-card" id="qc${p.id}"><button class="quiz-start" data-action="qstart" data-pid="${p.id}"><span class="material-symbols-outlined">play_arrow</span> ابدأ الاختبار (${p.quizData.length} ${p.quizData.length===1?'سؤال':'أسئلة'})</button></div>`):''}
+  ${p.content.length>220?`<div class="post-more" data-action="more" data-pid="${p.id}">${p._expand?'إخفاء':'عرض المزيد'}</div>`:''}
+  <div class="post-actions">
+   <button class="pa-btn${p._saved?' saved':''}" data-action="save" data-pid="${p.id}" title="حفظ في المكتبة"><span class="material-symbols-outlined">bookmark</span></button>
+   <button class="pa-btn" data-action="share" data-pid="${p.id}" title="مشاركة"><span class="material-symbols-outlined">share</span></button>
+   <span class="pa-spacer"></span>
+   ${p.mine?`<button class="pa-btn" data-action="del" data-pid="${p.id}" title="حذف"><span class="material-symbols-outlined">delete</span></button>`:''}
+  </div>
+ </article>`;}
+
+/* ── الرسم ───────────────────────────────────────────────────────── */
+function render(){
+ renderTabs();
+ const qv=$('q').value.trim();
+ let list=posts;
+ if(curTab==='mine')list=posts.filter(p=>p.mine);
+ else if(curTab!=='all')list=posts.filter(p=>p.type===curTab);
+ if(qv)list=list.filter(p=>(p.title+' '+p.content+' '+p.author).includes(qv));
+ $('feed').innerHTML=list.length?list.map(postHTML).join('')
+  :`<div class="empty"><div class="e-ic"><span class="material-symbols-outlined">forum</span></div>
+    <div class="e-t">لا توجد منشورات هنا</div>
+    <div class="e-d">${curTab==='mine'?'لم تقم بالمشاركة بعد — يمكنك نشر اختباراتك وكتبك من صفحة المكتبة':'لا توجد منشورات بعد — يمكنك مشاركة اختباراتك وكتبك من صفحة المكتبة'}</div></div>`;
+ list.forEach(p=>{if(p._qstarted&&p.quizData&&p.quizData.length)drawCQuiz(p.id);});
+}
+
+/* ── التفاعلات ───────────────────────────────────────────────────── */
+function toggleMore(pid){
+ const p=posts.find(x=>x.id===pid);if(!p)return;
+ p._expand=!p._expand;
+ const body=$('pb'+pid);
+ if(body)body.classList.toggle('clamp',!p._expand);
+ const moreBtn=document.querySelector(`[data-action="more"][data-pid="${pid}"]`);
+ if(moreBtn)moreBtn.textContent=p._expand?'إخفاء':'عرض المزيد';}
+function startQuiz(pid){
+ const p=posts.find(x=>x.id===pid);if(!p)return;
+ p._qstarted=true;drawCQuiz(pid);}
+function savePost(pid){
+ const p=posts.find(x=>x.id===pid);if(!p)return;
+ let saved=LS.get('mai_community_saved',[]);
+ if(!Array.isArray(saved))saved=[];
+ if(saved.some(x=>x&&x.title===p.title)){toast('محفوظ مسبقًا في المكتبة');return;}
+ saved.unshift({title:p.title,text:p.content.slice(0,1500),ic:TYPE_META[p.type]?TYPE_META[p.type].ic:'bookmark',ts:Date.now()});
+ if(LS.set('mai_community_saved',saved)){
+  p._saved=true;LS.set('mai_community_posts',posts);
+  const btn=document.querySelector(`[data-action="save"][data-pid="${pid}"]`);
+  if(btn)btn.classList.add('saved');
+  toast('تم الحفظ في المكتبة — تبويب «من المجتمع»');}}
+function sharePost(pid){
+ const p=posts.find(x=>x.id===pid);if(!p)return;
+ const text=p.title+'\n\n'+p.content;
+ if(navigator.share){navigator.share({title:p.title,text:p.content}).catch(()=>{});}
+ else if(navigator.clipboard&&navigator.clipboard.writeText){
+  navigator.clipboard.writeText(text).then(()=>toast('تم نسخ المنشور للمشاركة')).catch(()=>toast('تعذّرت المشاركة'));}
+ else toast('المشاركة غير مدعومة في هذا المتصفح');}
+function deletePost(pid){
+ const el=$('post'+pid);
+ posts=posts.filter(x=>x.id!==pid);LS.set('mai_community_posts',posts);renderTabs();
+ if(el){el.style.transition='all .3s ease';el.style.opacity='0';el.style.transform='scale(.95)';el.style.height=el.offsetHeight+'px';
+  requestAnimationFrame(()=>{el.style.height='0';el.style.marginTop='-18px';el.style.padding='0';el.style.overflow='hidden';});
+  setTimeout(()=>el.remove(),320);}else render();
+ toast('تم حذف المنشور');}
+
+/* ── خريطة الإجراءات المركزية (تفويض أحداث واحد) ─────────────────── */
+const ACTIONS={
+ 'theme':el=>setTheme(el.dataset.t),
+ 'open-sidebar':()=>openSidebar(),
+ 'close-sidebar':()=>closeSidebar(),
+ 'tab':el=>{curTab=el.dataset.tab;render();},
+ 'more':el=>toggleMore(+el.dataset.pid),
+ 'qstart':el=>startQuiz(+el.dataset.pid),
+ 'cq-pick':el=>cqPick(+el.dataset.pid,+el.dataset.ci),
+ 'cq-nav':el=>cqNav(+el.dataset.pid,+el.dataset.d),
+ 'cq-finish':el=>cqFinish(+el.dataset.pid),
+ 'save':el=>savePost(+el.dataset.pid),
+ 'share':el=>sharePost(+el.dataset.pid),
+ 'del':el=>deletePost(+el.dataset.pid)
+};
+
+/* ── المستمع المركزي الواحد ──────────────────────────────────────── */
+document.addEventListener('click',e=>{
+ const actEl=e.target.closest('[data-action]');
+ if(actEl){const fn=ACTIONS[actEl.dataset.action];if(fn){fn(actEl,e);return;}}
+});
+document.addEventListener('input',e=>{
+ if(e.target.matches&&e.target.matches('.quiz-essay'))cqEssay(+e.target.dataset.pid,e.target.value);
+});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape')closeSidebar();
+});
+$('tabs').addEventListener('scroll',updateTabsFades);
+$('q').addEventListener('input',render);
+
+/* ── الإقلاع ─────────────────────────────────────────────────────── */
+(function init(){
+ setTheme(LS.raw('mai-theme')||'dark');
+ render();
+})();
+</script>
+<script src="sync.js"></script>
+</body>
+</html>

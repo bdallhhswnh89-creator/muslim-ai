@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'">
+<meta name="theme-color" id="metaThemeColor" content="#157a55">
+<title>لوحة التحكم — مسلم AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
+:root{--bg:#f6f7f6;--sidebar:#eff1ef;--surface:#fff;--surface-2:#f0f2f0;--surface-3:#e7eae7;--border:#e2e5e2;--border-strong:#cfd4cf;--text:#1b1e1c;--text-2:#5f665f;--text-3:#91978f;--accent:#157a55;--accent-hover:#0f6646;--accent-soft:#e3f1ea;--accent-text:#0d5c3f;--danger:#b3423a;--gold:#c9a227;--blue:#2b6cb0;--shadow:0 1px 3px rgba(15,25,20,.06);color-scheme:light}
+[data-theme="dark"]{--bg:#131615;--sidebar:#0e1110;--surface:#1a1e1c;--surface-2:#212624;--surface-3:#2a302d;--border:#262c29;--border-strong:#37403c;--text:#e7e9e7;--text-2:#a2a8a2;--text-3:#6f766f;--accent:#3fb984;--accent-hover:#57c795;--accent-soft:rgba(63,185,132,.13);--accent-text:#72d3a6;--danger:#e07068;--gold:#d9b53a;--blue:#63a4d8;--shadow:0 1px 3px rgba(0,0,0,.35);color-scheme:dark}
+*{margin:0;padding:0;box-sizing:border-box;scrollbar-width:none;-ms-overflow-style:none}
+*::-webkit-scrollbar{width:0;height:0;display:none}
+body,input,button,textarea,select{font-family:'IBM Plex Sans Arabic',sans-serif}
+body{background:var(--bg);color:var(--text);font-size:15px;height:100vh;overflow:hidden}
+button{cursor:pointer;border:none;background:none;color:inherit}
+input,textarea,select{color:var(--text)}
+.material-symbols-outlined{font-size:22px;line-height:1;user-select:none}
+.app{display:flex;height:100vh;height:100dvh}
+body,.sidebar,.topbar,.ad-card,.ad-row,.modal-card{transition:background-color .3s,border-color .3s,color .3s}
+
+/* ══ الشريط الجانبي ══ */
+.sidebar{width:264px;background:var(--sidebar);border-left:1px solid var(--border);display:flex;flex-direction:column;padding:14px 10px;flex-shrink:0;z-index:100}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 10px 14px;font-weight:700;font-size:1.02rem;user-select:none}
+.brand-mark{width:36px;height:36px;display:grid;place-items:center;color:var(--accent)}
+.brand small{display:block;font-size:.66rem;font-weight:400;color:var(--text-3)}
+.brand-spacer{flex:1}
+.brand a{color:var(--text-3);display:grid;place-items:center;width:34px;height:34px;border-radius:9px;text-decoration:none}
+.brand a:hover{background:var(--surface-2);color:var(--accent)}
+.nav-label{font-size:.68rem;color:var(--text-3);padding:10px 12px 6px;font-weight:600}
+.nav-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:3px;padding:0 2px}
+.nav-item{display:flex;align-items:center;gap:11px;width:100%;padding:10px 12px;border-radius:11px;color:var(--text-2);font-size:.87rem;text-align:right;position:relative;animation:popIn .28s ease both}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--surface-3);color:var(--text);font-weight:600}
+.nav-item.active::before{content:'';position:absolute;right:0;top:22%;bottom:22%;width:3px;border-radius:4px;background:var(--accent)}
+.nav-item .material-symbols-outlined{font-size:19px;color:var(--accent)}
+.nav-item .cnt{margin-right:auto;font-size:.66rem;font-weight:700;background:var(--accent-soft);color:var(--accent-text);border-radius:50px;padding:2px 8px}
+.sb-bottom{border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:10px}
+.theme-seg{position:relative;display:flex;background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:3px}
+.theme-seg button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 4px;font-size:.8rem;color:var(--text-2)}
+.theme-seg button.active{color:var(--text);font-weight:600}
+.theme-seg .material-symbols-outlined{font-size:15px}
+.seg-thumb{position:absolute;top:3px;bottom:3px;width:calc(50% - 3px);background:var(--surface);border:1px solid var(--border-strong);border-radius:9px;transition:right .3s}
+.admin-chip{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:600;font-size:.85rem;flex-shrink:0}
+.u-name{font-size:.86rem;font-weight:600}.u-role{font-size:.68rem;color:var(--text-3)}
+
+/* ══ المحتوى ══ */
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{height:58px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.burger{display:none;color:var(--text-2);padding:6px}
+.tb-title{font-weight:700;font-size:1rem;white-space:nowrap}
+.tb-spacer{flex:1}
+.icon-btn{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text-2)}
+.icon-btn:hover{color:var(--accent);border-color:var(--accent)}
+.live{display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:.74rem;color:var(--accent-text);background:var(--accent-soft);border-radius:50px;padding:5px 13px;font-weight:600}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:22px 22px 40px;scrollbar-width:none}
+.view{display:none;flex-direction:column;gap:18px;animation:fadeUp .4s ease both}
+.view.on{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:scale(.94) translateY(6px)}to{opacity:1;transform:none}}
+
+.v-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.v-head h2{font-size:1.15rem}
+.v-head p{font-size:.8rem;color:var(--text-3);width:100%}
+.v-spacer{flex:1}
+.btn{display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:#fff;border-radius:11px;padding:10px 18px;font-size:.84rem;font-weight:600;transition:.2s}
+.btn:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 6px 18px rgba(21,122,85,.3)}
+.btn.ghost{background:var(--surface);border:1px solid var(--border-strong);color:var(--text-2)}
+.btn.ghost:hover{color:var(--accent);border-color:var(--accent);box-shadow:none}
+.btn.danger{background:var(--danger)}
+.btn.sm{padding:7px 13px;font-size:.76rem;border-radius:9px}
+
+/* بطاقات الإحصائيات */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(215px,100%),1fr));gap:12px}
+.ad-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow);animation:popIn .35s ease both;transition:transform .3s cubic-bezier(.25,.9,.35,1),box-shadow .3s}
+.ad-card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(15,25,20,.12)}
+[data-theme="dark"] .ad-card:hover{box-shadow:0 14px 34px rgba(0,0,0,.45)}
+.ad-card .st-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ad-card .st-ic{width:38px;height:38px;border-radius:11px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center}
+.ad-card .st-ic .material-symbols-outlined{font-size:19px}
+.ad-card .st-lbl{font-size:.76rem;color:var(--text-2);font-weight:600}
+.ad-card .st-val{font-size:1.55rem;font-weight:700;font-variant-numeric:tabular-nums}
+.ad-card .st-sub{font-size:.7rem;color:var(--text-3);margin-top:2px}
+.ad-card .st-sub b{font-weight:700}
+.up{color:var(--accent-text)}.dn{color:var(--danger)}
+
+/* الجداول */
+.ad-card.pad0{padding:0;overflow:hidden}
+.ad-card .c-head{display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--border)}
+.ad-card .c-head h3{font-size:.92rem;flex:1}
+.ad-card .c-head .material-symbols-outlined{color:var(--accent);font-size:20px}
+.tbl-wrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+.tbl th{background:var(--surface-2);padding:10px 14px;text-align:right;font-size:.72rem;color:var(--text-2);font-weight:600;white-space:nowrap}
+.tbl td{padding:11px 14px;border-top:1px solid var(--border);color:var(--text);vertical-align:middle}
+.tbl tr{transition:background-color .15s}
+.tbl tbody tr:hover{background:var(--surface-2)}
+.mono{direction:ltr;text-align:left;font-variant-numeric:tabular-nums;font-size:.74rem;color:var(--text-2)}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:600;border-radius:50px;padding:4px 11px;white-space:nowrap}
+.tag.g{background:var(--accent-soft);color:var(--accent-text)}
+
+.tag.gr{background:var(--surface-2);color:var(--text-2);border:1px solid var(--border-strong)}
+.row-acts{display:flex;gap:4px}
+.mini-btn{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:var(--text-3);border:1px solid var(--border)}
+.mini-btn:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.mini-btn.del:hover{color:var(--danger);border-color:var(--danger);background:rgba(179,66,58,.13)}
+.mini-btn .material-symbols-outlined{font-size:16px}
+.avatar-s{width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.u-cell{display:flex;align-items:center;gap:9px}
+.u-cell .n{font-weight:600;font-size:.8rem}
+.u-cell .e{font-size:.68rem;color:var(--text-3);direction:ltr;text-align:right}
+
+/* حقول البحث */
+.search-box{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-strong);border-radius:11px;padding:8px 13px;min-width:230px}
+.search-box input{border:none;outline:none;background:none;font-size:.84rem;flex:1;font-family:inherit}
+.search-box .material-symbols-outlined{font-size:18px;color:var(--text-3)}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.f-chip{border:1px solid var(--border);background:var(--surface-2);border-radius:50px;padding:7px 15px;font-size:.76rem;color:var(--text-2)}
+.f-chip.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+
+/* موديلات */
+.mods-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:12px}
+.mod-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;animation:popIn .35s ease both;transition:transform .3s}
+.mod-card:hover{transform:translateY(-3px)}
+.mod-card.off{opacity:.62}
+.mod-top{display:flex;align-items:center;gap:10px}
+.mod-ic{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center}
+.mod-name{font-weight:700;font-size:.9rem}
+.mod-desc{font-size:.7rem;color:var(--text-3)}
+.mod-stats{display:flex;flex-direction:column;gap:7px;font-size:.74rem}
+.mod-stats .r{display:flex;justify-content:space-between;color:var(--text-2)}
+.mod-stats .r b{color:var(--text);font-variant-numeric:tabular-nums}
+.meter{height:6px;background:var(--surface-2);border-radius:10px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:10px;transition:width .6s cubic-bezier(.3,.8,.3,1)}
+.mod-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:11px}
+
+/* سويتش */
+.switch{position:relative;width:38px;height:22px;background:var(--border-strong);border-radius:50px;cursor:pointer;transition:.3s;flex-shrink:0}
+.switch.on{background:var(--accent)}
+.switch::after{content:'';position:absolute;top:2px;right:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on::after{right:18px}
+
+/* قاعدة المعرفة */
+.kb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(230px,100%),1fr));gap:12px}
+.kb-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;animation:popIn .35s ease both;transition:transform .3s}
+.kb-card:hover{transform:translateY(-3px)}
+.kb-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.kb-ic{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center}
+.kb-name{font-weight:700;font-size:.88rem}
+.kb-count{font-size:.68rem;color:var(--text-3)}
+.kb-meta{display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-2);margin-bottom:10px}
+.src-row{display:flex;align-items:center;gap:10px;padding:10px 6px;border-bottom:1px solid var(--border)}
+.src-row:last-child{border:none}
+.src-row .si{width:36px;height:36px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;color:var(--accent);flex-shrink:0}
+.src-row .si .material-symbols-outlined{font-size:17px}
+.src-info{flex:1;min-width:0}
+.src-name{font-size:.82rem;font-weight:600}
+.src-sub{font-size:.68rem;color:var(--text-3)}
+
+/* الرسوم البيانية */
+.chart-box{padding:16px 18px}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.72rem;color:var(--text-2);margin-top:10px}
+.chart-legend span{display:flex;align-items:center;gap:6px}
+.chart-legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.bars{display:flex;align-items:flex-end;gap:6px;height:150px;margin-top:14px}
+.bars .bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.bars .bar i{width:100%;max-width:26px;background:var(--accent);border-radius:6px 6px 3px 3px;transition:height .7s cubic-bezier(.3,.8,.3,1);min-height:3px}
+.bars .bar.alt i{background:var(--gold)}
+.bars .bar b{font-size:.6rem;color:var(--text-3);font-weight:400;white-space:nowrap}
+
+/* صفوف القائمة */
+.lrow{display:flex;align-items:center;gap:12px;padding:12px 6px;border-bottom:1px solid var(--border)}
+.lrow:last-child{border:none}
+.lrow .li{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}
+.lrow .lt{flex:1;min-width:0}
+.lrow .lt .t1{font-size:.83rem;font-weight:600}
+.lrow .lt .t2{font-size:.7rem;color:var(--text-3);line-height:1.7}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:12px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:12px}
+
+/* إعدادات / فلاجز */
+.flag-row{display:flex;align-items:center;gap:12px;padding:12px 6px;border-bottom:1px solid var(--border)}
+.flag-row:last-child{border:none}
+.flag-row .fi{width:38px;height:38px;border-radius:11px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;flex-shrink:0}
+.flag-row .ft{flex:1}
+.flag-row .ft .t1{font-size:.84rem;font-weight:600}
+.flag-row .ft .t2{font-size:.72rem;color:var(--text-3);line-height:1.7}
+
+/* مودال */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:450;display:grid;place-items:center;padding:20px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s,visibility .28s}
+.modal.open{opacity:1;visibility:visible;pointer-events:auto}
+.modal.open>.modal-card{animation:modalCardIn .38s cubic-bezier(.26,1.32,.42,1)}
+@keyframes modalCardIn{from{opacity:0;transform:translateY(26px) scale(.93)}to{opacity:1;transform:none}}
+.modal-card{width:100%;max-width:460px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-card.wide{max-width:640px}
+.modal-card h3{font-size:1.02rem;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.modal-card h3 .material-symbols-outlined{color:var(--accent);font-size:20px}
+.modal-card p{font-size:.83rem;color:var(--text-2);line-height:1.9;margin-bottom:14px}
+.f-field{text-align:right;margin-bottom:13px}
+.f-field label{font-size:.78rem;color:var(--text-2);display:block;margin-bottom:6px}
+.f-field input,.f-field select,.f-field textarea{width:100%;border:1px solid var(--border-strong);background:var(--surface-2);border-radius:12px;padding:11px 13px;font-size:.88rem;outline:none;transition:.25s;font-family:inherit}
+.f-field input:focus,.f-field select:focus,.f-field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.m-row{display:flex;gap:10px;margin-top:10px}
+.m-btn{flex:1;padding:11px;border-radius:11px;font-size:.85rem;font-weight:600}
+.m-btn.pri{background:var(--accent);color:#fff}.m-btn.ghost{border:1px solid var(--border-strong);color:var(--text-2)}
+
+/* توست */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--text);color:var(--bg);padding:12px 24px;border-radius:12px;font-size:.85rem;z-index:600;transition:.35s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.3s;z-index:90}
+.overlay.show{opacity:1;pointer-events:auto}
+.empty{padding:30px 10px;text-align:center;font-size:.8rem;color:var(--text-3)}
+@media(max-width:920px){.sidebar{position:fixed;top:0;bottom:0;right:0;width:100%;border-left:none;transform:translateX(100%);transition:transform .35s}.sidebar.open{transform:none}.burger{display:block}}
+
+/* ══ ستايل لوحة الإعدادات المدمجة (معزول تحت .s2) ══ */
+.s2 *{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+.s2 .tabs{display:flex;gap:6px;padding:10px 16px;min-width:max-content}
+.s2 .wrap{max-width:820px;margin:0 auto;padding:20px 16px 80px;overflow-x:hidden}
+.s2 .panel{display:none;flex-direction:column;gap:16px;animation:fadeIn .3s ease;min-width:0}
+.s2 .panel.active{display:flex}
+.s2 .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow);min-width:0}
+.s2 .card h2{font-size:.98rem;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.s2 .card h2 .material-symbols-outlined{color:var(--accent);font-size:19px}
+.s2 .card .sub{font-size:.78rem;color:var(--text-3);line-height:1.8;margin-bottom:10px}
+.s2 .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s2 .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;min-width:0}
+.s2 .stat-box .n{font-size:1.7rem;font-weight:700;color:var(--accent-text)}
+.s2 .stat-box .l{font-size:.74rem;color:var(--text-2);margin-top:4px}
+.s2 .qa-row{display:flex;gap:8px;flex-wrap:wrap}
+.s2 .qa-btn{display:flex;align-items:center;gap:7px;padding:10px 15px;border-radius:11px;background:var(--surface-2);border:1px solid var(--border);font-size:.82rem;font-weight:600;color:var(--text)}
+.s2 .qa-btn:hover{border-color:var(--accent);color:var(--accent)}
+.s2 .qa-btn.danger:hover{border-color:var(--danger);color:var(--danger)}
+.s2 .acc{border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.s2 .acc-item{border-bottom:1px solid var(--border)}
+.s2 .acc-item:last-child{border-bottom:none}
+.s2 .acc-head{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;background:var(--surface-2)}
+.s2 .acc-head .material-symbols-outlined.chev{margin-right:auto;transition:.25s;font-size:18px;color:var(--text-3);flex-shrink:0}
+.s2 .acc-item.open .acc-head .chev{transform:rotate(180deg)}
+.s2 .acc-head .ic{color:var(--accent);font-size:18px;flex-shrink:0}
+.s2 .acc-name{flex:1;min-width:0;font-weight:600;font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s2 .acc-toggle{width:34px;height:20px;border-radius:50px;background:var(--border-strong);position:relative;flex-shrink:0}
+.s2 .acc-toggle.on{background:var(--accent)}
+.s2 .acc-toggle::after{content:'';position:absolute;top:2px;right:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.25s}
+.s2 .acc-toggle.on::after{right:16px}
+.s2 .acc-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.s2 .acc-item.open .acc-body{max-height:600px}
+.s2 .acc-body-inner{padding:14px;display:flex;flex-direction:column;gap:8px}
+.s2 .acc-body-inner textarea{width:100%;min-height:110px;border:1px solid var(--border-strong);background:var(--surface);border-radius:11px;padding:11px;font-size:.85rem;line-height:1.8;resize:vertical}
+.s2 .acc-body-inner .row{display:flex;gap:8px;justify-content:flex-end}
+.s2 .del-acc{color:var(--danger)}
+.s2 .add-acc-row{display:flex;gap:8px;padding:12px}
+.s2 .add-acc-row input{flex:1;min-width:0;border:1px solid var(--border-strong);background:var(--surface);border-radius:10px;padding:9px 12px;font-size:.84rem}
+.s2 .add-acc-row button{flex-shrink:0}
+.s2 .btn{padding:9px 18px;border-radius:10px;font-size:.82rem;font-weight:600}
+.s2 .btn.pri{background:var(--accent);color:#fff}
+.s2 .btn.pri:hover{background:var(--accent-hover)}
+.s2 .btn.ghost{border:1px solid var(--border-strong);color:var(--text-2)}
+.s2 .btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.s2 .btn.danger{background:var(--danger-soft);color:var(--danger)}
+.s2 .btn.danger:hover{background:var(--danger);color:#fff}
+.s2 .btn.sm{padding:7px 13px;font-size:.76rem}
+.s2 .btn .material-symbols-outlined{font-size:16px;vertical-align:-3px;margin-left:4px}
+.s2 .src-folder{border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.s2 .src-folder-head{display:flex;align-items:center;gap:9px;padding:12px 14px;background:var(--surface-2)}
+.s2 .src-folder-head .material-symbols-outlined{color:var(--accent);flex-shrink:0}
+.s2 .src-folder-head b{flex:1;min-width:0;font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s2 .src-count{font-size:.72rem;color:var(--text-3);background:var(--surface);border:1px solid var(--border);border-radius:50px;padding:2px 10px;flex-shrink:0}
+.s2 .src-list{display:flex;flex-direction:column}
+.s2 .src-row{display:flex;align-items:center;gap:10px;padding:11px 14px;border-top:1px solid var(--border)}
+.s2 .src-row .pri-badge{width:24px;height:24px;border-radius:7px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.s2 .src-row .info{flex:1;min-width:0}
+.s2 .src-row .nm{font-size:.85rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s2 .src-row .tp{font-size:.7rem;color:var(--text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s2 .src-row .mini-btn{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--text-3);flex-shrink:0}
+.s2 .src-row .mini-btn:hover{color:var(--accent);background:var(--surface-2)}
+.s2 .src-row .mini-btn.del:hover{color:var(--danger)}
+.s2 .src-row.disabled{opacity:.45}
+.s2 .src-add-bar{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-top:1px solid var(--border);background:var(--surface-2)}
+.s2 .src-add-seg{display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px}
+.s2 .src-add-seg button{flex:1;min-width:0;padding:7px;border-radius:8px;font-size:.75rem;color:var(--text-2)}
+.s2 .src-add-seg button.active{background:var(--accent);color:#fff}
+.s2 .src-add-fields{display:flex;gap:8px;min-width:0}
+.s2 .src-add-fields input{flex:1;min-width:0;border:1px solid var(--border-strong);background:var(--surface);border-radius:9px;padding:9px 11px;font-size:.82rem}
+.s2 .src-add-fields button{flex-shrink:0}
+.s2 .new-folder-row{display:flex;gap:8px}
+.s2 .new-folder-row input{flex:1;min-width:0;border:1px solid var(--border-strong);background:var(--surface);border-radius:10px;padding:10px 12px;font-size:.84rem}
+.s2 .new-folder-row button{flex-shrink:0}
+.s2 .f-field{margin-bottom:12px;min-width:0}
+.s2 .f-field label{font-size:.78rem;color:var(--text-2);display:block;margin-bottom:6px;font-weight:600}
+.s2 .f-field input,.s2 .f-field select{width:100%;border:1px solid var(--border-strong);background:var(--surface-2);border-radius:11px;padding:11px 13px;font-size:.88rem}
+.s2 .f-field input:focus,.s2 .f-field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.s2 .hint{font-size:.72rem;color:var(--text-3);margin-top:5px;line-height:1.7}
+.s2 .mufti-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
+.s2 .mufti-row:last-child{border-bottom:none}
+.s2 .mufti-row .g-badge{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:50px;background:var(--accent-soft);color:var(--accent-text);flex-shrink:0}
+.s2 .mufti-row .info{flex:1;min-width:0}
+.s2 .mufti-row .nm{font-size:.86rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s2 .mufti-row .tel{font-size:.72rem;color:var(--text-3);direction:ltr;text-align:right}
+.s2 .mufti-row.custom .nm::after{content:'مضاف';font-size:.62rem;font-weight:600;color:var(--accent-text);background:var(--accent-soft);border-radius:50px;padding:1px 8px;margin-right:8px}
+.s2 .feat-group{margin-bottom:14px}
+.s2 .feat-group-title{font-size:.8rem;font-weight:700;color:var(--accent-text);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.s2 .feat-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;margin-bottom:6px;background:var(--surface)}
+.s2 .feat-row .material-symbols-outlined.fi{color:var(--accent);font-size:18px;flex-shrink:0}
+.s2 .feat-row .ft{flex:1;min-width:0;font-size:.85rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s2 .feat-switch{width:38px;height:22px;border-radius:50px;background:var(--accent);position:relative;flex-shrink:0}
+.s2 .feat-switch.off{background:var(--border-strong)}
+.s2 .feat-switch::after{content:'';position:absolute;top:2px;right:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.25s}
+.s2 .feat-switch.off::after{right:18px}
+.s2 .s2modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:450;display:none;place-items:center;padding:20px}
+.s2 .s2modal.open{display:grid}
+.s2 .s2modal-card{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px}
+.s2 .s2modal-card h3{font-size:1rem;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.s2 .s2modal-card h3 .material-symbols-outlined{color:var(--danger)}
+.s2 .s2modal-card p{font-size:.85rem;color:var(--text-2);line-height:1.8;margin-bottom:16px}
+.s2 .s2modal-row{display:flex;gap:10px}
+.s2 .s2modal-row button{flex:1;min-width:0;padding:11px;border-radius:11px;font-weight:600;font-size:.86rem}
+.s2 .empty{text-align:center;padding:30px 10px;color:var(--text-3);font-size:.82rem}
+.s2{--danger-soft:#f7e6e4}
+[data-theme="dark"] .s2{--danger-soft:rgba(224,119,109,.13)}
+.s2 ::-webkit-scrollbar{width:8px;height:8px;display:block}
+.s2 ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:8px}
+
+/* ══ ضبط العرض على الموبايل (من غير تغيير شكل الديسكتوب) ══ */
+.view.s2{max-width:100%;overflow-x:hidden}
+.s2 .wrap{width:100%;max-width:820px;padding:0 0 40px;display:flex;flex-direction:column;gap:16px}
+.s2 .stat-grid{grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr))}
+.s2 .src-row{flex-wrap:wrap}
+.s2 .src-add-fields{flex-wrap:wrap}
+.s2 .src-add-fields input{min-width:140px}
+.s2 .new-folder-row{flex-wrap:wrap}
+.s2 .src-folder-head{flex-wrap:wrap}
+.s2 .acc-head{flex-wrap:wrap}
+.s2 .acc-body-inner .row{flex-wrap:wrap}
+.s2 .feat-row{flex-wrap:wrap}
+.s2 .mufti-row{flex-wrap:wrap}
+.s2 .qa-row .qa-btn{flex:1 1 44%}
+.s2 .s2modal-row{flex-wrap:wrap}
+.s2 .card h2{flex-wrap:wrap}
+@media(max-width:600px){
+ .s2 .mufti-grid{grid-template-columns:1fr}
+ .s2 .src-add-seg{flex-wrap:wrap}
+ .s2 .stat-box{padding:12px}
+}
+
+/* ══ تحسينات ══ */
+.nav-tabs{display:flex;gap:6px;padding:0 2px 8px}
+.ntab{flex:1;padding:8px 4px;border-radius:10px;font-size:.8rem;font-weight:600;color:var(--text-2);background:var(--surface-2);border:1px solid var(--border)}
+.ntab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.tag.y{background:rgba(201,162,39,.16);color:var(--gold)}
+.tag.r{background:rgba(179,66,58,.13);color:var(--danger)}
+.tag.b{background:rgba(43,108,176,.13);color:var(--blue)}
+.stats-grid .ad-card{min-height:116px;display:flex;flex-direction:column;justify-content:center}
+.brand button{color:var(--text-3);display:grid;place-items:center;width:34px;height:34px;border-radius:9px}
+.brand button:hover{background:var(--surface-2);color:var(--accent)}
+
+.s2 .src-folder.closed .src-add-bar{display:none}
+.s2 .src-list{overflow:hidden;max-height:8000px;opacity:1;transition:max-height .45s ease,opacity .3s ease}
+.s2 .src-folder.closed .src-list{max-height:0;opacity:0}
+@keyframes s2row{from{opacity:0;transform:translateY(8px)}}
+.s2 .src-row{animation:s2row .28s ease both}
+@keyframes s2pulse{0%,100%{background:var(--accent-soft)}50%{background:transparent}}
+.s2 .src-row.moving{animation:s2pulse 1.1s ease infinite}
+.s2 .src-folder-head .material-symbols-outlined{transition:transform .3s}
+.s2 .src-folder-head{cursor:pointer;user-select:none;-webkit-user-select:none}
+.s2 .src-row{cursor:pointer;-webkit-user-select:none;user-select:none}
+.s2 .src-row.moving{background:var(--accent-soft);outline:1.5px dashed var(--accent);border-radius:10px}
+
+
+
+.s2 .new-folder-row{align-items:center}
+.s2 .new-folder-row input{min-width:0}
+.s2 .src-folder{margin-bottom:14px}
+
+.s2 .src-row{padding:14px}
+.s2 .src-add-bar{padding:14px}
+.s2 .src-folder{border-radius:16px}
+.s2 .new-folder-row{margin-bottom:16px}
+
+/* رؤوس مجموعات المصادر */
+.src-group-head{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--surface-3);border:1px solid var(--border);border-radius:13px;margin-top:4px}
+.src-group-head .material-symbols-outlined{color:var(--accent);font-size:20px}
+.src-group-head b{flex:1;font-size:.92rem}
+.s2 .src-folder{margin-right:16px}
+.s2 .src-group-head{margin-right:2px}
+
+#srcFolders.no-anim .src-row{animation:none!important}
+#srcFolders.no-anim .src-folder{animation:none!important}
+#v-s2-src .new-folder-row .btn{box-shadow:none!important}
+#v-s2-src .new-folder-row .btn:hover{box-shadow:none!important;transform:none}
+</style>
+</head>
+<body>
+
+<script>/* غلاف آمن للتخزين المحلي */
+window.LS={get:function(k,d){try{var v=LS.raw(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},setRaw:function(k,v){try{LS.setRaw(k,v);return true;}catch(e){return false;}},raw:function(k){try{return LS.raw(k);}catch(e){return null;}},del:function(k){try{LS.del(k);}catch(e){}}};
+</script>
+<div class="app">
+  <!-- ══ الشريط الجانبي ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 675 675" width="22" height="22" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="50" stroke-dasharray="300" d="m337.5 630c-161.75 0-292.5-130.75-292.5-292.5 0-161.75 130.75-292.5 292.5-292.5 161.75 0 292.5 130.75 292.5 292.5 0 161.75-130.75 292.5-292.5 292.5z"/></svg></div>
+      <div>مسلم AI<small>لوحة التحكم الإدارية</small></div>
+      <div class="brand-spacer"></div>
+      <button data-action="brand-exit" title="إغلاق القائمة"><span class="material-symbols-outlined" style="font-size:19px">logout</span></button>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="ntab active" data-sec="main" data-action="nav-sec" data-sec="main">الرئيسية</button>
+      <button class="ntab" data-sec="admin" data-action="nav-sec" data-sec="admin">الإدارة</button>
+    </div>
+    <div class="nav-list" id="navMain"></div>
+    <div class="nav-list" id="navAdmin" style="display:none"></div>
+
+    <div class="sb-bottom">
+      <div class="admin-chip">
+        <div class="avatar">ع</div>
+        <div><div class="u-name">عبدالله</div><div class="u-role">Super Admin</div></div>
+      </div>
+    </div>
+  </aside>
+  <div class="overlay" id="overlay" data-action="close-sidebar"></div>
+
+  <!-- ══ المحتوى ══ -->
+  <main class="main">
+    <header class="topbar">
+      <button class="burger" data-action="open-sidebar"><span class="material-symbols-outlined">menu</span></button>
+      <div class="tb-title" id="tbTitle">لوحة القيادة</div>
+      <div class="tb-spacer"></div>
+      <div class="live"><i></i> النظام يعمل</div>
+      <button class="icon-btn" data-action="open-modal" data-m="maintModal" title="وضع الصيانة"><span class="material-symbols-outlined">construction</span></button>
+      <button class="icon-btn" data-action="theme-toggle" title="المظهر"><span class="material-symbols-outlined">contrast</span></button>
+    </header>
+
+    <div class="content" id="content">
+
+      <!-- ═══════ 1) لوحة القيادة ═══════ -->
+      <section class="view on" id="v-dash">
+        <div class="v-head">
+          <h2>لوحة القيادة</h2>
+          <div class="v-spacer"></div>
+          <button class="btn ghost sm" data-action="refresh-dash"><span class="material-symbols-outlined" style="font-size:17px">refresh</span> تحديث</button>
+          <p>نظرة شاملة على أداء التطبيق والمستخدمين والنماذج</p>
+        </div>
+        <div class="stats-grid" id="dashStats"></div>
+        <div class="grid-2">
+          <div class="ad-card chart-box">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="material-symbols-outlined" style="color:var(--accent)">monitoring</span>
+              <b style="font-size:.9rem">النشاط اليومي — آخر 14 يوم</b>
+            </div>
+            <div class="bars" id="actBars"></div>
+            <div class="chart-legend"><span><i style="background:var(--accent)"></i> المستخدمون النشطون</span><span><i style="background:var(--gold)"></i> المحادثات الجديدة</span></div>
+          </div>
+          <div class="ad-card pad0">
+            <div class="c-head"><span class="material-symbols-outlined">psychology</span><h3>استخدام النماذج اليوم</h3></div>
+            <div style="padding:6px 16px 14px" id="dashModels"></div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="ad-card pad0">
+            <div class="c-head"><span class="material-symbols-outlined">star</span><h3>أحدث التقييمات</h3></div>
+            <div style="padding:4px 14px" id="dashRates"></div>
+          </div>
+          <div class="ad-card pad0">
+            <div class="c-head"><span class="material-symbols-outlined">notifications_active</span><h3>تنبيهات تحتاج إجراء</h3></div>
+            <div style="padding:4px 14px" id="dashAlerts"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════ 2) المستخدمون ═══════ -->
+      <section class="view" id="v-users">
+        <div class="v-head">
+          <h2>المستخدمون</h2>
+          <div class="v-spacer"></div>
+          <div class="search-box"><span class="material-symbols-outlined">search</span><input id="userSearch" placeholder="بحث بالاسم أو البريد..." maxlength="60"></div>
+          <p>إدارة حسابات المستخدمين — ملاحظة الخصوصية: لا يطّلع الأدمن على محتوى المحادثات الخاصة إلا بسبب تشغيلي/قانوني موثق</p>
+        </div>
+        <div class="stats-grid" id="userStats"></div>
+        <div class="ad-card pad0">
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>المستخدم</th><th>تاريخ التسجيل</th><th>آخر نشاط</th><th>المحادثات</th><th>الاشتراك</th><th>الاستهلاك</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <tbody id="usersTbl"></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ═══════ 3) المحادثات ═══════ -->
+      <section class="view" id="v-convs">
+        <div class="v-head">
+          <h2>المحادثات</h2>
+          <div class="v-spacer"></div>
+          <button class="btn ghost sm" data-action="export-convs"><span class="material-symbols-outlined" style="font-size:17px">download</span> تصدير CSV</button>
+          <p>مراقبة جودة الخدمة وتقييم الإجابات وحالات المراجعة</p>
+        </div>
+        <div class="filters" id="convFilters"></div>
+        <div class="stats-grid" id="convStats"></div>
+        <div class="ad-card pad0">
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>المحادثة</th><th>المستخدم</th><th>الموضوع</th><th>الرسائل</th><th>النموذج</th><th>حالة الإجابة</th><th>الجودة</th></tr></thead>
+            <tbody id="convsTbl"></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ═══════ 4) النماذج ═══════ -->
+      <section class="view" id="v-models">
+        <div class="v-head">
+          <h2>إدارة نماذج AI</h2>
+          <div class="v-spacer"></div>
+          <button class="btn sm" data-action="open-modal" data-m="modelEditModal"><span class="material-symbols-outlined" style="font-size:17px">add</span> إضافة نموذج</button>
+          <p>النموذج الافتراضي، التوجيه، درجة الحرارة، حدود الاستخدام والتكلفة</p>
+        </div>
+        <div class="ad-card" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <span class="material-symbols-outlined" style="color:var(--accent)">alt_route</span>
+          <div style="flex:1;min-width:200px"><b style="font-size:.88rem">توجيه النماذج (Model Routing)</b><div style="font-size:.72rem;color:var(--text-3)">تبديل تلقائي للنموذج الأنسب: صور ← رؤية، اختبارات ← متوازن، فتوى ← الافتراضي</div></div>
+          <div class="switch on" id="routingSw" data-action="toggle-routing"></div>
+        </div>
+        <div class="mods-grid" id="modsGrid"></div>
+      </section>
+
+      <!-- ═══════ 5) قاعدة المعرفة ═══════ -->
+      <section class="view" id="v-kb">
+        <div class="v-head">
+          <h2>قاعدة المعرفة الإسلامية</h2>
+          <div class="v-spacer"></div>
+          <button class="btn sm" data-action="open-modal" data-m="srcModal"><span class="material-symbols-outlined" style="font-size:17px">add</span> إضافة مصدر</button>
+          <p>مصادر موثقة يعتمد عليها التطبيق: القرآن، الحديث، الفقه، العقيدة، السيرة، الفتاوى</p>
+        </div>
+        <div class="kb-grid" id="kbGrid"></div>
+        <div class="ad-card pad0">
+          <div class="c-head"><span class="material-symbols-outlined">library_books</span><h3>المصادر والمراجع الأخيرة</h3></div>
+          <div style="padding:4px 16px 10px" id="kbSources"></div>
+        </div>
+      </section>
+
+      <!-- ═══════ 6) الأمان ═══════ -->
+      <section class="view" id="v-safety">
+        <div class="v-head">
+          <h2>الأمان والمراقبة</h2>
+          <p>الإشراف الآلي على الإساءة، السبام، محاولات تسريب الـ system prompt و prompt injection</p>
+        </div>
+        <div class="grid-3" id="safetyCards"></div>
+        <div class="ad-card pad0">
+          <div class="c-head"><span class="material-symbols-outlined">shield</span><h3>سجل المراقبة الأخير</h3><span class="tag r" style="margin-right:auto" id="modCount"></span></div>
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>النوع</th><th>المحتوى المختصر</th><th>المستخدم</th><th>الإجراء</th><th>الوقت</th></tr></thead>
+            <tbody id="modTbl"></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ═══════ 7) الـ Prompts ═══════ -->
+      <section class="view" id="v-prompts">
+        <div class="v-head">
+          <h2>إدارة الأوامر (Prompts)</h2>
+          <div class="v-spacer"></div>
+          <button class="btn sm" data-action="save-all-prompts"><span class="material-symbols-outlined" style="font-size:17px">save</span> حفظ الكل</button>
+          <p>System prompts الخاصة بكل وضع من أوضاع التطبيق</p>
+        </div>
+        <div class="grid-2" id="promptsGrid"></div>
+      </section>
+
+      
+
+      <!-- ═══════ 9) التقييمات والبلاغات ═══════ -->
+      <section class="view" id="v-feedback">
+        <div class="v-head">
+          <h2>التقييمات والبلاغات</h2>
+          <p><span class="material-symbols-outlined" style="font-size:15px;vertical-align:middle">thumb_up</span> مفيدة — <span class="material-symbols-outlined" style="font-size:15px;vertical-align:middle">thumb_down</span> غير مفيدة (مع السبب ونوع المشكلة) — <span class="material-symbols-outlined" style="font-size:15px;vertical-align:middle">flag</span> بلاغات</p>
+        </div>
+        <div class="filters" id="fbFilters"></div>
+        <div class="ad-card pad0">
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>النوع</th><th>السؤال</th><th>السبب</th><th>النموذج</th><th>الحالة</th><th></th></tr></thead>
+            <tbody id="fbTbl"></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ═══════ 10) التحليلات ═══════ -->
+      <section class="view" id="v-analytics">
+        <div class="v-head">
+          <h2>التحليلات</h2>
+          <div class="v-spacer"></div>
+          <button class="btn ghost sm" data-action="export-report"><span class="material-symbols-outlined" style="font-size:17px">download</span> تقرير PDF</button>
+        </div>
+        <div class="stats-grid" id="anStats"></div>
+        <div class="grid-2">
+          <div class="ad-card chart-box">
+            <b style="font-size:.9rem">المواضيع الأكثر سؤالاً</b>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px" id="topicBars"></div>
+          </div>
+          <div class="ad-card chart-box">
+            <b style="font-size:.9rem">معدل الرضا أسبوعياً</b>
+            <div class="bars" id="satBars" style="margin-top:20px"></div>
+            <div class="chart-legend"><span><i style="background:var(--accent)"></i> راضون %</span></div>
+          </div>
+        </div>
+        <div class="ad-card pad0">
+          <div class="c-head"><span class="material-symbols-outlined">schedule</span><h3>ذروة الاستخدام اليومية</h3></div>
+          <div style="padding:16px 18px"><div class="bars" id="hourBars"></div></div>
+        </div>
+      </section>
+
+      <!-- ═══════ 11) إدارة التطبيق ═══════ -->
+      <section class="view" id="v-app">
+        <div class="v-head">
+          <h2>إدارة التطبيق</h2>
+          <p>التحكم في ميزات التطبيق (Feature Flags)، وضع الصيانة، المظهر، الاقتراحات والمفتون</p>
+        </div>
+        <div class="grid-2">
+          <div class="ad-card pad0">
+            <div class="c-head"><span class="material-symbols-outlined">tune</span><h3>تفعيل/تعطيل ميزات المحادثة</h3><span class="tag gr" style="margin-right:auto">Feature Flags</span></div>
+            <div style="padding:6px 16px 12px" id="flagsList"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="ad-card pad0">
+              <div class="c-head"><span class="material-symbols-outlined">palette</span><h3>إعدادات عامة</h3></div>
+              <div style="padding:6px 16px 12px">
+                <div class="flag-row">
+                  <div class="fi"><span class="material-symbols-outlined" style="font-size:18px">lock</span></div>
+                  <div class="ft"><div class="t1">قفل تغيير المظهر للمستخدمين</div><div class="t2">منع المستخدم من تبديل الثيم من التطبيق</div></div>
+                  <div class="switch" id="themeLockSw" data-action="toggle-theme-lock"></div>
+                </div>
+                <div class="flag-row">
+                  <div class="fi"><span class="material-symbols-outlined" style="font-size:18px">construction</span></div>
+                  <div class="ft"><div class="t1">وضع الصيانة</div><div class="t2">إيقاف التطبيق مؤقتاً مع رسالة للمستخدمين</div></div>
+                  <div class="switch" id="maintSw" data-action="toggle-maint"></div>
+                </div>
+                <div class="flag-row">
+                  <div class="fi"><span class="material-symbols-outlined" style="font-size:18px">bolt</span></div>
+                  <div class="ft"><div class="t1">الرد الفوري (Streaming)</div><div class="t2">عرض الرد كلمة كلمة أثناء التوليد</div></div>
+                  <div class="switch on" data-action="toggle-streaming"></div>
+                </div>
+              </div>
+            </div>
+            <div class="ad-card pad0">
+              <div class="c-head"><span class="material-symbols-outlined">lightbulb</span><h3>اقتراحات الشاشة الرئيسية</h3><span class="tag gr" style="margin-right:auto" id="sugCount"></span></div>
+              <div style="padding:8px 16px 12px">
+                <div style="display:flex;gap:8px;margin-bottom:10px">
+                  <div class="search-box" style="flex:1;min-width:0"><input id="newSugg" placeholder="اقتراح جديد..." maxlength="80"></div>
+                  <button class="btn sm" data-action="add-sugg">إضافة</button>
+                </div>
+                <div id="suggList"></div>
+              </div>
+            </div>
+            <div class="ad-card pad0">
+              <div class="c-head"><span class="material-symbols-outlined">pin</span><h3>قائمة المفتون</h3></div>
+              <div style="padding:8px 16px 12px">
+                <div style="display:flex;gap:8px;margin-bottom:10px">
+                  <div class="search-box" style="flex:1;min-width:0"><input id="newMufti" placeholder="اسم المفتي — الرقم — m/f" maxlength="80"></div>
+                  <button class="btn sm" data-action="add-mufti">إضافة</button>
+                </div>
+                <div id="muftiList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════ 12) فريق الإدارة ═══════ -->
+      <section class="view" id="v-team">
+        <div class="v-head">
+          <h2>فريق الإدارة والصلاحيات</h2>
+          <div class="v-spacer"></div>
+          <button class="btn sm" data-action="open-modal" data-m="inviteModal"><span class="material-symbols-outlined" style="font-size:17px">person_add</span> دعوة مدير</button>
+          <p>Super Admin يملك كل شيء — الأدوار الأخرى محددة الصلاحيات</p>
+        </div>
+        <div class="ad-card pad0">
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>المدير</th><th>الدور</th><th>آخر دخول</th><th>الحالة</th><th></th></tr></thead>
+            <tbody id="teamTbl"></tbody>
+          </table></div>
+        </div>
+        <div class="grid-3" id="rolesGrid"></div>
+      </section>
+
+      <!-- ═══════ 13) سجل العمليات ═══════ -->
+      <section class="view" id="v-logs">
+        <div class="v-head">
+          <h2>سجل العمليات (Audit Logs)</h2>
+          <div class="v-spacer"></div>
+          <button class="btn ghost sm" data-action="export-logs"><span class="material-symbols-outlined" style="font-size:17px">download</span> تصدير</button>
+          <p>من فعل ماذا ومتى — مع IP / Session ID ونتيجة العملية</p>
+        </div>
+        <div class="filters" id="logFilters"></div>
+        <div class="ad-card pad0">
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>المدير</th><th>العملية</th><th>التفاصيل</th><th>الوقت</th><th>IP / Session</th><th>النتيجة</th></tr></thead>
+            <tbody id="logsTbl"></tbody>
+          </table></div>
+        </div>
+      </section>
+
+
+      
+
+      <!-- ══ (من لوحة الإعدادات) تعليمات AI ══ -->
+      <section class="view s2" id="v-s2-instr">
+        <div class="wrap">
+<div class="card">
+      <h2><span class="material-symbols-outlined">psychology</span> تعليمات الذكاء الاصطناعي</h2>
+      <div class="sub">تعليمات مخصّصة لكل نوع رد (فتوى، اختبار، بديل حلال...). فعّل/عطّل أو عدّل نص التعليمة، ثم احفظ. تُطبَّق فعليًا عند ربط السيرفر بهذا الإعداد.</div>
+      <div class="acc" id="instrAcc"></div>
+      <div class="add-acc-row">
+        <input id="newInstrName" maxlength="60" placeholder="اسم تعليمة جديدة (مثال: المستشار المالي)">
+        <button class="btn pri sm" data-action="add-instruction"><span class="material-symbols-outlined">add</span> إضافة</button>
+      </div>
+    </div>
+    <div class="qa-row">
+      <button class="btn pri" data-action="save-instructions"><span class="material-symbols-outlined">save</span> حفظ كل التعليمات</button>
+      <button class="btn ghost" data-action="confirm" data-act="reset-instr" data-txt="استرجاع التعليمات الافتراضية وحذف أي تعديل؟"><span class="material-symbols-outlined">restart_alt</span> استرجاع الافتراضي</button>
+    </div>
+        </div>
+      </section>
+
+      <!-- ══ (من لوحة الإعدادات) المصادر ══ -->
+      <section class="view s2" id="v-s2-src">
+        <div class="wrap">
+<div class="card">
+      <h2><span class="material-symbols-outlined">source</span> مصادر كل علم شرعي</h2>
+      <div class="sub">نظّم المصادر في مجلدات حسب العلم الشرعي، رتّبها بالأولوية، وفعّل أو عطّل كل مصدر. يمكن الإضافة برفع ملف، رابط، أو استيراد عبر API.</div>
+      <div class="new-folder-row">
+        <input id="catSearch" placeholder="ابحث في كل الكتب..." maxlength="60" style="flex:1;min-width:0">
+       </div>
+       <div class="new-folder-row" style="flex-wrap:wrap">
+        <button class="btn" style="flex:1 1 220px;justify-content:center;white-space:nowrap" data-action="pick-catalog"><span class="material-symbols-outlined" style="font-size:18px">cloud_download</span> استيراد مصادر (JSON / JSONL)</button>
+        <button class="btn ghost" style="flex:1 1 150px;justify-content:center;white-space:nowrap" data-action="export-catalog"><span class="material-symbols-outlined" style="font-size:18px">upload</span> تصدير الفهرس</button>
+        <input type="file" id="catalogFile" accept=".json,.jsonl,application/json" hidden>
+       </div>
+    <div id="srcFolders" style="display:flex;flex-direction:column;gap:14px"></div>
+        </div>
+      </section>
+
+      <!-- ══ (من لوحة الإعدادات) الأدوات والميزات ══ -->
+      <section class="view s2" id="v-s2-feat">
+        <div class="wrap">
+<div class="card">
+      <h2><span class="material-symbols-outlined">tune</span> تفعيل/تعطيل الأدوات والميزات</h2>
+      <div class="sub">تحكّم فيما يظهر للمستخدمين من علامة الزائد داخل التطبيق مباشرة — التغيير يظهر فورًا في index.html بنفس المتصفح.</div>
+      <div id="featGroups"></div>
+    </div>
+        </div>
+      </section>
+
+      <!-- ══ (من لوحة الإعدادات) المفتون ══ -->
+      <section class="view s2" id="v-s2-muftis">
+        <div class="wrap">
+<div class="card">
+      <h2><span class="material-symbols-outlined">person_add</span> إضافة مفتٍ / مفتية جديدة</h2>
+      <div class="f-field"><label>الاسم</label><input id="mfName" maxlength="60" placeholder="مثال: د. فلان الفلاني"></div>
+      <div style="display:flex;gap:10px;min-width:0">
+        <div class="f-field" style="flex:1;min-width:0"><label>الفئة</label>
+          <select id="mfGroup"><option value="m">مفتون رجال</option><option value="f">مفتيات نساء</option></select></div>
+        <div class="f-field" style="flex:1;min-width:0"><label>رقم الهاتف</label><input id="mfTel" maxlength="20" dir="ltr" placeholder="9665xxxxxxxx"></div>
+      </div>
+      <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+        <label style="font-size:.8rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="mfWa" checked> واتساب</label>
+        <label style="font-size:.8rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="mfCall" checked> اتصال</label>
+      </div>
+      <div class="f-field"><label>ملاحظة (اختياري)</label><input id="mfNote" maxlength="120" placeholder="مثال: الاتصال بعد العصر"></div>
+      <button class="btn pri" data-action="add-mufti-s2"><span class="material-symbols-outlined">add</span> إضافة للدليل</button>
+    </div>
+    <div class="card">
+      <h2><span class="material-symbols-outlined">list_alt</span> الدليل الحالي</h2>
+      <div class="sub" style="margin-bottom:0">حذف مفتٍ افتراضي يخفيه فقط من التطبيق على هذا الجهاز، ولا يحذفه من الكود الأصلي.</div>
+      <div id="muftiListAdmin" style="margin-top:8px"></div>
+    </div>
+        </div>
+      </section>
+
+      <!-- ══ (من لوحة الإعدادات) إعدادات عامة ══ -->
+      <section class="view s2" id="v-s2-gen">
+        <div class="wrap">
+<div class="card">
+      <h2><span class="material-symbols-outlined">key</span> رمز دخول لوحة التحكم</h2>
+      <div class="sub">هذا الرمز يُطلب عند الضغط المطوّل على شعار التطبيق للوصول لهذه اللوحة.</div>
+      <div class="f-field"><label>رمز جديد</label><input id="newAdminCode" type="password" maxlength="60" dir="ltr" placeholder="اترك فارغًا للاحتفاظ بالحالي"></div>
+      <button class="btn pri sm" data-action="save-admin-code"><span class="material-symbols-outlined">save</span> حفظ الرمز</button>
+    </div>
+    <div class="card">
+      <h2><span class="material-symbols-outlined">data_object</span> نسخ احتياطي للإعدادات</h2>
+      <div class="sub">تصدير كل إعدادات اللوحة (تعليمات، مصادر، ميزات، مفتين) كملف JSON واحد، أو استيراده على جهاز آخر.</div>
+      <div class="qa-row">
+        <button class="btn ghost sm" data-action="export-config"><span class="material-symbols-outlined">download</span> تصدير</button>
+        <button class="btn ghost sm" data-action="pick-import"><span class="material-symbols-outlined">upload</span> استيراد</button>
+      </div>
+      <input type="file" id="importFile2" accept="application/json" hidden>
+    </div>
+    <div class="card">
+      <h2><span class="material-symbols-outlined">warning</span> منطقة الخطر</h2>
+      <div class="sub">هذه الإجراءات نهائية ولا يمكن التراجع عنها.</div>
+      <div class="qa-row">
+        <button class="qa-btn danger" data-action="confirm" data-act="reset-admin" data-txt="استرجاع كل إعدادات لوحة التحكم (تعليمات، مصادر، ميزات، مفتين، رمز الدخول) للوضع الافتراضي؟"><span class="material-symbols-outlined">restart_alt</span> استرجاع كل شيء للافتراضي</button>
+        <button class="qa-btn danger" data-action="confirm" data-act="reset-app" data-txt="مسح كل محادثات المستخدمين نهائيًا من هذا الجهاز؟"><span class="material-symbols-outlined">delete_sweep</span> مسح محادثات المستخدمين</button>
+      </div>
+    </div>
+        </div>
+      </section>
+
+      <div class="s2" style="display:contents">
+      <div class="s2modal" id="s2Confirm"><div class="s2modal-card">
+  <h3><span class="material-symbols-outlined">warning</span> تأكيد الإجراء</h3>
+  <p id="confirmText"></p>
+  <div class="s2modal-row">
+    <button class="btn danger" id="confirmYes">تأكيد</button>
+    <button class="btn ghost" data-action="s2-close">إلغاء</button>
+  </div>
+</div></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ══ المودالات ══ -->
+<div class="modal" id="userModal"><div class="modal-card">
+  <h3><span class="material-symbols-outlined">person</span> بيانات المستخدم</h3>
+  <div id="userModalBody"></div>
+  <div class="m-row"><button class="m-btn ghost" data-action="close-modal" data-m="userModal">إغلاق</button></div>
+</div></div>
+
+<div class="modal" id="convModal"><div class="modal-card wide">
+  <h3><span class="material-symbols-outlined">forum</span> مراجعة المحادثة</h3>
+  <div id="convModalBody"></div>
+  <div class="m-row">
+    <button class="m-btn pri" data-action="conv-quality" data-q="ممتازة"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle">star</span> ممتازة</button>
+    <button class="m-btn ghost" style="border-color:var(--gold);color:var(--gold)" data-action="conv-quality" data-q="تحتاج مراجعة"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle">warning</span> مراجعة</button>
+    <button class="m-btn ghost" style="border-color:var(--danger);color:var(--danger)" data-action="conv-quality" data-q="إلغاء عليها"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle">report</span> إلغاء</button>
+  </div>
+  <div class="m-row"><button class="m-btn ghost" data-action="close-modal" data-m="convModal">إغلاق</button></div>
+</div></div>
+
+<div class="modal" id="modelEditModal"><div class="modal-card">
+  <h3><span class="material-symbols-outlined">psychology</span> إضافة/تعديل نموذج</h3>
+  <div class="f-field"><label>اسم النموذج</label><input id="mdName" maxlength="60" placeholder="مثال: Llama 3.1 70B"></div>
+  <div class="f-field"><label>System Prompt</label><textarea id="mdPrompt" maxlength="2000" style="min-height:70px" placeholder="أنت مساعد شرعي..."></textarea></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="f-field"><label>Temperature</label><input id="mdTemp" type="number" step="0.1" value="0.3" maxlength="9"></div>
+    <div class="f-field"><label>Max Tokens</label><input id="mdMax" type="number" value="4096" maxlength="9"></div>
+    <div class="f-field"><label>Context Window</label><input id="mdCtx" type="number" value="131072" maxlength="9"></div>
+    <div class="f-field"><label>حد الاستخدام / مستخدم / يوم</label><input id="mdLimit" type="number" value="100" maxlength="9"></div>
+  </div>
+  <div class="m-row"><button class="m-btn pri" data-action="save-model">حفظ</button>
+  <button class="m-btn ghost" data-action="close-modal" data-m="modelEditModal">إلغاء</button></div>
+</div></div>
+
+<div class="modal" id="srcModal"><div class="modal-card">
+  <h3><span class="material-symbols-outlined">library_add</span> إضافة مصدر للمعرفة</h3>
+  <div class="f-field"><label>اسم المصدر</label><input id="srcName" maxlength="120" placeholder="مثال: تفسير السعدي"></div>
+  <div class="f-field"><label>التصنيف</label><select id="srcCat"><option>القرآن</option><option>كتب الحديث</option><option>كتب الفقه</option><option>العقيدة</option><option>السيرة</option><option>الفتاوى</option><option>المقالات</option></select></div>
+  <div class="f-field"><label>المصدر / الرابط</label><input id="srcUrl" maxlength="500" dir="ltr" placeholder="https://..."></div>
+  <div class="m-row"><button class="m-btn pri" data-action="save-source">إضافة</button>
+  <button class="m-btn ghost" data-action="close-modal" data-m="srcModal">إلغاء</button></div>
+</div></div>
+
+<div class="modal" id="planModal"><div class="modal-card">
+  <h3><span class="material-symbols-outlined">card_membership</span> خطة اشتراك جديدة</h3>
+  <div class="f-field"><label>اسم الخطة</label><input id="plName" maxlength="60" placeholder="مثال: العائلية"></div>
+  <div class="f-field"><label>السعر شهرياً (ج.م)</label><input id="plPrice" type="number" placeholder="29" maxlength="9"></div>
+  <div class="m-row"><button class="m-btn pri" data-action="save-plan">إضافة</button>
+  <button class="m-btn ghost" data-action="close-modal" data-m="planModal">إلغاء</button></div>
+</div></div>
+
+<div class="modal" id="inviteModal"><div class="modal-card">
+  <h3><span class="material-symbols-outlined">person_add</span> دعوة مدير جديد</h3>
+  <div class="f-field"><label>البريد الإلكتروني</label><input id="invMail" maxlength="120" dir="ltr" placeholder="admin@example.com"></div>
+  <div class="f-field"><label>الدور</label><select id="invRole"><option>Content Admin</option><option>Support</option><option>مدير نماذج AI</option><option>مدير Prompts</option><option>محلل استخدام</option><option>مراجع شرعي</option></select></div>
+  <div class="m-row"><button class="m-btn pri" data-action="invite-admin">إرسال الدعوة</button>
+  <button class="m-btn ghost" data-action="close-modal" data-m="inviteModal">إلغاء</button></div>
+</div></div>
+
+<div class="modal" id="maintModal"><div class="modal-card">
+  <h3><span class="material-symbols-outlined">construction</span> وضع الصيانة</h3>
+  <p>عند التفعيل يظهر للمستخدمين إشعار صيانة ويتم إيقاف المحادثات مؤقتاً.</p>
+  <div class="f-field"><label>رسالة الصيانة للمستخدمين</label><textarea id="maintMsg" maxlength="300" style="min-height:70px">نعتذر، التطبيق تحت الصيانة حالياً — نعود إليكم قريباً بإذن الله</textarea></div>
+  <div class="m-row"><button class="m-btn pri" data-action="enable-maint">تفعيل وضع الصيانة</button>
+  <button class="m-btn ghost" data-action="close-modal" data-m="maintModal">إلغاء</button></div>
+</div></div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+/* ══ الثيم ══ */
+const root=document.documentElement;
+function setTheme(t){root.dataset.theme=t;try{LS.setRaw('mai-theme',t)}catch(e){}
+ document.querySelectorAll('.theme-seg button').forEach(b=>b.classList.toggle('active',b.dataset.t===t));
+ metaThemeColor.setAttribute('content',t==='dark'?'#3fb984':'#157a55');
+ var _th=document.getElementById('segThumb');if(_th)_th.style.right=t==='light'?'3px':'50%';}
+document.querySelectorAll('.theme-seg button').forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
+setTheme((()=>{try{return LS.raw('mai-theme')}catch(e){return null}})()||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+
+let toastT;function toast(m){toastEl.textContent=m;toastEl.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('show'),2500);}
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function openSidebar(){sidebar.classList.add('open');overlay.classList.add('show')}
+function brandExit(){if(innerWidth<=920){closeSidebar()}else{location.href='Muslim.html'}}
+function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show')}
+function esc(t){return String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmtN(n){return n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':String(n)}
+function qTag(q){const mm={'ممتازة':['g','star','ممتازة'],'تحتاج مراجعة':['y','warning','مراجعة'],'إلغاء عليها':['r','report','إلغاء']};const[t,ic,l]=mm[q]||['gr','help',q];return `<span class="tag ${t}"><span class="material-symbols-outlined" style="font-size:13px">${ic}</span> ${l}</span>`;}
+function timeAgo(t){const m=Math.floor((Date.now()-t)/6e4);if(m<60)return 'قبل '+m+' د';
+ const h=Math.floor(m/60);if(h<24)return 'قبل '+h+' س';return 'قبل '+Math.floor(h/24)+' يوم'}
+
+/* ══ بيانات تجريبية ══ */
+const USERS=[];
+
+const CONVS=[];
+
+let MODELS=[];
+
+const KB=[];
+
+let SOURCES=[];
+
+const MODS=[];
+
+const PROMPTS=[
+ {mode:'الفتوى العامة',ic:'menu_book',txt:'أنت مساعد شرعي تعرض أقوال أهل العلم بمصادرها الموثقة من القرآن والسنة وفتاوى المجامع المعتمدة. لا تصدر فتوى مستقلة، واذكر الخلاف إذا وجد، واختم دائماً بأن الفتوى حق لأهل العلم.'},
+ {mode:'المناظرات',ic:'forum',txt:'مثّل الإسلام أو مذهب السلفية بحكمة وذكاء وإقناع بالأدلة العقلية والنقلية، ثم اختم ردك دائماً بسؤال منطقي دقيق يكشف تناقض موقف المقابل.'},
+ {mode:'المحدِّث (صحة الحديث)',ic:'verified',txt:'تحقق من الحديث بدقة: النص، الراوي، المحدث، المصدر، والحكم (صحيح/حسن/ضعيف/موضوع) مع التخريج كاملاً. لا تجزم بصحة حديث ضعيف.'},
+ {mode:'المستشار المالي',ic:'account_balance',txt:'قدّم البدائل الحلال للمعاملات الربوية (مرابحة، تورق منضبط، تكافل) مع خطوات عملية، دون إصدار حكم فتوي نهائي.'},
+ {mode:'صانع الاختبارات',ic:'quiz',txt:'أنشئ أسئلة بمستوى الصعوبة المطلوب فعلاً، مع إجابات نموذجية، وأضف حقل type لكل سؤال (mcq/tf/essay).'},
+ {mode:'الرد القاطع',ic:'gavel',txt:'رد رداً قاطعاً مقنعاً على الشبهة بلغة عامية بسيطة، استبق الأسئلة المحتملة وأجب عنها ضمن الرد نفسه.'}];
+
+let PLANS=[];
+
+const PAYS=[];
+
+let FEEDBACK=[];
+
+const TEAM=[];
+
+const ROLES=[
+ {name:'Super Admin',ic:'shield_person',desc:'كل شيء: النماذج، المحتوى، الفريق، الإعدادات، السجلات'},
+ {name:'Content Admin',desc:'المحتوى والمصادر والمعرفة'},
+ {name:'Support',desc:'دعم المستخدمين والبلاغات'},
+ {name:'مدير نماذج AI',desc:'النماذج والتوجيه والتكاليف'},
+ {name:'مدير Prompts',desc:'أوامر النماذج وضبطها'},
+ {name:'محلل استخدام',desc:'التحليلات والقراءات دون تعديل'},
+ {name:'مراجع شرعي',desc:'المراجعة الشرعية للمحتوى والفتاوى'}];
+
+let LOGS=[];
+
+const FEATURES=[
+ {id:'deep-search',ic:'travel_explore',t:'البحث التفصيلي',d:'بحث ويب مع مصادر'},
+ {id:'book',ic:'auto_stories',t:'إنشاء كتاب',d:'توليد كتب PDF'},
+ {id:'content-check',ic:'fact_check',t:'فحص محتوى',d:'فحص سكريبتات وفيديو'},
+ {id:'sharp-reply',ic:'gavel',t:'الرد القاطع',d:'ردود على الشبهات'},
+ {id:'did-say',ic:'verified_user',t:'هل قال؟',d:'التحقق من نسبة الكلام'},
+ {id:'dawah',ic:'volunteer_activism',t:'ولو بآية',d:'خطط الدعوة'},
+ {id:'fin',ic:'account_balance',t:'المستشار المالي',d:'استشارات مالية إسلامية'},
+ {id:'debate',ic:'forum',t:'المناظرات',d:'المناظرة مع الأديان والمذاهب'},
+ {id:'quiz',ic:'quiz',t:'الأسئلة',d:'إنشاء الاختبارات'},
+ {id:'tafsir',ic:'book_4',t:'التفسير',d:'تفسير الآيات'},
+ {id:'irab',ic:'spellcheck',t:'الإعراب',d:'إعراب الجمل'},
+ {id:'call',ic:'call',t:'المكالمات الصوتية',d:'المكالمة الصوتية المباشرة'}];
+
+/* ══ التنقل ══ */
+const NAVS=[
+ {v:'v-dash',ic:'home',t:'لوحة القيادة',sec:'main'},
+ {v:'v-users',ic:'group',t:'المستخدمون',sec:'main',cnt:USERS.length},
+ {v:'v-convs',ic:'forum',t:'المحادثات',sec:'main',cnt:CONVS.length},
+ {v:'v-models',ic:'psychology',t:'نماذج AI',sec:'main'},
+ {v:'v-kb',ic:'menu_book',t:'قاعدة المعرفة',sec:'main'},
+ {v:'v-safety',ic:'shield',t:'الأمان والمراقبة',sec:'main',cnt:MODS.length},
+ {v:'v-prompts',ic:'terminal',t:'أوامر AI',sec:'main'},
+ {v:'v-feedback',ic:'star',t:'التقييمات والبلاغات',sec:'admin',cnt:FEEDBACK.filter(f=>f.st==='مفتوح').length},
+ {v:'v-analytics',ic:'monitoring',t:'التحليلات',sec:'admin'},
+ {v:'v-app',ic:'tune',t:'إدارة التطبيق',sec:'admin'},
+ {v:'v-team',ic:'badge',t:'فريق الإدارة',sec:'admin'},
+ {v:'v-logs',ic:'receipt_long',t:'سجل العمليات',sec:'admin'},
+ {v:'v-s2-instr',ic:'psychology',t:'تعليمات AI',sec:'main'},
+ {v:'v-s2-src',ic:'source',t:'المصادر',sec:'main'},
+ {v:'v-s2-feat',ic:'tune',t:'الأدوات والميزات',sec:'main'},
+ {v:'v-s2-muftis',ic:'call',t:'المفتون',sec:'main'},
+ {v:'v-s2-gen',ic:'settings',t:'إعدادات عامة',sec:'admin'}];
+function switchNavSec(sec){document.querySelectorAll('.ntab').forEach(b=>b.classList.toggle('active',b.dataset.sec===sec));navMain.style.display=sec==='main'?'flex':'none';navAdmin.style.display=sec==='admin'?'flex':'none';}
+let curView='v-dash';
+function buildNav(){
+ navMain.innerHTML=NAVS.filter(n=>n.sec==='main').map(n=>`<button class="nav-item${n.v===curView?' active':''}" data-v="${n.v}" data-action="go" data-v="${n.v}"><span class="material-symbols-outlined">${n.ic}</span>${n.t}${n.cnt?`<span class="cnt">${n.cnt}</span>`:''}</button>`).join('');
+ navAdmin.innerHTML=NAVS.filter(n=>n.sec==='admin').map(n=>`<button class="nav-item${n.v===curView?' active':''}" data-v="${n.v}" data-action="go" data-v="${n.v}"><span class="material-symbols-outlined">${n.ic}</span>${n.t}${n.cnt?`<span class="cnt">${n.cnt}</span>`:''}</button>`).join('');}
+function go(v){curView=v;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id===v));
+ document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
+ const nv=(NAVS.find(n=>n.v===v)||{});tbTitle.textContent=nv.t||'';if(nv.sec)switchNavSec(nv.sec);closeSidebar();renderView(v);}
+function renderView(v){({ 'v-dash':renderDash,'v-users':renderUsers,'v-convs':renderConvs,'v-models':renderModels,
+ 'v-kb':renderKB,'v-safety':renderSafety,'v-prompts':renderPrompts,'v-subs':renderSubs,'v-feedback':renderFeedback,
+  'v-analytics':renderAnalytics,'v-app':renderApp,'v-team':renderTeam,'v-logs':renderLogs,'v-s2-instr':()=>{try{renderInstr()}catch(e){}},'v-s2-src':()=>{try{renderSrc()}catch(e){}},'v-s2-feat':()=>{try{renderFeatGroups()}catch(e){}},'v-s2-muftis':()=>{try{renderMuftiAdmin()}catch(e){}},'v-s2-gen':()=>{try{loadGen&&loadGen()}catch(e){}}})[v]?.();}
+
+/* ══ لوحة القيادة ══ */
+function statCard(ic,lbl,val,sub,delay){return `<div class="ad-card" style="animation-delay:${delay}s"><div class="st-top"><div class="st-ic"><span class="material-symbols-outlined">${ic}</span></div><span class="st-lbl">${lbl}</span></div><div class="st-val">${val}</div><div class="st-sub">${sub}</div></div>`}
+function renderDash(){
+ const totUsers=USERS.length*1130,actD=312,actW=1980,actM=7410;
+ const msgs=USERS.reduce((s,u)=>s+u.convs*9,0)*13;
+ dashStats.innerHTML=
+  statCard('group','إجمالي المستخدمين',fmtN(totUsers),`<b class="up">+8.4%</b> هذا الشهر`,0)
+ + statCard('bolt','النشطون اليوم',actD,`<b class="up">+3.1%</b> عن أمس`,.05)
+ + statCard('bolt','النشطون الأسبوعي',fmtN(actW),`<b class="up">+5.7%</b>`,.1)
+ + statCard('bolt','النشطون الشهري',fmtN(actM),`<b class="up">+11%</b>`,.15)
+ + statCard('forum','عدد المحادثات',String(CONVS.length),`آخر تحديث الآن`,.2)
+ + statCard('chat','عدد الرسائل',fmtN(msgs),`متوسط ${Math.round(msgs/((CONVS.length)||1))} رسالة/محادثة`,.25)
+ + statCard('token','استهلاك AI Tokens',fmtN(MODELS.reduce((s,m)=>s+m.tokens,0)),`<b class="dn">+14%</b> التكلفة`,.3)
+ + statCard('payments','تكلفة النماذج','0 ج.م','بانتظار بيانات الفوترة',.35)
+ + statCard('card_membership','إيرادات الاشتراكات','0 ج.م','بانتظار بوابة الدفع',.4)
+ + statCard('sentiment_satisfied','معدل رضا المستخدمين','—','تُحتسب من التقييمات الواردة',.45);
+ const days=['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+ let bh='';for(let i=0;i<14;i++){const u=180+Math.round(Math.sin(i/2)*70+Math.random()*90);const c=Math.round(u*.55);
+  const nm=days[i%7]+' '+(i+1);
+  bh+=`<div class="bar" title="${nm}: ${u} نشط"><i style="height:${u/300*100}%"></i><div class="bar alt" style="width:100%;display:flex;flex-direction:column;align-items:center"><i style="height:${c/300*100}%;margin-top:-4px"></i></div><b>${i%2?'':i+1}</b></div>`;}
+ actBars.innerHTML=bh;
+ const totTok=MODELS.reduce((s,m)=>s+m.tokens,0)||1;
+ dashModels.innerHTML=MODELS.map(m=>{const p=m.tokens/totTok*100;
+  return `<div style="margin:11px 0"><div style="display:flex;justify-content:space-between;font-size:.74rem;margin-bottom:5px"><b>${esc(m.name)}</b><span style="color:var(--text-3)">${fmtN(m.tokens)} — ${Math.round(p)}%</span></div><div class="meter"><i style="width:${p}%"></i></div></div>`;}).join('');
+ const rates=[...FEEDBACK].slice(0,4);
+ dashRates.innerHTML=rates.map(f=>`<div class="lrow"><div class="li" style="background:${f.type==='up'?'var(--accent-soft)':f.type==='down'?'rgba(201,162,39,.16)':'rgba(179,66,58,.13)'};color:${f.type==='up'?'var(--accent-text)':f.type==='down'?'var(--gold)':'var(--danger)'}"><span class="material-symbols-outlined" style="font-size:18px">${f.type==='up'?'thumb_up':f.type==='down'?'thumb_down':'flag'}</span></div><div class="lt"><div class="t1">${esc(f.q)}</div><div class="t2">${esc(f.reason)}</div></div>${f.st==='مفتوح'?'<span class="tag y">مفتوح</span>':'<span class="tag g">مقروء</span>'}</div>`).join('')||'<div class="empty">لا تقييمات بعد</div>';
+ dashAlerts.innerHTML=(function(){
+ const openFb=FEEDBACK.filter(f=>f.st==='مفتوح').length;
+ const needReview=CONVS.filter(c=>c.quality&&c.quality!=='ممتازة').length;
+ let h='';
+ if(openFb)h+=`<div class="lrow"><div class="li" style="background:rgba(179,66,58,.13);color:var(--danger)"><span class="material-symbols-outlined" style="font-size:18px">flag</span></div><div class="lt"><div class="t1">${openFb} بلاغ/تقييم مفتوح يحتاج مراجعة</div></div><button class="mini-btn" data-action="go" data-v="v-feedback"><span class="material-symbols-outlined">chevron_left</span></button></div>`;
+ if(needReview)h+=`<div class="lrow"><div class="li" style="background:rgba(201,162,39,.16);color:var(--gold)"><span class="material-symbols-outlined" style="font-size:18px">error</span></div><div class="lt"><div class="t1">${needReview} إجابة تحتاج مراجعة</div></div><button class="mini-btn" data-action="go" data-v="v-convs"><span class="material-symbols-outlined">chevron_left</span></button></div>`;
+ if(MODS.length)h+=`<div class="lrow"><div class="li" style="background:var(--accent-soft);color:var(--accent-text)"><span class="material-symbols-outlined" style="font-size:18px">shield</span></div><div class="lt"><div class="t1">${MODS.length} حدث مراقبة مسجل</div></div></div>`;
+ return h||'<div class="empty">لا توجد تنبيهات — كل شيء سليم</div>';
+ })();
+}
+
+/* ══ المستخدمون ══ */
+function renderUsers(){
+ userStats.innerHTML=statCard('group','إجمالي المستخدمين',String(USERS.length),'يُزامن مع السيرفر عند ربطه',0)
+ +statCard('workspace_premium','مشتركون مدفوعون',fmtN(1620),'<b class="up">+4.1%</b> التحويل 12%',.05)
+ +statCard('block','محظورون / موقوفون','46','آخر حظر قبل 20 دقيقة',.1)
+ +statCard('person_add','تسجيلات اليوم','58','<b class="up">+12</b> عن الأمس',.15);
+ const q=(userSearch.value||'').trim();
+ usersTbl.innerHTML=USERS.filter(u=>!q||u.name.includes(q)||u.email.includes(q)).map(u=>`<tr>
+  <td><div class="u-cell"><div class="avatar-s">${esc(u.name[0])}</div><div><div class="n">${esc(u.name)}</div><div class="e">${esc(u.email)}</div></div></div></td>
+  <td class="mono">${new Date(u.reg).toLocaleDateString('ar-EG')}</td>
+  <td style="white-space:nowrap">${timeAgo(u.last)}</td>
+  <td>${u.convs}</td>
+  <td>${u.plan==='المجانية'?'<span class="tag gr">مجانية</span>':'<span class="tag g">'+esc(u.plan)+'</span>'}</td>
+  <td class="mono">${fmtN(u.tokens)} tok</td>
+  <td>${u.status==='نشط'?'<span class="tag g">نشط</span>':u.status==='موقوف'?'<span class="tag y">موقوف</span>':'<span class="tag r">محظور</span>'}</td>
+  <td><div class="row-acts">
+   <button class="mini-btn" title="عرض" data-action="view-user" data-id="${u.id}"><span class="material-symbols-outlined">visibility</span></button>
+   <button class="mini-btn" title="${u.status==='محظور'?'إلغاء الحظر':'حظر'}" data-action="ban-user" data-id="${u.id}"><span class="material-symbols-outlined">${u.status==='محظور'?'lock_open':'block'}</span></button>
+   <button class="mini-btn del" title="تعطيل الحساب" data-action="disable-user" data-id="${u.id}"><span class="material-symbols-outlined">person_off</span></button>
+  </div></td></tr>`).join('')||'<tr><td colspan="8"><div class="empty">لا نتائج مطابقة</div></td></tr>';}
+function viewUser(id){const u=USERS.find(x=>x.id===id);if(!u)return;
+ userModalBody.innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div class="avatar" style="width:48px;height:48px;font-size:1.1rem">${esc(u.name[0])}</div><div><b>${esc(u.name)}</b><div class="e mono" style="font-size:.74rem">${esc(u.email)}</div></div></div>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.8rem">
+  <div class="ad-card" style="padding:12px"><div style="color:var(--text-3);font-size:.68rem">تاريخ التسجيل</div><b>${new Date(u.reg).toLocaleDateString('ar-EG')}</b></div>
+  <div class="ad-card" style="padding:12px"><div style="color:var(--text-3);font-size:.68rem">آخر نشاط</div><b>${timeAgo(u.last)}</b></div>
+  <div class="ad-card" style="padding:12px"><div style="color:var(--text-3);font-size:.68rem">المحادثات</div><b>${u.convs}</b></div>
+  <div class="ad-card" style="padding:12px"><div style="color:var(--text-3);font-size:.68rem">نوع الاشتراك</div><b>${esc(u.plan)}</b></div>
+  <div class="ad-card" style="padding:12px"><div style="color:var(--text-3);font-size:.68rem">استهلاك Tokens</div><b class="mono">${fmtN(u.tokens)}</b></div>
+  <div class="ad-card" style="padding:12px"><div style="color:var(--text-3);font-size:.68rem">الحالة</div><b>${u.status}</b></div>
+ </div>
+ <p style="margin-top:12px;font-size:.72rem;color:var(--text-3);background:var(--surface-2);border-radius:10px;padding:10px 12px">حماية الخصوصية: لا يُعرض محتوى المحادثات الخاصة إلا بقرار تشغيلي/قانوني موثق في سجل العمليات.</p>`;
+ openModal('userModal');}
+function banUser(id){const u=USERS.find(x=>x.id===id);if(!u)return;
+ u.status=u.status==='محظور'?'نشط':'محظور';
+ audit(u.status==='محظور'?'حظر':'إلغاء حظر',u.name);renderUsers();toast(u.status==='محظور'?'تم حظر المستخدم':'تم إلغاء الحظر');}
+function disableUser(id){const u=USERS.find(x=>x.id===id);if(!u)return;
+ u.status=u.status==='موقوف'?'نشط':'موقوف';audit('تعطيل حساب',u.name);renderUsers();toast('تم تحديث حالة الحساب');}
+
+/* ══ المحادثات ══ */
+let convFilter='الكل';
+function renderConvs(){
+ const filters=[['الكل',''],['ممتازة','star'],['تحتاج مراجعة','warning'],['إلغاء عليها','report']];
+ convFilters.innerHTML=filters.map(([f,ic])=>`<button class="f-chip${f===convFilter?' active':''}" data-action="conv-filter" data-f="${f}">${ic?`<span class="material-symbols-outlined" style="font-size:14px">${ic}</span> `:''}${f}</button>`).join('');
+ convStats.innerHTML=statCard('forum','إجمالي المحادثات',String(CONVS.length),'يُزامن مع السيرفر عند ربطه',0)
+ +statCard('star','إجابات ممتازة',String(CONVS.filter(c=>c.quality==='ممتازة').length),'من إجمالي المحادثات',.05)
+ +statCard('error','إجابات بها خطأ',String(CONVS.filter(c=>c.quality==='إلغاء عليها').length),'تحتاج مراجعة',.1)
+ +statCard('trending_up','أكثر المواضيع سؤالاً','العبادات','38% من المحادثات',.15);
+ const list=CONVS.filter(c=>convFilter==='الكل'||c.quality===convFilter);
+ convsTbl.innerHTML=list.map(c=>`<tr>
+  <td style="font-weight:600">${esc(c.title)}</td>
+  <td>${esc(c.user)}</td>
+  <td><span class="tag b">${esc(c.topic)}</span></td>
+  <td>${c.msgs}</td>
+  <td class="mono" style="font-size:.72rem">${esc(c.model)}</td>
+  <td>${qTag(c.quality)}</td>
+  <td><div class="row-acts"><button class="mini-btn" title="مراجعة" data-action="review-conv" data-id="${c.id}"><span class="material-symbols-outlined">rate_review</span></button></div></td></tr>`).join('')
+  ||'<tr><td colspan="7"><div class="empty">لا محادثات بهذه الحالة</div></td></tr>';}
+let revConvId=null;
+function reviewConv(id){revConvId=id;const c=CONVS.find(x=>x.id===id);if(!c)return;
+ convModalBody.innerHTML=`<div style="font-size:.84rem;line-height:2;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px">
+ <b>السؤال:</b> ${esc(c.title)}؟<br><br>
+ <b>إجابة النموذج (${esc(c.model)}):</b><br>
+ بحسب ما قرره أهل العلم في ${esc(c.topic)}، فإن الجمهور على القول الأول... وقد قال ابن القيم رحمه الله: «...»، والخلاصة أن الحكم كذا، مع التنبيه إلى أن الفتوى المعتمدة عند دار الإفتاء جاءت على النحو التالي...<br><br>
+ <b>المصادر:</b> <span class="tag gr">فتاوى اللجنة الدائمة</span> <span class="tag gr">موقع الأزهر</span></div>
+ <div style="display:flex;gap:8px;margin-top:12px;align-items:center"><span style="font-size:.76rem;color:var(--text-3)">تقييم المستخدم:</span>${'★'.repeat(c.rate)}${'☆'.repeat(5-c.rate)}</div>`;
+ openModal('convModal');}
+function setConvQuality(v){const c=CONVS.find(x=>x.id===revConvId);if(!c)return;
+ c.quality=v;audit('مراجعة محادثة',c.title+' ← '+v);closeModal('convModal');renderConvs();toast('تم تحديث حالة الإجابة');}
+function exportConvsCsv(){const csv='العنوان,المستخدم,الموضوع,الرسائل,الحالة\n'+CONVS.map(c=>[c.title,c.user,c.topic,c.msgs,c.quality].join(',')).join('\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));a.download='conversations.csv';a.click();toast('تم تصدير المحادثات');}
+
+/* ══ النماذج ══ */
+function renderModels(){
+ modsGrid.innerHTML=MODELS.map((m,i)=>`<div class="mod-card${m.on?'':' off'}">
+  <div class="mod-top"><div class="mod-ic"><span class="material-symbols-outlined">psychology</span></div>
+   <div style="flex:1"><div class="mod-name">${esc(m.name)}</div><div class="mod-desc">${esc(m.desc)}</div></div>
+   <div class="switch${m.on?' on':''}" data-action="toggle-model" data-i="${i}"></div></div>
+  <div class="mod-stats">
+   <div class="r"><span>الاستخدام اليوم</span><b>${m.use}% — ${fmtN(m.tokens)} tok</b></div>
+   <div class="meter"><i style="width:${m.use}%"></i></div>
+   <div class="r"><span>Temp / Ctx</span><b class="mono">${m.temp} / ${m.ctx}</b></div>
+   <div class="r"><span>التكلفة / 1M token</span><b>$${m.cost}</b></div>
+   <div class="r"><span>حد الاستخدام اليومي</span><b class="mono">100 req/user</b></div>
+  </div>
+  <div class="mod-foot">
+   <span class="tag ${m.on?'g':'gr'}">${m.on?'مفعّل':'معطّل'}</span>
+   <div class="row-acts">
+    <button class="mini-btn" title="الافتراضي" data-action="default-model" data-i="${i}"><span class="material-symbols-outlined">${i===0?'radio_button_checked':'radio_button_unchecked'}</span></button>
+    <button class="mini-btn" title="تعديل" data-action="edit-model" data-i="${i}"><span class="material-symbols-outlined">edit</span></button>
+   </div></div></div>`).join('')||'<div class="empty" style="grid-column:1/-1">لا نماذج مضافة — أضف أول نموذج من الزر أعلاه</div>';}
+function toggleModel(i){MODELS[i].on=!MODELS[i].on;audit(MODELS[i].on?'تفعيل نموذج':'تعطيل نموذج',MODELS[i].name);renderModels();}
+function setDefaultModel(i){const m=MODELS.splice(i,1)[0];MODELS.unshift(m);audit('تغيير النموذج الافتراضي',m.name);renderModels();toast('النموذج الافتراضي الآن: '+m.name);}
+function editModel(i){const m=MODELS[i];mdName.value=m.name;mdTemp.value=m.temp;mdMax.value=4096;mdCtx.value=131072;mdPrompt.value='';openModal('modelEditModal');}
+function saveModel(){if(!mdName.value.trim()){toast('اكتب اسم النموذج');return;}
+ MODELS.unshift({name:mdName.value.trim(),desc:mdPrompt.value.slice(0,60)||'نموذج مخصص',on:true,tokens:0,cost:0.2,temp:+mdTemp.value||0.3,ctx:'128K',use:0});
+ audit('إضافة نموذج',mdName.value.trim());closeModal('modelEditModal');renderModels();toast('تمت إضافة النموذج');}
+
+/* ══ قاعدة المعرفة ══ */
+function renderKB(){
+ kbGrid.innerHTML=KB.map((k,i)=>`<div class="kb-card" style="animation-delay:${i*.04}s">
+  <div class="kb-top"><div class="kb-ic"><span class="material-symbols-outlined">${k.ic}</span></div>
+   <div><div class="kb-name">${k.name}</div><div class="kb-count">${k.count}</div></div></div>
+  <div class="kb-meta"><span>التوثيق: <b style="color:var(--accent-text)">${k.verified}</b></span><span>${k.upd}</span></div>
+  <div class="meter"><i style="width:${parseInt(k.verified)}%"></i></div></div>`).join('')||'<div class="empty" style="grid-column:1/-1">لا أقسام معرفة بعد — أضف مصادرك من الزر أعلاه</div>';
+ kbSources.innerHTML=SOURCES.map((s,i)=>`<div class="src-row"><div class="si"><span class="material-symbols-outlined">${s.cat==='القرآن'?'menu_book':s.cat==='كتب الحديث'?'auto_stories':s.cat==='الفتاوى'?'gavel':'article'}</span></div>
+  <div class="src-info"><div class="src-name">${esc(s.name)}</div><div class="src-sub">${esc(s.cat)} — آخر تحديث ${esc(s.upd)}</div></div>
+  ${s.status==='موثق'?'<span class="tag g">موثق</span>':'<span class="tag y">قيد المراجعة</span>'}
+  <button class="mini-btn del" data-action="del-source" data-i="${i}"><span class="material-symbols-outlined">delete</span></button></div>`).join('')||'<div class="empty" style="padding:14px 0">لا مصادر مضافة بعد</div>';}
+function saveSource(){if(!srcName.value.trim()){toast('اكتب اسم المصدر');return;}
+ SOURCES.unshift({name:srcName.value.trim(),cat:srcCat.value,status:'قيد المراجعة',upd:'الآن'});
+ audit('إضافة مصدر',srcName.value.trim());closeModal('srcModal');renderKB();toast('أُضيف المصدر — بانتظار التوثيق');}
+
+/* ══ الأمان ══ */
+function renderSafety(){
+ safetyCards.innerHTML=
+  `<div class="ad-card"><div class="st-top"><div class="st-ic" style="background:rgba(179,66,58,.13);color:var(--danger)"><span class="material-symbols-outlined">gpp_maybe</span></div><span class="st-lbl">محاولات تجاوز تعليمات النظام</span></div><div class="st-val">${MODS.filter(m=>m.type==='Prompt Injection').length}</div><div class="st-sub">كلها مرصودة ومرفوضة</div></div>`
+ +`<div class="ad-card"><div class="st-top"><div class="st-ic" style="background:rgba(201,162,39,.16);color:var(--gold)"><span class="material-symbols-outlined">replay_circle_filled</span></div><span class="st-lbl">حد معدل الطلبات (Rate Limit)</span></div><div class="st-val">${MODS.filter(m=>m.type==='سبام').length}</div><div class="st-sub">حالات سبام مسجلة</div></div>`
+ +`<div class="ad-card"><div class="st-top"><div class="st-ic"><span class="material-symbols-outlined">shield</span></div><span class="st-lbl">فلتر الإساءة الآلي</span></div><div class="st-val">${MODS.length?'يعمل':'—'}</div><div class="st-sub">مراجعة بشرية للحالات الحدّية فقط</div></div>`;
+ modCount.textContent=MODS.length+' حدث';
+ modTbl.innerHTML=MODS.map(m=>`<tr>
+  <td><span class="tag ${m.sev}">${esc(m.type)}</span></td>
+  <td style="font-size:.76rem;max-width:220px">${esc(m.txt)}</td>
+  <td>${esc(m.user)}</td>
+  <td style="font-size:.74rem">${esc(m.act)}</td>
+  <td style="white-space:nowrap;font-size:.74rem;color:var(--text-3)">${esc(m.t)}</td></tr>`).join('')||'<tr><td colspan="5"><div class="empty">لا أحداث مراقبة مسجلة</div></td></tr>';
+}
+
+/* ══ الـ Prompts ══ */
+function renderPrompts(){
+ promptsGrid.innerHTML=PROMPTS.map((p,i)=>`<div class="ad-card">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div class="st-ic"><span class="material-symbols-outlined">${p.ic}</span></div><b style="font-size:.88rem">${esc(p.mode)}</b>
+  <span class="tag gr" style="margin-right:auto">v${(3-i%3)}.${i}</span></div>
+  <textarea id="pr${i}" style="width:100%;min-height:120px;border:1px solid var(--border-strong);background:var(--surface-2);border-radius:12px;padding:11px 13px;font-family:inherit;font-size:.8rem;line-height:1.9;color:var(--text);resize:vertical;outline:none">${esc(p.txt)}</textarea>
+  <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btn ghost sm" data-action="save-prompt" data-i="${i}"><span class="material-symbols-outlined" style="font-size:16px">save</span> حفظ</button></div></div>`).join('');}
+
+/* ══ الاشتراكات ══ */
+function renderSubs(){
+ subStats.innerHTML=statCard('card_membership','إجمالي المشتركين المدفوعين','0','بانتظار بوابة الدفع',0)
+ +statCard('payments','MRR — الإيراد الشهري المتكرر','0 ج.م','بانتظار بوابة الدفع',.05)
+ +statCard('conversion','معدل التحويل','—','يُحتسب عند تفعيل الاشتراكات',.1)
+ +statCard('unsubscribe','معدل إلغاء الاشتراك','3.2%','<b class="dn">-0.6%</b> تحسن',.15);
+ plansGrid.innerHTML=PLANS.map((p,i)=>`<div class="ad-card" style="position:relative;${p.pop?'border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)':''}">
+  ${p.pop?'<span class="tag g" style="position:absolute;top:-10px;right:16px">الأكثر اشتراكاً</span>':''}
+  <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px"><b style="font-size:1.05rem">${esc(p.name)}</b><span style="font-size:1.5rem;font-weight:700;color:var(--accent-text);margin-right:auto">${p.price} <small style="font-size:.7rem;font-weight:400">ج.م/شهر</small></span></div>
+  <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">${p.feats.map(f=>`<div style="display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--text-2)"><span class="material-symbols-outlined" style="font-size:16px;color:var(--accent)">check</span>${esc(f)}</div>`).join('')||'<div class="empty" style="grid-column:1/-1">لا خطط اشتراك بعد — أنشئ أول خطة</div>'}</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:12px">
+   <span style="font-size:.74rem;color:var(--text-3)">${fmtN(p.subs)} مشترك</span>
+   <button class="btn ghost sm" data-action="edit-plan" data-i="${i}"><span class="material-symbols-outlined" style="font-size:16px">edit</span> تعديل</button></div></div>`).join('');
+ payTbl.innerHTML=PAYS.map(p=>`<tr><td style="font-weight:600">${esc(p.u)}</td><td>${esc(p.plan)}</td><td class="mono">${esc(p.amt)}</td><td class="mono">${esc(p.m)}</td>
+  <td>${p.st==='ناجحة'?'<span class="tag g">ناجحة</span>':p.st==='فاشلة'?'<span class="tag r">فاشلة</span>':'<span class="tag gr">ملغاة</span>'}</td>
+  <td style="font-size:.74rem;color:var(--text-3);white-space:nowrap">${esc(p.t)}</td></tr>`).join('')||'<tr><td colspan="6"><div class="empty">لا مدفوعات مسجلة</div></td></tr>';}
+function editPlan(i){plName.value=PLANS[i].name;plPrice.value=PLANS[i].price;openModal('planModal');}
+function savePlan(){if(!plName.value.trim()){toast('اكتب اسم الخطة');return;}
+ PLANS.push({name:plName.value.trim(),price:+plPrice.value||0,subs:0,feats:['ميزة مخصصة']});
+ audit('إضافة خطة',plName.value.trim());closeModal('planModal');renderSubs();toast('تمت إضافة الخطة');}
+
+/* ══ التقييمات والبلاغات ══ */
+let fbFilter='الكل';
+function renderFeedback(){
+ const fs=[['الكل',''],['مفيدة','thumb_up'],['غير مفيدة','thumb_down'],['بلاغات','flag']];
+ fbFilters.innerHTML=fs.map(([f,ic])=>`<button class="f-chip${f===fbFilter?' active':''}" data-action="fb-filter" data-f="${f}">${ic?`<span class="material-symbols-outlined" style="font-size:14px">${ic}</span> `:''}${f}</button>`).join('');
+ const icon={up:['thumb_up','var(--accent-soft)','var(--accent-text)'],down:['thumb_down','rgba(201,162,39,.16)','var(--gold)'],report:['flag','rgba(179,66,58,.13)','var(--danger)']};
+ const match=f=>fbFilter==='الكل'||(fbFilter==='مفيدة'&&f.type==='up')||(fbFilter==='غير مفيدة'&&f.type==='down')||(fbFilter==='بلاغات'&&f.type==='report');
+ fbTbl.innerHTML=FEEDBACK.filter(match).map((f,i)=>{const[ic,bg,cl]=icon[f.type];const gi=FEEDBACK.indexOf(f);
+  return `<tr><td><span class="tag" style="background:${bg};color:${cl}"><span class="material-symbols-outlined" style="font-size:14px">${ic}</span>${f.type==='up'?'مفيدة':f.type==='down'?'غير مفيدة':'بلاغ'}</span></td>
+  <td style="font-weight:600;font-size:.78rem">${esc(f.q)}</td>
+  <td style="font-size:.74rem">${esc(f.reason)}${f.prob?` <span class="tag gr">${esc(f.prob)}</span>`:''}</td>
+  <td class="mono" style="font-size:.7rem">${esc(f.model)}</td>
+  <td>${f.st==='مفتوح'?'<span class="tag y">مفتوح</span>':'<span class="tag g">مقروء</span>'}</td>
+  <td>${f.st==='مفتوح'?`<button class="btn ghost sm" data-action="close-report" data-gi="${gi}">إغلاق</button>`:''}</td></tr>`;}).join('')||'<tr><td colspan="6"><div class="empty">لا تقييمات أو بلاغات بعد</div></td></tr>';}
+
+/* ══ التحليلات ══ */
+function renderAnalytics(){
+ anStats.innerHTML=statCard('timer','متوسط زمن الرد','—','يُحتسب من السجلات',0)
+ +statCard('smart_button','متوسط الرسائل/محادثة','—','يُحتسب من السجلات',.05)
+ +statCard('stadia_controller','أكثر وضع استخداماً','—','يُحتسب من السجلات',.1)
+ +statCard('download','معدل الاحتفاظ D30','—','يُحتسب من السجلات',.15);
+ const topics=[];
+ topicBars.innerHTML=topics.map(([t,p])=>`<div><div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:4px"><b>${t}</b><span style="color:var(--text-3)">${p}%</span></div><div class="meter"><i style="width:${p/38*100}%"></i></div></div>`).join('')||'<div class="empty">لا بيانات مواضيع بعد</div>';
+ let sh='';for(let i=0;i<8;i++){const s=78+Math.round(Math.sin(i/1.6)*12+Math.random()*6);
+  sh+=`<div class="bar"><i style="height:${s}%"></i><b>أ${i+1}</b></div>`;}
+ satBars.innerHTML=sh;
+ let hh='';for(let h=0;h<12;h++){const v=(h+5)%24;const load=Math.max(10,100-Math.abs(v-21)*9+Math.round(Math.random()*18));
+  hh+=`<div class="bar"><i style="height:${load}%"></i><b>${v}:00</b></div>`;}
+ hourBars.innerHTML=hh;}
+
+/* ══ إدارة التطبيق ══ */
+let featDisabled=(()=>{try{return JSON.parse(LS.raw('mai_feature_toggles')||'[]')}catch(e){return[]}})();
+function renderApp(){
+ flagsList.innerHTML=FEATURES.map(f=>`<div class="flag-row">
+  <div class="fi"><span class="material-symbols-outlined" style="font-size:18px">${f.ic}</span></div>
+  <div class="ft"><div class="t1">${f.t}</div><div class="t2">${f.d}</div></div>
+  <div class="switch${featDisabled.includes(f.id)?'':' on'}" data-action="toggle-feature" data-id="${f.id}"></div></div>`).join('');
+ themeLockSw.classList.toggle('on',LS.raw('mai_theme_lock')==='1');
+ maintSw.classList.toggle('on',LS.raw('mai_maintenance')==='1');
+ renderSuggs();renderMuftisAdmin();}
+function toggleFeature(id,sw){const i=featDisabled.indexOf(id);
+ if(i>-1)featDisabled.splice(i,1);else featDisabled.push(id);
+ try{LS.setRaw('mai_feature_toggles',JSON.stringify(featDisabled))}catch(e){}
+ sw.classList.toggle('on',i>-1);audit(i>-1?'تفعيل ميزة':'تعطيل ميزة',id);toast(i>-1?'الميزة مفعّلة الآن في التطبيق':'الميزة مخفية الآن من التطبيق');}
+function toggleThemeLock(sw){const on=sw.classList.toggle('on');
+ try{LS.setRaw('mai_theme_lock',on?'1':'0')}catch(e){}
+ audit('قفل المظهر',on?'مفعّل':'مغلق');toast(on?'تم قفل تغيير المظهر':'تم فتح تغيير المظهر');}
+function toggleMaint(sw){sw.classList.toggle('on');maintModal.classList.add('open');sw.classList.remove('on');}
+function enableMaint(){try{LS.setRaw('mai_maintenance','1');LS.setRaw('mai_maintenance_msg',maintMsg.value)}catch(e){}
+ audit('تفعيل صيانة','وضع الصيانة');closeModal('maintModal');renderApp();toast('وضع الصيانة مفعّل');}
+function getSuggs(){try{return JSON.parse(LS.raw('mai_suggs'))||[]}catch(e){return[]}}
+function renderSuggs(){const s=getSuggs();sugCount.textContent=s.length+' مقترح';
+ suggList.innerHTML=s.map((x,i)=>`<div class="lrow" style="padding:9px 4px"><div class="lt"><div class="t1" style="font-weight:500;font-size:.8rem">${esc(x)}</div></div>
+  <button class="mini-btn del" data-action="del-sugg" data-i="${i}"><span class="material-symbols-outlined">delete</span></button></div>`).join('')||'<div class="empty">لا اقتراحات محفوظة</div>';}
+function addSugg(){const v=newSugg.value.trim();if(!v){toast('اكتب الاقتراح');return;}
+ const s=getSuggs();s.unshift(v);try{LS.setRaw('mai_suggs',JSON.stringify(s))}catch(e){}
+ newSugg.value='';renderSuggs();audit('إضافة اقتراح',v);toast('تمت الإضافة');}
+function delSugg(i){const s=getSuggs();audit('حذف اقتراح',s[i]);s.splice(i,1);try{LS.setRaw('mai_suggs',JSON.stringify(s))}catch(e){}renderSuggs();}
+function getCustomMuftis(){try{return JSON.parse(LS.raw('mai_muftis_custom')||'[]')}catch(e){return[]}}
+function renderMuftisAdmin(){const m=getCustomMuftis();
+ muftiList.innerHTML=m.map((x,i)=>`<div class="lrow" style="padding:9px 4px"><div class="lt"><div class="t1" style="font-weight:500;font-size:.8rem">${esc(x.n)}</div><div class="t2 mono" style="direction:ltr;text-align:right">${esc(x.t)} — ${x.g==='f'?'نساء':'رجال'}</div></div>
+  <button class="mini-btn del" data-action="del-mufti" data-i="${i}"><span class="material-symbols-outlined">delete</span></button></div>`).join('')||'<div class="empty">لا مفتون مضافون — الافتراضيون من كود التطبيق</div>';}
+function addMufti(){const parts=newMufti.value.split('—').map(s=>s.trim());
+ if(parts.length<2){toast('الصيغة: الاسم — الرقم — m/f');return;}
+ const m=getCustomMuftis();m.push({g:parts[2]==='f'?'f':'m',n:parts[0],t:parts[1],wa:1,call:1});
+ try{LS.setRaw('mai_muftis_custom',JSON.stringify(m))}catch(e){}
+ newMufti.value='';renderMuftisAdmin();audit('إضافة مفتي',parts[0]);toast('تمت الإضافة للتطبيق');}
+function delMufti(i){const m=getCustomMuftis();audit('حذف مفتي',m[i].n);m.splice(i,1);try{LS.setRaw('mai_muftis_custom',JSON.stringify(m))}catch(e){}renderMuftisAdmin();}
+
+/* ══ فريق الإدارة ══ */
+function renderTeam(){
+ teamTbl.innerHTML=TEAM.map((t,i)=>`<tr>
+  <td><div class="u-cell"><div class="avatar-s">${esc(t.name[0])}</div><div><div class="n">${esc(t.name)}</div><div class="e">${esc(t.email)}</div></div></div></td>
+  <td>${t.role==='Super Admin'?'<span class="tag g">Super Admin</span>':'<span class="tag b">'+esc(t.role)+'</span>'}</td>
+  <td style="white-space:nowrap;font-size:.76rem">${t.on?timeAgo(t.last):'—'}</td>
+  <td>${t.on?'<span class="tag g">متصل</span>':'<span class="tag gr">غير متصل</span>'}</td>
+  <td><div class="row-acts"><button class="mini-btn" title="تعديل الدور" data-action="edit-role" data-name="${esc(t.name)}"><span class="material-symbols-outlined">edit</span></button>
+   ${t.role!=='Super Admin'?`<button class="mini-btn del" title="إزالة" data-action="del-team" data-i="${i}"><span class="material-symbols-outlined">person_remove</span></button>`:''}</div></td></tr>`).join('')||'<tr><td colspan="5"><div class="empty">لا مدراء بعد — أرسل أول دعوة من الزر أعلاه</div></td></tr>';
+ rolesGrid.innerHTML=ROLES.map((r,i)=>`<div class="ad-card" style="animation-delay:${i*.05}s;padding:14px 16px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div class="st-ic" style="width:34px;height:34px"><span class="material-symbols-outlined" style="font-size:17px">${r.ic||'badge'}</span></div><b style="font-size:.84rem">${esc(r.name)}</b></div>
+  <div style="font-size:.72rem;color:var(--text-3);line-height:1.8">${esc(r.desc)}</div></div>`).join('');}
+function inviteAdmin(){if(!invMail.value.trim()){toast('اكتب البريد');return;}
+ TEAM.push({name:invMail.value.split('@')[0],email:invMail.value.trim(),role:invRole.value,last:Date.now(),on:false});
+ audit('دعوة مدير',invMail.value.trim()+' — '+invRole.value);closeModal('inviteModal');renderTeam();toast('أُرسلت الدعوة');}
+
+/* ══ سجل العمليات ══ */
+let logFilter='الكل';
+function renderLogs(){
+ const ops=['الكل','دخول','تعديل','حظر','إضافة','حذف','مراجعة'];
+ logFilters.innerHTML=ops.map(o=>`<button class="f-chip${o===logFilter?' active':''}" data-action="log-filter" data-f="${o}">${o}</button>`).join('');
+ logsTbl.innerHTML=LOGS.filter(l=>logFilter==='الكل'||l.op===logFilter).map(l=>`<tr>
+  <td style="font-weight:600">${esc(l.who)}</td>
+  <td><span class="tag ${l.op==='حظر'||l.op==='حذف'?'r':l.op==='دخول'?'b':'g'}">${esc(l.op)}</span></td>
+  <td style="font-size:.76rem">${esc(l.what)}</td>
+  <td style="white-space:nowrap;font-size:.74rem;color:var(--text-3)">${timeAgo(l.t)}<br><span style="font-size:.62rem">${new Date(l.t).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})}</span></td>
+  <td class="mono">${esc(l.ip)}<br><span style="font-size:.62rem;opacity:.7">sess_${String(l.t).slice(-6)}</span></td>
+  <td>${l.ok?'<span class="tag g">ناجحة</span>':'<span class="tag r">فاشلة</span>'}</td></tr>`).join('')||'<tr><td colspan="6"><div class="empty">لا عمليات مسجلة بعد في هذه الجلسة</div></td></tr>';}
+function audit(op,what){LOGS.unshift({who:'عبدالله',op,what,t:Date.now(),ip:'84.235.12.9',ok:true});}
+function exportLogs(){const csv='المدير,العملية,التفاصيل,الوقت,IP,نتيجة\n'+LOGS.map(l=>[l.who,l.op,l.what,new Date(l.t).toISOString(),l.ip,l.ok?'ناجحة':'فاشلة'].join(',')).join('\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));a.download='audit-logs.csv';a.click();toast('تم تصدير السجل');}
+
+/* ══ تشغيل ══ */
+buildNav();renderView('v-dash');
+document.addEventListener('click',e=>{const m=e.target.closest('.modal');if(m&&e.target===m)closeModal(m.id);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));});
+</script>
+<script>
+/* ══ الثيم ══ */
+const root2=document.documentElement;
+function setTheme2(t){root2.dataset.theme=t;try{LS.setRaw('mai-theme',t)}catch(e){}
+ {const ti=document.getElementById('themeIcon');if(ti)ti.textContent=t==='light'?'dark_mode':'light_mode';}
+ metaThemeColor.setAttribute('content',t==='dark'?'#3fb984':'#157a55');}
+function toggleTheme2(){setTheme2(root2.dataset.theme==='light'?'dark':'light')}
+setTheme2((()=>{try{return LS.raw('mai-theme')}catch(e){return null}})()||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+
+function toast(m){toastEl.textContent=m;toastEl.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>toastEl.classList.remove('show'),2400);}
+function esc(t){return String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+
+/* ══ نظرة عامة ══ */
+function loadDash(){
+ if(typeof stConvs==='undefined')return;
+ let convs=[];try{convs=JSON.parse(LS.raw('mai_convs'))||[]}catch(e){}
+ stConvs.textContent=convs.length;
+ stMsgs.textContent=convs.reduce((s,c)=>s+(c.messages?c.messages.length:0),0);
+ stFav.textContent=convs.reduce((s,c)=>s+(c.messages?c.messages.filter(m=>m.fav).length:0),0);
+ stLocked.textContent=convs.filter(c=>c.locked).length;
+}
+loadDash();
+
+/* ══ تعليمات الذكاء الاصطناعي ══ */
+const DEFAULT_INSTR={
+ fatwa:{name:'فتوى',on:true,text:'أجب بأسلوب علمي متأنٍ، اذكر الدليل من القرآن أو السنة عند الإمكان، ووضّح اختلاف العلماء إن وجد دون تعصب لمذهب.'},
+ smart:{name:'الفتوى الذكية',on:true,text:'قدّم إجابة شاملة تجمع بين أقوال المذاهب المعتبرة، ووازن بينها بأدلتها دون ترجيح متعصب.'},
+ halal:{name:'البديل الحلال',on:true,text:'عند ذكر أمر محرم، لا تكتفِ بالتحريم، بل اذكر دائمًا بديلاً حلالاً عمليًا ومتدرجًا يناسب حال السائل.'},
+ quiz:{name:'صانع الأسئلة',on:true,text:'التزم فعليًا بمستوى الصعوبة المطلوب (مبتدئ/متوسط/متقدم) دون تخفيف أو تصعيب، ونوّع الأسئلة حسب الأنواع المطلوبة.'},
+ 'hadith-check':{name:'المحدّث (صحة حديث)',on:true,text:'اذكر نص الحديث، درجة صحته (صحيح/حسن/ضعيف/موضوع)، اسم من حكم عليه، الراوي، والمصدر بدقة دون تساهل.'},
+ 'hadith-explain':{name:'شرح حديث',on:true,text:'اشرح الحديث شرحًا مبسطًا يناسب عامة الناس، مع ذكر الفوائد المستنبطة منه.'},
+ tafsir:{name:'المفسّر',on:true,text:'فسّر الآية أو الكلمة القرآنية بالمأثور من كتب التفسير المعتبرة، واذكر المصدر.'},
+ debate:{name:'المناظرة',on:true,text:'رد بحكمة وذكاء وإقناع بالأدلة العقلية والنقلية، ثم اختم ردك دائمًا بسؤال منطقي دقيق يكشف تناقض موقف المقابل أو يضعف حجته.'},
+ 'sharp-reply':{name:'الرد القاطع',on:true,text:'رد ردًا قاطعًا ومقنعًا وذكيًا جدًا على الشبهة، بلغة عامية بسيطة قريبة من القلوب، بالأدلة الكاملة.'},
+ 'did-say':{name:'هل قال؟',on:true,text:'تحقق بدقة من نسبة القول للعالِم المذكور، واذكر المصدر أو انفِ النسبة بوضوح إن كانت غير صحيحة.'},
+ dawah:{name:'ولو بآية',on:true,text:'دلّ السائل على طريق دعوة عملي يناسب مهاراته واهتماماته، بخطوات قابلة للتطبيق فورًا.'},
+ book:{name:'صانع الكتب',on:true,text:'أنشئ محتوى الكتاب بأسلوب تأليف حقيقي، مقسّم لفصول متسلسلة منطقيًا حسب المواصفات المطلوبة.'},
+ 'content-check':{name:'فاحص المحتوى',on:true,text:'افحص المحتوى المرفق وبيّن ما فيه من مخالفات شرعية أو معلومات غير دقيقة بأسلوب علمي محايد.'}
+};
+function cleanInstr(o){const d={};if(!o||typeof o!=='object')return d;
+ Object.keys(o).forEach(k=>{const it=o[k];if(!it||typeof it!=='object')return;
+  d[String(k).slice(0,40)]={name:String(it.name||'تعليمة').slice(0,60),on:!!it.on,text:String(it.text||'').slice(0,4000)};});
+ return d;}
+function getInstr(){try{return {...DEFAULT_INSTR,...cleanInstr(JSON.parse(LS.raw('mai_admin_instructions')||'{}'))}}catch(e){return {...DEFAULT_INSTR}}}
+let instrState=getInstr();
+function renderInstr(){
+ const keys=Object.keys(instrState);
+ instrAcc.innerHTML=keys.length?keys.map(k=>{const it=instrState[k];
+  return `<div class="acc-item" data-k="${k}">
+   <div class="acc-head" data-acchead="${k}">
+    <span class="material-symbols-outlined ic">smart_toy</span>
+    <span class="acc-name">${esc(it.name)}</span>
+    <div class="acc-toggle${it.on?' on':''}" data-acctoggle="${k}"></div>
+    <span class="material-symbols-outlined chev">expand_more</span>
+   </div>
+   <div class="acc-body"><div class="acc-body-inner">
+    <textarea data-instrtext="${k}" placeholder="نص التعليمة المخصّصة...">${esc(it.text)}</textarea>
+    <div class="row"><button class="btn sm del-acc" data-delinstr="${k}"><span class="material-symbols-outlined">delete</span> حذف</button></div>
+   </div></div>
+  </div>`;}).join(''):'<div class="empty">لا توجد تعليمات بعد</div>';
+}
+renderInstr();
+instrAcc.addEventListener('click',e=>{
+ const h=e.target.closest('[data-acchead]');
+ const tg=e.target.closest('[data-acctoggle]');
+ const dl=e.target.closest('[data-delinstr]');
+ if(tg){const k=tg.dataset.acctoggle;instrState[k].on=!instrState[k].on;renderInstr();return;}
+ if(dl){const k=dl.dataset.delinstr;delete instrState[k];renderInstr();toast('تم حذف التعليمة (اضغط حفظ لتثبيت التغيير)');return;}
+ if(h){h.closest('.acc-item').classList.toggle('open');}
+});
+instrAcc.addEventListener('input',e=>{
+ const ta=e.target.closest('[data-instrtext]');if(!ta)return;
+ instrState[ta.dataset.instrtext].text=ta.value;
+});
+function addInstruction(){
+ const name=newInstrName.value.trim();if(!name){toast('اكتب اسم التعليمة');return}
+ const key='custom_'+Date.now();
+ instrState[key]={name,on:true,text:''};
+ newInstrName.value='';renderInstr();toast('أُضيفت — عدّل النص ثم احفظ');
+}
+function saveInstructions(){
+ try{LS.setRaw('mai_admin_instructions',JSON.stringify(instrState));toast('تم حفظ كل التعليمات');}catch(e){toast('تعذّر الحفظ');}
+}
+
+/* ══ المصادر ══ */
+const DEFAULT_SRC={
+ aqidah:{name:'العقيدة',items:[
+  {n:'كتاب التوحيد — محمد بن عبد الوهاب',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'كتاب التوحيد — محمد بن عبد الوهاب'),on:true},
+  {n:'العقيدة الواسطية — ابن تيمية',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'العقيدة الواسطية — ابن تيمية'),on:true},
+  {n:'العقيدة الطحاوية — الطحاوي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'العقيدة الطحاوية — الطحاوي'),on:true},
+  {n:'لمعة الاعتقاد — ابن قدامة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'لمعة الاعتقاد — ابن قدامة'),on:true},
+  {n:'كشف الشبهات — محمد بن عبد الوهاب',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'كشف الشبهات — محمد بن عبد الوهاب'),on:true},
+  {n:'الصواعق المرسلة — ابن القيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الصواعق المرسلة — ابن القيم'),on:true},
+  {n:'السنة — أحمد بن حنبل',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'السنة — أحمد بن حنبل'),on:true},
+  {n:'اعتقاد أهل السنة — الخلال',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'اعتقاد أهل السنة — الخلال'),on:true},
+  {n:'الاعتقاد والهدي إلى سبيل الرشاد — البغدادي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الاعتقاد والهدي إلى سبيل الرشاد — البغدادي'),on:true},
+  {n:'شرح العقيدة الطحاوية — ابن أبي العز الحنفي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح العقيدة الطحاوية — ابن أبي العز الحنفي'),on:true},
+  {n:'الإيمان — ابن تيمية',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الإيمان — ابن تيمية'),on:true},
+  {n:'ثلاثة الأصول — محمد بن عبد الوهاب',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'ثلاثة الأصول — محمد بن عبد الوهاب'),on:true},
+  {n:'قواعد الأربع — محمد بن عبد الوهاب',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'قواعد الأربع — محمد بن عبد الوهاب'),on:true},
+  {n:'القواعد المثلى — ابن عثيمين',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'القواعد المثلى — ابن عثيمين'),on:true},
+  {n:'صفة الصلاة — ابن عثيمين',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'صفة الصلاة — ابن عثيمين'),on:true},
+  {n:'العبودية — ابن تيمية',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'العبودية — ابن تيمية'),on:true},
+  {n:'القصيدة النونية — ابن القيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'القصيدة النونية — ابن القيم'),on:true},
+  {n:'شرح العقيدة السفارينية — ابن عثيمين',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح العقيدة السفارينية — ابن عثيمين'),on:true},
+  {n:'الرد على الجهمية والزنادقة — أحمد بن حنبل',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الرد على الجهمية والزنادقة — أحمد بن حنبل'),on:true},
+  {n:'التوحيد — ابن خزيمة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'التوحيد — ابن خزيمة'),on:true},
+  {n:'التوحيد — ابن منده',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'التوحيد — ابن منده'),on:true},
+  {n:'الشريعة — الآجري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الشريعة — الآجري'),on:true},
+  {n:'العقيدة السفارينية — السفاريني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'العقيدة السفارينية — السفاريني'),on:true},
+  {n:'نصيحة أهل التوحيد — أحمد بن حنبل',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'نصيحة أهل التوحيد — أحمد بن حنبل'),on:true},
+  {n:'الرد على المنطقيين — ابن تيمية',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الرد على المنطقيين — ابن تيمية'),on:true},
+  {n:'درء تعارض العقل والنقل — ابن تيمية',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'درء تعارض العقل والنقل — ابن تيمية'),on:true},
+  {n:'مجموع رسائل ابن رجب — ابن رجب',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مجموع رسائل ابن رجب — ابن رجب'),on:true}]},
+ tafsir:{name:'التفسير وعلوم القرآن',items:[
+  {n:'جامع البيان — الطبري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'جامع البيان — الطبري'),on:true},
+  {n:'تفسير القرآن العظيم — ابن كثير',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير القرآن العظيم — ابن كثير'),on:true},
+  {n:'تيسير الكريم الرحمن — السعدي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تيسير الكريم الرحمن — السعدي'),on:true},
+  {n:'الجامع لأحكام القرآن — القرطبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الجامع لأحكام القرآن — القرطبي'),on:true},
+  {n:'الدر المنثور — السيوطي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الدر المنثور — السيوطي'),on:true},
+  {n:'أيسر التفاسير — أبو بكر الجزائري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'أيسر التفاسير — أبو بكر الجزائري'),on:true},
+  {n:'فتح القدير — الشوكاني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'فتح القدير — الشوكاني'),on:true},
+  {n:'الكشاف — الزمخشري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الكشاف — الزمخشري'),on:true},
+  {n:'تفسير البيضاوي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير البيضاوي'),on:true},
+  {n:'تفسير النسفي (مدارك التنزيل)',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير النسفي (مدارك التنزيل)'),on:true},
+  {n:'تفسير أبي حيان (البحر المحيط)',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير أبي حيان (البحر المحيط)'),on:true},
+  {n:'تفسير الثعلبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير الثعلبي'),on:true},
+  {n:'تفسير القرآن — السمرقندي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير القرآن — السمرقندي'),on:true},
+  {n:'مصنف عبد الرزاق (تفسير)',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مصنف عبد الرزاق (تفسير)'),on:true},
+  {n:'تفسير مجاهد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير مجاهد'),on:true},
+  {n:'تفسير مقاتل بن سليمان',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير مقاتل بن سليمان'),on:true},
+  {n:'تفسير سفيان الثوري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير سفيان الثوري'),on:true},
+  {n:'الإتقان في علوم القرآن — السيوطي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الإتقان في علوم القرآن — السيوطي'),on:true},
+  {n:'البرهان في علوم القرآن — الزركشي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'البرهان في علوم القرآن — الزركشي'),on:true},
+  {n:'مناهل العرفان — الزرقاني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مناهل العرفان — الزرقاني'),on:true},
+  {n:'الوجيز — الواحدي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الوجيز — الواحدي'),on:true},
+  {n:'التحرير والتنوير — ابن عاشور',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'التحرير والتنوير — ابن عاشور'),on:true},
+  {n:'مفاتيح الغيب — الرازي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مفاتيح الغيب — الرازي'),on:true},
+  {n:'زاد المسير — ابن الجوزي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'زاد المسير — ابن الجوزي'),on:true},
+  {n:'تفسير ابن أبي حاتم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير ابن أبي حاتم'),on:true},
+  {n:'النكت والعيون — الماوردي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'النكت والعيون — الماوردي'),on:true},
+  {n:'تفسير ابن عطية (المحرر الوجيز)',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تفسير ابن عطية (المحرر الوجيز)'),on:true},
+  {n:'الدر الثمين — الخضري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الدر الثمين — الخضري'),on:true},
+  {n:'التحبير في علم التبير — الداودي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'التحبير في علم التبير — الداودي'),on:true},
+  {n:'النشر في القراءات العشر — ابن الجزري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'النشر في القراءات العشر — ابن الجزري'),on:true},
+  {n:'معاني القرآن — الفراء',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'معاني القرآن — الفراء'),on:true}]},
+ hadith:{name:'الحديث وعلومه',items:[
+  {n:'صحيح البخاري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'صحيح البخاري'),on:true},
+  {n:'صحيح مسلم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'صحيح مسلم'),on:true},
+  {n:'سنن أبي داود',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سنن أبي داود'),on:true},
+  {n:'سنن الترمذي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سنن الترمذي'),on:true},
+  {n:'سنن النسائي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سنن النسائي'),on:true},
+  {n:'سنن ابن ماجه',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سنن ابن ماجه'),on:true},
+  {n:'موطأ الإمام مالك',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'موطأ الإمام مالك'),on:true},
+  {n:'مسند الإمام أحمد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مسند الإمام أحمد'),on:true},
+  {n:'مسند الدارمي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مسند الدارمي'),on:true},
+  {n:'سنن الدارقطني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سنن الدارقطني'),on:true},
+  {n:'مصنف عبد الرزاق',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مصنف عبد الرزاق'),on:true},
+  {n:'مصنف ابن أبي شيبة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مصنف ابن أبي شيبة'),on:true},
+  {n:'السنن الكبرى — البيهقي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'السنن الكبرى — البيهقي'),on:true},
+  {n:'مجمع الزوائد — الهيثمي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مجمع الزوائد — الهيثمي'),on:true},
+  {n:'كنز العمال — المتقي الهندي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'كنز العمال — المتقي الهندي'),on:true},
+  {n:'بلوغ المرام — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'بلوغ المرام — ابن حجر'),on:true},
+  {n:'نزهة النظر — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'نزهة النظر — ابن حجر'),on:true},
+  {n:'تدريب الراوي — السيوطي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تدريب الراوي — السيوطي'),on:true},
+  {n:'علوم الحديث — ابن الصلاح',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'علوم الحديث — ابن الصلاح'),on:true},
+  {n:'شرح علوم الحديث — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح علوم الحديث — النووي'),on:true},
+  {n:'المنهاج شرح صحيح مسلم — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المنهاج شرح صحيح مسلم — النووي'),on:true},
+  {n:'فتح الباري — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'فتح الباري — ابن حجر'),on:true},
+  {n:'عمدة القاري — العيني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'عمدة القاري — العيني'),on:true},
+  {n:'تقييد العلم — الخطيب البغدادي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تقييد العلم — الخطيب البغدادي'),on:true},
+  {n:'الكفاية في علم الرواية — الخطيب البغدادي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الكفاية في علم الرواية — الخطيب البغدادي'),on:true},
+  {n:'شرح نخبة الفكر — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح نخبة الفكر — ابن حجر'),on:true},
+  {n:'النخبة — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'النخبة — ابن حجر'),on:true},
+  {n:'الطبقات الكبرى — ابن سعد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الطبقات الكبرى — ابن سعد'),on:true},
+  {n:'التاريخ الكبير — البخاري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'التاريخ الكبير — البخاري'),on:true},
+  {n:'الجرح والتعديل — ابن أبي حاتم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الجرح والتعديل — ابن أبي حاتم'),on:true},
+  {n:'تهذيب الكمال — المزي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تهذيب الكمال — المزي'),on:true},
+  {n:'تقريب التهذيب — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تقريب التهذيب — ابن حجر'),on:true},
+  {n:'الإصابة — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الإصابة — ابن حجر'),on:true},
+  {n:'سير أعلام النبلاء — الذهبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سير أعلام النبلاء — الذهبي'),on:true},
+  {n:'تذكرة الحفاظ — الذهبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تذكرة الحفاظ — الذهبي'),on:true},
+  {n:'حلية الأولياء — أبو نعيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'حلية الأولياء — أبو نعيم'),on:true},
+  {n:'طبقات الحفاظ — السيوطي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'طبقات الحفاظ — السيوطي'),on:true},
+  {n:'صحيح ابن حبان',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'صحيح ابن حبان'),on:true},
+  {n:'صحيح ابن خزيمة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'صحيح ابن خزيمة'),on:true},
+  {n:'المستدرك على الصحيحين — الحاكم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المستدرك على الصحيحين — الحاكم'),on:true},
+  {n:'سنن سعيد بن منصور',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سنن سعيد بن منصور'),on:true},
+  {n:'الآحاد والمثاني — ابن أبي عاصم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الآحاد والمثاني — ابن أبي عاصم'),on:true},
+  {n:'الأربعون — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الأربعون — النووي'),on:true},
+  {n:'شرح الأربعين النووية — ابن رجب',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح الأربعين النووية — ابن رجب'),on:true},
+  {n:'الأدب المفرد — البخاري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الأدب المفرد — البخاري'),on:true},
+  {n:'المعجم الكبير — الطبراني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المعجم الكبير — الطبراني'),on:true},
+  {n:'المعجم الأوسط — الطبراني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المعجم الأوسط — الطبراني'),on:true},
+  {n:'المعجم الصغير — الطبراني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المعجم الصغير — الطبراني'),on:true},
+  {n:'الضعفاء الصغير — البخاري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الضعفاء الصغير — البخاري'),on:true},
+  {n:'الضعفاء الكبير — العقيلي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الضعفاء الكبير — العقيلي'),on:true},
+  {n:'الكامل في ضعفاء الرجال — ابن عدي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الكامل في ضعفاء الرجال — ابن عدي'),on:true},
+  {n:'الميزان في الاعتدال — الذهبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الميزان في الاعتدال — الذهبي'),on:true},
+  {n:'لسان الميزان — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'لسان الميزان — ابن حجر'),on:true},
+  {n:'سنن البيهقي الصغرى — البيهقي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سنن البيهقي الصغرى — البيهقي'),on:true},
+  {n:'الإحسان في تقريح صحيح ابن حبان — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الإحسان في تقريح صحيح ابن حبان — ابن حجر'),on:true},
+  {n:'نصب الراية — الزيلعي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'نصب الراية — الزيلعي'),on:true},
+  {n:'رياض الصالحين — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'رياض الصالحين — النووي'),on:true},
+  {n:'الترغيب والترهيب — المنذري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الترغيب والترهيب — المنذري'),on:true},
+  {n:'مشكاة المصابيح — الخطيب التبريزي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مشكاة المصابيح — الخطيب التبريزي'),on:true},
+  {n:'المشكل — الخطيب البغدادي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المشكل — الخطيب البغدادي'),on:true}]},
+ fiqh:{name:'الفقه وعلومه',items:[
+  {n:'بداية المجتهد — ابن رشد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'بداية المجتهد — ابن رشد'),on:true},
+  {n:'المغني — ابن قدامة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المغني — ابن قدامة'),on:true},
+  {n:'الفروق — القرافي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الفروق — القرافي'),on:true},
+  {n:'إعلام الموقعين — ابن القيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'إعلام الموقعين — ابن القيم'),on:true},
+  {n:'زاد المستقنع — الحجاوي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'زاد المستقنع — الحجاوي'),on:true},
+  {n:'الأم — الشافعي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الأم — الشافعي'),on:true},
+  {n:'المحلى — ابن حزم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المحلى — ابن حزم'),on:true},
+  {n:'الإحكام في أصول الأحكام — الآمدي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الإحكام في أصول الأحكام — الآمدي'),on:true},
+  {n:'المستصفى — الغزالي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المستصفى — الغزالي'),on:true},
+  {n:'روضة الناظر — ابن قدامة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'روضة الناظر — ابن قدامة'),on:true},
+  {n:'الرسالة — الشافعي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الرسالة — الشافعي'),on:true},
+  {n:'إحياء علوم الدين — الغزالي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'إحياء علوم الدين — الغزالي'),on:true},
+  {n:'الأشباه والنظائر — السيوطي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الأشباه والنظائر — السيوطي'),on:true},
+  {n:'الأشباه والنظائر — ابن نجيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الأشباه والنظائر — ابن نجيم'),on:true},
+  {n:'مقاصد الشريعة — الشاطبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مقاصد الشريعة — الشاطبي'),on:true},
+  {n:'الموافقات — الشاطبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الموافقات — الشاطبي'),on:true},
+  {n:'مجموع فتاوى ابن تيمية',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مجموع فتاوى ابن تيمية'),on:true},
+  {n:'فتاوى اللجنة الدائمة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'فتاوى اللجنة الدائمة'),on:true},
+  {n:'مجموع فتاوى ابن باز',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مجموع فتاوى ابن باز'),on:true},
+  {n:'فتاوى نور على الدرب — ابن باز',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'فتاوى نور على الدرب — ابن باز'),on:true},
+  {n:'مجموع فتاوى ابن عثيمين',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مجموع فتاوى ابن عثيمين'),on:true},
+  {n:'الفقه على المذاهب الأربعة — الجزيري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الفقه على المذاهب الأربعة — الجزيري'),on:true},
+  {n:'الموسوعة الفقهية الكويتية',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الموسوعة الفقهية الكويتية'),on:true},
+  {n:'الفقه الإسلامي وأدلته — وهبة الزحيلي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الفقه الإسلامي وأدلته — وهبة الزحيلي'),on:true},
+  {n:'الشرح الممتع — ابن عثيمين',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الشرح الممتع — ابن عثيمين'),on:true},
+  {n:'نيل الأوطار — الشوكاني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'نيل الأوطار — الشوكاني'),on:true},
+  {n:'سبل السلام — الصنعاني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سبل السلام — الصنعاني'),on:true},
+  {n:'الآداب الشرعية — ابن مفلح',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الآداب الشرعية — ابن مفلح'),on:true},
+  {n:'الفروع — ابن مفلح',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الفروع — ابن مفلح'),on:true},
+  {n:'المقنع — موفق الدين ابن قدامة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المقنع — موفق الدين ابن قدامة'),on:true},
+  {n:'المبدع في شرح المقنع — البهوتي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المبدع في شرح المقنع — البهوتي'),on:true},
+  {n:'روضة الطالبين — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'روضة الطالبين — النووي'),on:true},
+  {n:'المنهاج — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المنهاج — النووي'),on:true},
+  {n:'أحكام القرآن — ابن العربي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'أحكام القرآن — ابن العربي'),on:true},
+  {n:'أحكام القرآن — الجصاص',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'أحكام القرآن — الجصاص'),on:true},
+  {n:'المدخل — ابن الحاج',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المدخل — ابن الحاج'),on:true},
+  {n:'المنتقى — الباجي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المنتقى — الباجي'),on:true},
+  {n:'الاستذكار — القرطبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الاستذكار — القرطبي'),on:true},
+  {n:'الآثار — أبو يوسف',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الآثار — أبو يوسف'),on:true},
+  {n:'أحكام القرآن — القرطبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'أحكام القرآن — القرطبي'),on:true},
+  {n:'زاد المعاد — ابن القيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'زاد المعاد — ابن القيم'),on:true}]},
+ hanafi:{name:'الفقه الحنفي',items:[
+  {n:'الهداية — المرغيناني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الهداية — المرغيناني'),on:true},
+  {n:'بدائع الصنائع — الكاساني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'بدائع الصنائع — الكاساني'),on:true},
+  {n:'فتح القدير — ابن الهمام',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'فتح القدير — ابن الهمام'),on:true},
+  {n:'رد المحتار (حاشية ابن عابدين)',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'رد المحتار (حاشية ابن عابدين)'),on:true},
+  {n:'المختار للفتوى — الموصلي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المختار للفتوى — الموصلي'),on:true},
+  {n:'الاختيار لتعليل المختار',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الاختيار لتعليل المختار'),on:true},
+  {n:'العناية شرح الهداية — بابرتي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'العناية شرح الهداية — بابرتي'),on:true},
+  {n:'تبيين الحقائق — الزيلعي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تبيين الحقائق — الزيلعي'),on:true},
+  {n:'المحيط البرهاني — ابن مازة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المحيط البرهاني — ابن مازة'),on:true},
+  {n:'الخلاصة — الطحاوي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الخلاصة — الطحاوي'),on:true},
+  {n:'القدوري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'القدوري'),on:true},
+  {n:'النتف في الفتاوى — ابن نجيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'النتف في الفتاوى — ابن نجيم'),on:true},
+  {n:'اللباب — عبد الغني الميداني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'اللباب — عبد الغني الميداني'),on:true},
+  {n:'مجمع الأنهر — الشلبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مجمع الأنهر — الشلبي'),on:true},
+  {n:'الدر المختار — ابن عابدين',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الدر المختار — ابن عابدين'),on:true},
+  {n:'مراقي الفلاح — الطحطاوي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مراقي الفلاح — الطحطاوي'),on:true},
+  {n:'الأشباه والنظائر — ابن نجيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الأشباه والنظائر — ابن نجيم'),on:true}]},
+ maliki:{name:'الفقه المالكي',items:[
+  {n:'المدونة الكبرى — سحنون',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المدونة الكبرى — سحنون'),on:true},
+  {n:'الشرح الكبير — الدردير',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الشرح الكبير — الدردير'),on:true},
+  {n:'حاشية الدسوقي على الشرح الكبير',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'حاشية الدسوقي على الشرح الكبير'),on:true},
+  {n:'مواهب الجليل — الحطاب',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مواهب الجليل — الحطاب'),on:true},
+  {n:'المدخل — ابن الحاج',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المدخل — ابن الحاج'),on:true},
+  {n:'الموطأ — مالك',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الموطأ — مالك'),on:true},
+  {n:'المنتقى — الباجي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المنتقى — الباجي'),on:true},
+  {n:'الاستذكار — القرطبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الاستذكار — القرطبي'),on:true},
+  {n:'التمهيد — ابن عبد البر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'التمهيد — ابن عبد البر'),on:true},
+  {n:'الكافي — ابن عبد البر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الكافي — ابن عبد البر'),on:true},
+  {n:'شرح الزرقاني على موطأ مالك',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح الزرقاني على موطأ مالك'),on:true},
+  {n:'منهاج الطالبين — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'منهاج الطالبين — النووي'),on:true},
+  {n:'الجامع — ابن أبي زيد القيرواني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الجامع — ابن أبي زيد القيرواني'),on:true},
+  {n:'أحكام القرآن — القرطبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'أحكام القرآن — القرطبي'),on:true}]},
+ shafii:{name:'الفقه الشافعي',items:[
+  {n:'المنهاج — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المنهاج — النووي'),on:true},
+  {n:'روضة الطالبين — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'روضة الطالبين — النووي'),on:true},
+  {n:'تحفة المحتاج — ابن حجر الهيتمي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تحفة المحتاج — ابن حجر الهيتمي'),on:true},
+  {n:'نهاية المحتاج — الرملي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'نهاية المحتاج — الرملي'),on:true},
+  {n:'المجموع شرح المهذب — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المجموع شرح المهذب — النووي'),on:true},
+  {n:'الأم — الشافعي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الأم — الشافعي'),on:true},
+  {n:'المحلى — ابن حزم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المحلى — ابن حزم'),on:true},
+  {n:'حواشي البجيرمي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'حواشي البجيرمي'),on:true},
+  {n:'المقدمة الحضرمية — ابن دقيق العيد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المقدمة الحضرمية — ابن دقيق العيد'),on:true},
+  {n:'منهاج الطالبين — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'منهاج الطالبين — النووي'),on:true}]},
+ hanbali:{name:'الفقه الحنبلي',items:[
+  {n:'الإنصاف — المرداوي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الإنصاف — المرداوي'),on:true},
+  {n:'كشاف القناع — البهوتي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'كشاف القناع — البهوتي'),on:true},
+  {n:'دليل الطالب — ابن ضويان',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'دليل الطالب — ابن ضويان'),on:true},
+  {n:'الروض المربع — البهوتي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الروض المربع — البهوتي'),on:true},
+  {n:'المغني — ابن قدامة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المغني — ابن قدامة'),on:true},
+  {n:'المقنع — موفق الدين',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المقنع — موفق الدين'),on:true},
+  {n:'المبدع في شرح المقنع — البهوتي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المبدع في شرح المقنع — البهوتي'),on:true},
+  {n:'الآداب الشرعية — ابن مفلح',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الآداب الشرعية — ابن مفلح'),on:true},
+  {n:'الفروع — ابن مفلح',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الفروع — ابن مفلح'),on:true},
+  {n:'غاية المنتهى — البهوتي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'غاية المنتهى — البهوتي'),on:true},
+  {n:'مطالب أولي النهى — الرحيباني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مطالب أولي النهى — الرحيباني'),on:true},
+  {n:'دقائق أولي النهى — الرحيباني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'دقائق أولي النهى — الرحيباني'),on:true},
+  {n:'العمدة — ابن قدامة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'العمدة — ابن قدامة'),on:true},
+  {n:'شرح العمدة — البهوتي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح العمدة — البهوتي'),on:true},
+  {n:'المحرر — المرداوي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المحرر — المرداوي'),on:true},
+  {n:'الكافي — ابن قدامة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الكافي — ابن قدامة'),on:true}]},
+ riqaq:{name:'الرقاق والآداب والأذكار',items:[
+  {n:'رياض الصالحين — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'رياض الصالحين — النووي'),on:true},
+  {n:'الأذكار — النووي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الأذكار — النووي'),on:true},
+  {n:'الوابل الصيب — ابن القيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الوابل الصيب — ابن القيم'),on:true},
+  {n:'مدارج السالكين — ابن القيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مدارج السالكين — ابن القيم'),on:true},
+  {n:'الفوائد — ابن القيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الفوائد — ابن القيم'),on:true},
+  {n:'الجواب الكافي — ابن القيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الجواب الكافي — ابن القيم'),on:true},
+  {n:'الزهد — أحمد بن حنبل',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الزهد — أحمد بن حنبل'),on:true},
+  {n:'الزهد — ابن المبارك',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الزهد — ابن المبارك'),on:true},
+  {n:'الورع — ابن أبي الدنيا',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الورع — ابن أبي الدنيا'),on:true},
+  {n:'الصمت — ابن أبي الدنيا',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الصمت — ابن أبي الدنيا'),on:true},
+  {n:'الإخلاص والنية — ابن أبي الدنيا',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الإخلاص والنية — ابن أبي الدنيا'),on:true},
+  {n:'الصبر — ابن أبي الدنيا',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الصبر — ابن أبي الدنيا'),on:true},
+  {n:'الحياة — ابن أبي الدنيا',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الحياة — ابن أبي الدنيا'),on:true},
+  {n:'التواضع — ابن أبي الدنيا',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'التواضع — ابن أبي الدنيا'),on:true},
+  {n:'التبتل — ابن أبي الدنيا',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'التبتل — ابن أبي الدنيا'),on:true},
+  {n:'مكارم الأخلاق — ابن أبي الدنيا',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مكارم الأخلاق — ابن أبي الدنيا'),on:true},
+  {n:'الترغيب والترهيب — المنذري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الترغيب والترهيب — المنذري'),on:true}]},
+ sira:{name:'السيرة والرحلات',items:[
+  {n:'سيرة ابن هشام',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سيرة ابن هشام'),on:true},
+  {n:'زاد المعاد — ابن القيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'زاد المعاد — ابن القيم'),on:true},
+  {n:'الرحيق المختوم — المباركفوري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الرحيق المختوم — المباركفوري'),on:true},
+  {n:'السيرة النبوية — ابن كثير',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'السيرة النبوية — ابن كثير'),on:true},
+  {n:'السيرة الحلبية — الحلبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'السيرة الحلبية — الحلبي'),on:true},
+  {n:'الشمائل — الترمذي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الشمائل — الترمذي'),on:true},
+  {n:'أسد الغابة — ابن الأثير',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'أسد الغابة — ابن الأثير'),on:true},
+  {n:'الطبقات — ابن سعد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الطبقات — ابن سعد'),on:true},
+  {n:'دلائل النبوة — البيهقي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'دلائل النبوة — البيهقي'),on:true},
+  {n:'رحلة ابن بطوطة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'رحلة ابن بطوطة'),on:true},
+  {n:'رحلة ابن جبير',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'رحلة ابن جبير'),on:true},
+  {n:'أخبار مكة — الأزرقي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'أخبار مكة — الأزرقي'),on:true}]},
+ history:{name:'التاريخ',items:[
+  {n:'البداية والنهاية — ابن كثير',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'البداية والنهاية — ابن كثير'),on:true},
+  {n:'تاريخ الطبري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تاريخ الطبري'),on:true},
+  {n:'تاريخ ابن خلدون',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تاريخ ابن خلدون'),on:true},
+  {n:'تاريخ الإسلام — الذهبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تاريخ الإسلام — الذهبي'),on:true},
+  {n:'تاريخ الخلفاء — السيوطي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تاريخ الخلفاء — السيوطي'),on:true},
+  {n:'العبر — الذهبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'العبر — الذهبي'),on:true},
+  {n:'سير أعلام النبلاء — الذهبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سير أعلام النبلاء — الذهبي'),on:true},
+  {n:'الكامل في التاريخ — ابن الأثير',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الكامل في التاريخ — ابن الأثير'),on:true},
+  {n:'مروج الذهب — المسعودي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مروج الذهب — المسعودي'),on:true},
+  {n:'مقدمة ابن خلدون',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مقدمة ابن خلدون'),on:true},
+  {n:'تاريخ اليعقوبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تاريخ اليعقوبي'),on:true},
+  {n:'تاريخ مدينة دمشق — ابن عساكر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تاريخ مدينة دمشق — ابن عساكر'),on:true},
+  {n:'الانتقاء — ابن عبد البر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الانتقاء — ابن عبد البر'),on:true},
+  {n:'طبقات ابن سعد — ابن سعد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'طبقات ابن سعد — ابن سعد'),on:true}]},
+ lugha:{name:'اللغة وعلومها',items:[
+  {n:'لسان العرب — ابن منظور',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'لسان العرب — ابن منظور'),on:true},
+  {n:'القاموس المحيط — الفيروزآبادي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'القاموس المحيط — الفيروزآبادي'),on:true},
+  {n:'تاج العروس — الزبيدي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تاج العروس — الزبيدي'),on:true},
+  {n:'الصحاح — الجوهري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الصحاح — الجوهري'),on:true},
+  {n:'مقاييس اللغة — ابن فارس',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مقاييس اللغة — ابن فارس'),on:true},
+  {n:'المصباح المنير — الفيومي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المصباح المنير — الفيومي'),on:true},
+  {n:'النهاية في غريب الحديث — ابن الأثير',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'النهاية في غريب الحديث — ابن الأثير'),on:true},
+  {n:'الجمهرة — ابن دريد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الجمهرة — ابن دريد'),on:true},
+  {n:'العين — الخليل بن أحمد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'العين — الخليل بن أحمد'),on:true},
+  {n:'شرح شذور الذهب — الجرجاني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح شذور الذهب — الجرجاني'),on:true},
+  {n:'شرح ابن عقيل',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح ابن عقيل'),on:true},
+  {n:'ألفية ابن مالك',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'ألفية ابن مالك'),on:true},
+  {n:'شرح ألفية ابن مالك — ابن عقيل',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح ألفية ابن مالك — ابن عقيل'),on:true},
+  {n:'آجرومية — ابن آجروم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'آجرومية — ابن آجروم'),on:true},
+  {n:'شرح الآجرومية — ابن عثيمين',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح الآجرومية — ابن عثيمين'),on:true},
+  {n:'قطر الندى — ابن هشام',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'قطر الندى — ابن هشام'),on:true},
+  {n:'ألفية السيوطي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'ألفية السيوطي'),on:true},
+  {n:'الخلاصة — ابن مالك',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الخلاصة — ابن مالك'),on:true},
+  {n:'تهذيب اللغة — الأزهري',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تهذيب اللغة — الأزهري'),on:true}]},
+ adab:{name:'الأدب',items:[
+  {n:'الكامل في اللغة والأدب — المبرد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الكامل في اللغة والأدب — المبرد'),on:true},
+  {n:'البيان والتبيين — الجاحظ',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'البيان والتبيين — الجاحظ'),on:true},
+  {n:'الحيوان — الجاحظ',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الحيوان — الجاحظ'),on:true},
+  {n:'البخلاء — الجاحظ',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'البخلاء — الجاحظ'),on:true},
+  {n:'العقد الفريد — ابن عبد ربه',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'العقد الفريد — ابن عبد ربه'),on:true},
+  {n:'المحاضرات — الراغب الأصفهاني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المحاضرات — الراغب الأصفهاني'),on:true},
+  {n:'الأمالي — القالي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الأمالي — القالي'),on:true},
+  {n:'الأدب الصغير — الجاحظ',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الأدب الصغير — الجاحظ'),on:true},
+  {n:'البصائر والذخائر — الجاحظ',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'البصائر والذخائر — الجاحظ'),on:true}]},
+ kalam:{name:'الفلسفة والمنطق والكلام',items:[
+  {n:'شرح العقائد النسفية — التفتازاني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شرح العقائد النسفية — التفتازاني'),on:true},
+  {n:'المواقف — الإيجي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المواقف — الإيجي'),on:true},
+  {n:'المطالع — الجرجاني',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المطالع — الجرجاني'),on:true},
+  {n:'المنطق — الفارابي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'المنطق — الفارابي'),on:true},
+  {n:'الشفاء — ابن سينا',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الشفاء — ابن سينا'),on:true}]},
+ tarajim:{name:'التراجم',items:[
+  {n:'سير أعلام النبلاء — الذهبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'سير أعلام النبلاء — الذهبي'),on:true},
+  {n:'تهذيب الكمال — المزي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تهذيب الكمال — المزي'),on:true},
+  {n:'تهذيب التهذيب — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تهذيب التهذيب — ابن حجر'),on:true},
+  {n:'الإصابة — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الإصابة — ابن حجر'),on:true},
+  {n:'الدرر الكامنة — ابن حجر',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الدرر الكامنة — ابن حجر'),on:true},
+  {n:'حلية الأولياء — أبو نعيم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'حلية الأولياء — أبو نعيم'),on:true},
+  {n:'تذكرة الحفاظ — الذهبي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تذكرة الحفاظ — الذهبي'),on:true},
+  {n:'طبقات الحفاظ — السيوطي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'طبقات الحفاظ — السيوطي'),on:true},
+  {n:'طبقات الشافعية الكبرى — السبكي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'طبقات الشافعية الكبرى — السبكي'),on:true},
+  {n:'وفيات الأعيان — ابن خلكان',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'وفيات الأعيان — ابن خلكان'),on:true},
+  {n:'شذرات الذهب — ابن العماد',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'شذرات الذهب — ابن العماد'),on:true},
+  {n:'تاريخ بغداد — الخطيب البغدادي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'تاريخ بغداد — الخطيب البغدادي'),on:true},
+  {n:'الضوء اللامع — السخاوي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الضوء اللامع — السخاوي'),on:true}]},
+ kutub:{name:'المكتبات والفهارس',items:[
+  {n:'بغية الوعاة — السيوطي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'بغية الوعاة — السيوطي'),on:true},
+  {n:'أنشاب الكثب — السيوطي',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'أنشاب الكثب — السيوطي'),on:true},
+  {n:'الفهرست — ابن النديم',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'الفهرست — ابن النديم'),on:true},
+  {n:'فهرست ابن خير',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'فهرست ابن خير'),on:true}]},
+ majmu:{name:'مجموعات ورسائل',items:[
+  {n:'مجموع فتاوى شيخ الإسلام — ابن تيمية',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مجموع فتاوى شيخ الإسلام — ابن تيمية'),on:true},
+  {n:'مجموع رسائل ابن رجب — ابن رجب',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'مجموع رسائل ابن رجب — ابن رجب'),on:true},
+  {n:'فتاوى اللجنة الدائمة',t:'رابط',v:'https://www.google.com/search?q='+encodeURIComponent('site:shamela.ws '+'فتاوى اللجنة الدائمة'),on:true}]},
+ makh:{name:'المخطوطات',items:[
+  ]}
+};
+function getSrc(){try{return {...DEFAULT_SRC,...JSON.parse(LS.raw('mai_admin_sources_v4')||'{}')}}catch(e){return {...DEFAULT_SRC}}}
+let srcState=getSrc();
+function inferParent(f){
+ if(f.items&&f.items.some(i=>i.audio))return 'ابن باز';
+ const vs=(f.items||[]).map(i=>String(i.v||''));
+ if(vs.some(v=>v.includes('binbaz.org.sa')))return 'ابن باز';
+ if(vs.some(v=>v.includes('islamqa.info')))return 'الإسلام سؤال وجواب';
+ if(vs.some(v=>v.includes('islamweb.net')))return 'إسلام ويب';
+ if(vs.some(v=>v.includes('shamela.ws')))return 'المكتبة الشاملة';
+ return f.parent||'مصادر أخرى';
+}
+Object.keys(srcState).forEach(k=>{if(!srcState[k].parent)srcState[k].parent=inferParent(srcState[k]);});
+let addModeByFolder={};
+function typeIcon(t){return {'رابط':'link','ملف':'description','API':'api'}[t]||'source'}
+function renderSrc(){
+ const keys=Object.keys(srcState);
+ const _sorted=keys.slice().sort((a,b)=>{const pa=String(srcState[a].parent||''),pb=String(srcState[b].parent||'');return pa.localeCompare(pb,'ar')||a.localeCompare(b,'ar');});
+ let _lastParent=null;
+ srcFolders.innerHTML=_sorted.map((fk)=>{const fi=keys.indexOf(fk);const f=srcState[fk];const mode=addModeByFolder[fk]||'رابط';
+  const _p=String(f.parent||'مصادر');
+  const _open=openGroups.has(_p);
+  let _gh='';
+  if(_p!==_lastParent){_lastParent=_p;
+   const cnt=keys.filter(k=>String(srcState[k].parent||'مصادر')===_p).reduce((s,kk)=>s+srcState[kk].items.length,0);
+   _gh=`<div class="src-group-head${_open?'':' closed'}" data-grptoggle="${esc(_p)}"><span class="material-symbols-outlined">folder_special</span><b>${esc(_p)}</b><span class="src-count">${cnt.toLocaleString('ar-EG')} مصدر</span><button class="mini-btn" data-grpopts="${esc(_p)}" title="خيارات المصدر"><span class="material-symbols-outlined">more_vert</span></button><span class="material-symbols-outlined" style="font-size:18px;color:var(--text-3)">${_open?'expand_less':'expand_more'}</span></div>`;
+  }
+  if(!_open)return _gh||'';
+  const closed=!openSrc.has(fk);
+  return _gh+`<div class="src-folder${closed?' closed':''}${f.on===false?' off':''}" data-folder="${fi}">
+   <div class="src-folder-head" data-foldertoggle="${fi}"><span class="material-symbols-outlined">${closed?'folder':'folder_open'}</span><b>${esc(f.name)}</b><span class="src-count">${f.items.length} مصدر${f.typeFilter&&f.typeFilter.length?' — معروض '+f.items.filter(x=>f.typeFilter.includes(x.t)).length:''}${(f.prio!=null&&f.items[f.prio])?' — ⭐ '+esc(f.items[f.prio].n):''}</span>${f.on===false?'<span class="src-count" style="color:var(--danger);border-color:var(--danger)">متوقف</span>':''}
+    <button class="mini-btn" data-folderopts="${fi}" title="خيارات المجلد"><span class="material-symbols-outlined">more_vert</span></button>
+    <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-3)">${closed?'expand_more':'expand_less'}</span></div>
+   <div class="src-list">
+    ${(()=>{const LIM=400;const exp=expandedFolders.has(fk);const list=exp?f.items:f.items.slice(0,LIM);
+     return list.map((it,i)=>`<div class="src-row${it.on?'':' disabled'}${moveTarget===fi+':'+i?' moving':''}" data-srcrow="${fi}:${i}"${f.typeFilter&&f.typeFilter.length&&!f.typeFilter.includes(it.t)?' hidden':''}>
+     <div class="pri-badge">${i+1}</div>${f.prio===i?'<span class="material-symbols-outlined" style="font-size:15px;color:var(--gold)" title="المصدر ذو الأولوية">star</span>':''}
+     <div class="info"><div class="nm">${esc(it.n)}</div><div class="tp">${it.t} — ${esc(srcDisp(it))}</div></div>
+     ${moveTarget===fi+':'+i?`<button class="mini-btn" data-moveup="${fi}:${i}" title="أعلى"><span class="material-symbols-outlined">keyboard_arrow_up</span></button>
+     <button class="mini-btn" data-movedown="${fi}:${i}" title="أسفل"><span class="material-symbols-outlined">keyboard_arrow_down</span></button>`:''}
+     <button class="mini-btn" data-srctoggle="${fi}:${i}" title="${it.on?'تعطيل':'تفعيل'}"><span class="material-symbols-outlined">${it.on?'toggle_on':'toggle_off'}</span></button>
+     <button class="mini-btn del" data-srcdel="${fi}:${i}" title="حذف"><span class="material-symbols-outlined">delete</span></button>
+    </div>`).join('')
+     +(!exp&&f.items.length>LIM?`<div class="src-row" data-expand="${fk}"><div class="pri-badge" style="width:auto;padding:0 9px">+${(f.items.length-LIM).toLocaleString('ar-EG')}</div><div class="info"><div class="nm" style="color:var(--accent-text);font-size:.8rem;font-weight:700">عرض كل مصادر المجلد (${f.items.length.toLocaleString('ar-EG')} مصدر)</div></div></div>`:'');
+    })()||'<div class="empty">لا مصادر في هذا المجلد</div>'}
+   </div>
+   <div class="src-add-bar">
+    <div class="src-add-seg">
+     <button class="${mode==='رابط'?'active':''}" data-addmode="${fi}:رابط">رابط</button>
+     <button class="${mode==='ملف'?'active':''}" data-addmode="${fi}:ملف">رفع ملف</button>
+     <button class="${mode==='API'?'active':''}" data-addmode="${fi}:API">API</button>
+    </div>
+    <div class="src-add-fields">
+     <input placeholder="اسم المصدر" maxlength="120" data-srcname="${fi}">
+     <input placeholder="${mode==='رابط'?'https://...':mode==='API'?'رابط نقطة الـ API':'اسم الملف'}" maxlength="500" data-srcval="${fi}" ${mode==='ملف'?'type=file':''}>
+     <button class="btn sm" data-srcadd="${fi}"><span class="material-symbols-outlined" style="font-size:16px">add</span></button>
+    </div>
+   </div>
+  </div>`;}).join('');
+}
+var renderSources=renderSrc;
+function srcDisp(it){
+ let v=it.v||'';
+ try{const u=new URL(v);const q=u.searchParams.get('q');v=q?decodeURIComponent(q):(u.hostname+u.pathname);}catch(e){}
+ if(v.length>52)v=v.slice(0,52)+'…';
+ return v;
+}
+const openSrc=(()=>{try{return new Set(JSON.parse(LS.raw('mai_src_open')||'[]'))}catch(e){return new Set()}})();
+function saveOpen(){LS.setRaw('mai_src_open',JSON.stringify([...openSrc]))}
+let moveTarget=null,lpTimer=null,lpRow=null,justMovedAt=0;
+const expandedFolders=new Set();
+const openGroups=(()=>{try{return new Set(JSON.parse(LS.raw('mai_grp_open')||'[]'))}catch(e){return new Set()}})();
+function saveGroups(){LS.setRaw('mai_grp_open',JSON.stringify([...openGroups]))}
+function fkOf(fi){return Object.keys(srcState)[+fi]}
+function moveIn(fi,i,dir){const fk=fkOf(fi);if(!srcState[fk])return;const arr=srcState[fk].items;const j=i+dir;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]];moveTarget=fi+':'+j;saveSrc(true);renderSrc();}
+srcFolders.addEventListener('click',e=>{
+ const gop=e.target.closest('[data-grpopts]');
+ if(gop){openGroupMenu(gop.dataset.grpopts,gop);return;}
+ const gt=e.target.closest('[data-grptoggle]');
+ if(gt&&!e.target.closest('[data-grpopts]')){const p=gt.dataset.grptoggle;openGroups.has(p)?openGroups.delete(p):openGroups.add(p);saveGroups();srcFolders.classList.add('no-anim');renderSrc();setTimeout(()=>srcFolders.classList.remove('no-anim'),600);return;}
+ const ex=e.target.closest('[data-expand]');
+ if(ex){expandedFolders.add(ex.dataset.expand);srcFolders.classList.add('no-anim');renderSrc();setTimeout(()=>srcFolders.classList.remove('no-anim'),600);return;}
+ const ft=e.target.closest('[data-foldertoggle]');
+ const mvu=e.target.closest('[data-moveup]'),mvd=e.target.closest('[data-movedown]'),
+  tgl=e.target.closest('[data-srctoggle]'),del=e.target.closest('[data-srcdel]'),
+  delf=e.target.closest('[data-delfolder]'),am=e.target.closest('[data-addmode]'),add=e.target.closest('[data-srcadd]'),
+  row=e.target.closest('[data-srcrow]');
+ if(ft&&!e.target.closest('[data-folderopts]')){const fk=fkOf(ft.dataset.foldertoggle);if(!srcState[fk])return;const nowOpen=!openSrc.has(fk);nowOpen?openSrc.delete(fk):openSrc.add(fk);saveOpen();
+  const card=ft.closest('.src-folder');
+  if(card){card.classList.toggle('closed',!nowOpen);const ics=ft.querySelectorAll('.material-symbols-outlined');if(ics.length){ics[0].textContent=nowOpen?'folder_open':'folder';ics[ics.length-1].textContent=nowOpen?'expand_less':'expand_more';}}
+  return;}
+ if(mvu){const[fi,i]=mvu.dataset.moveup.split(':');moveIn(fi,+i,-1);return;}
+ if(mvd){const[fi,i]=mvd.dataset.movedown.split(':');moveIn(fi,+i,1);return;}
+ if(tgl){const[fi,i]=tgl.dataset.srctoggle.split(':');const fk=fkOf(fi);if(!srcState[fk])return;srcState[fk].items[+i].on=!srcState[fk].items[+i].on;saveSrc(true);renderSrc();return;}
+ if(del){const[fi,i]=del.dataset.srcdel.split(':');const fk=fkOf(fi);if(!srcState[fk]||!srcState[fk].items[+i])return;const n=srcState[fk].items[+i].n;
+  confirmText.textContent='حذف المصدر "'+n+'" نهائياً؟';
+  s2Confirm.classList.add('open');
+  confirmYes.onclick=()=>{srcState[fk].items.splice(+i,1);moveTarget=null;saveSrc(true);renderSrc();s2Confirm.classList.remove('open');toast('تم حذف المصدر')};
+  return;}
+ if(delf){const fk=fkOf(delf.dataset.delfolder);if(!srcState[fk])return;
+  confirmText.textContent='حذف مجلد "'+srcState[fk].name+'" وكل مصادره نهائياً؟';
+  s2Confirm.classList.add('open');
+  confirmYes.onclick=()=>{delete srcState[fk];moveTarget=null;saveSrc(true);renderSrc();s2Confirm.classList.remove('open');toast('حُذف المجلد')};
+  return;}
+ if(am){const[fi,md]=am.dataset.addmode.split(':');const fk=fkOf(fi);if(!srcState[fk])return;addModeByFolder[fk]=md;renderSrc();return;}
+ if(add){const fi=add.dataset.srcadd;const fk=fkOf(fi);if(!srcState[fk])return;
+  const nmEl=srcFolders.querySelector(`[data-srcname="${fi}"]`);
+  const vlEl=srcFolders.querySelector(`[data-srcval="${fi}"]`);
+  const mode=addModeByFolder[fk]||'رابط';
+  const n=nmEl.value.trim();if(!n){toast('اكتب اسم المصدر');return}
+  const v=mode==='ملف'?(vlEl.files&&vlEl.files[0]?vlEl.files[0].name:''):vlEl.value.trim();
+  srcState[fk].items.push({n,t:mode,v,on:true});
+  saveSrc(true);renderSrc();audit('إضافة مصدر',n);toast('تمت إضافة المصدر');return;}
+ if(row){const[fi,i]=row.dataset.srcrow.split(':');
+  if(moveTarget){if(Date.now()-justMovedAt>400){moveTarget=null;renderSrc();}return;}
+  const fk=fkOf(fi);const it=srcState[fk]&&srcState[fk].items[+i];
+  if(it&&it.v){try{const u2=new URL(String(it.v));if(u2.protocol==='http:'||u2.protocol==='https:')window.open(u2.href,'_blank','noopener');else toast('نوع رابط غير مسموح');}catch(e){toast('رابط غير صالح');}}
+  return;}
+});
+/* ضغط مطوّل على المصدر = وضع التحريك */
+srcFolders.addEventListener('pointerdown',e=>{
+ const row=e.target.closest('[data-srcrow]');if(!row)return;
+ lpRow=row.dataset.srcrow;
+ lpTimer=setTimeout(()=>{justMovedAt=Date.now();moveTarget=lpRow;renderSrc();try{navigator.vibrate&&navigator.vibrate(40)}catch(x){}},550);
+});
+srcFolders.addEventListener('pointerup',()=>{clearTimeout(lpTimer);lpTimer=null;lpRow=null;});
+srcFolders.addEventListener('pointercancel',()=>{clearTimeout(lpTimer);lpTimer=null;lpRow=null;});
+srcFolders.addEventListener('pointermove',e=>{
+ if(!lpTimer)return;
+ const row=e.target.closest('[data-srcrow]');
+ if(!row||row.dataset.srcrow!==lpRow){clearTimeout(lpTimer);lpTimer=null;lpRow=null;}
+});
+function addFolder(){
+ const n=newFolderName.value.trim();if(!n){toast('اكتب اسم المجلد');return}
+ const key='folder_'+Date.now();srcState[key]={name:n,items:[]};
+ newFolderName.value='';saveSrc(true);renderSrc();toast('أُنشئ المجلد');
+}
+function saveSrc(silent){try{LS.setRaw('mai_admin_sources_v4',JSON.stringify(srcState));if(!silent)toast('تم حفظ المصادر');}catch(e){toast('تعذّر الحفظ');}}
+
+/* ══ الأدوات والميزات ══ */
+const FEATURE_GROUPS=[
+ {t:'الأدوات',items:[
+  {ic:'travel_explore',t:'بحث تفصيلي',m:'deep-search'},
+  {ic:'auto_stories',t:'إنشاء كتاب',m:'book'},
+  {ic:'menu_book',t:'تصميم كتاب',m:'book-design'},
+  {ic:'fact_check',t:'فحص محتوى',m:'content-check'},
+  {ic:'gavel',t:'الرد القاطع',m:'sharp-reply'},
+  {ic:'verified_user',t:'هل قال؟',m:'did-say'},
+  {ic:'volunteer_activism',t:'ولو بآية',m:'dawah'}]},
+ {t:'الفتوى',items:[
+  {ic:'image_search',t:'هل يجوز؟ بالصورة/الصوت/الفيديو',m:'img'},
+  {ic:'auto_awesome',t:'الفتوى الذكية',m:'smart'},
+  {ic:'recycling',t:'البديل الحلال',m:'halal'},
+  {ic:'account_balance',t:'المستشار المالي',m:'fin'}]},
+ {t:'العلم',items:[
+  {ic:'forum',t:'المناظرات',m:'debate'},
+  {ic:'school',t:'التعلّم',m:'learn'},
+  {ic:'verified',t:'صحة حديث',m:'hadith-check'},
+  {ic:'auto_stories',t:'شرح حديث',m:'hadith-explain'},
+  {ic:'book_4',t:'تفسير',m:'tafsir'},
+  {ic:'spellcheck',t:'إعراب',m:'irab'},
+  {ic:'quiz',t:'أسئلة',m:'quiz'}]}];
+function getDisabledFeatures(){try{return JSON.parse(LS.raw('mai_feature_toggles')||'[]')}catch(e){return []}}
+let disabledFeatures=getDisabledFeatures();
+function renderFeatGroups(){
+ featGroups.innerHTML=FEATURE_GROUPS.map(g=>`
+  <div class="feat-group">
+   <div class="feat-group-title"><span class="material-symbols-outlined" style="font-size:15px">folder</span> ${esc(g.t)}</div>
+   ${g.items.map(it=>`<div class="feat-row">
+    <span class="material-symbols-outlined fi">${it.ic}</span>
+    <span class="ft">${esc(it.t)}</span>
+    <div class="feat-switch${disabledFeatures.includes(it.m)?' off':''}" data-featm="${it.m}"></div>
+   </div>`).join('')}
+  </div>`).join('');
+}
+renderFeatGroups();
+featGroups.addEventListener('click',e=>{
+ const sw=e.target.closest('[data-featm]');if(!sw)return;
+ const m=sw.dataset.featm;
+ if(disabledFeatures.includes(m))disabledFeatures=disabledFeatures.filter(x=>x!==m);
+ else disabledFeatures.push(m);
+ try{LS.setRaw('mai_feature_toggles',JSON.stringify(disabledFeatures));}catch(e){}
+ renderFeatGroups();
+ toast('تم التحديث — سيظهر التغيير فورًا في التطبيق');
+});
+
+/* ══ المفتون ══ */
+const BASE_MUFTIS_COUNT_NOTE=true;
+function getCustomMuftis(){try{return JSON.parse(LS.raw('mai_muftis_custom')||'[]')}catch(e){return []}}
+function getHiddenMuftis(){try{return JSON.parse(LS.raw('mai_muftis_hidden')||'[]')}catch(e){return []}}
+function renderMuftiAdmin(){
+ const custom=getCustomMuftis(),hidden=getHiddenMuftis();
+ let html='';
+ if(!custom.length)html+='<div class="empty">لا يوجد مفتون مُضافون بعد من هذه اللوحة</div>';
+ else html+=custom.map((x,i)=>`<div class="mufti-row custom">
+   <span class="g-badge">${x.g==='m'?'رجال':'نساء'}</span>
+   <div class="info"><div class="nm">${esc(x.n)}</div><div class="tel">${esc(x.t)}${x.nt?' — '+esc(x.nt):''}</div></div>
+   <button class="mini-btn del" data-delcustom="${i}"><span class="material-symbols-outlined">delete</span></button>
+  </div>`).join('');
+ if(hidden.length){
+  html+=`<div style="margin-top:14px;font-size:.78rem;color:var(--text-3);font-weight:600">مفتون افتراضيون مخفيون:</div>`;
+  html+=hidden.map(n=>`<div class="mufti-row"><div class="info"><div class="nm">${esc(n)}</div></div>
+   <button class="btn sm ghost" data-unhide="${esc(n)}">إظهار</button></div>`).join('');
+ }
+ muftiListAdmin.innerHTML=html;
+}
+renderMuftiAdmin();
+muftiListAdmin.addEventListener('click',e=>{
+ const del=e.target.closest('[data-delcustom]');
+ const unh=e.target.closest('[data-unhide]');
+ if(del){const arr=getCustomMuftis();arr.splice(+del.dataset.delcustom,1);LS.setRaw('mai_muftis_custom',JSON.stringify(arr));renderMuftiAdmin();toast('تم الحذف');return;}
+ if(unh){let arr=getHiddenMuftis();arr=arr.filter(n=>n!==unh.dataset.unhide);LS.setRaw('mai_muftis_hidden',JSON.stringify(arr));renderMuftiAdmin();toast('تم الإظهار');return;}
+});
+function addMuftiS2(){
+ const n=mfName.value.trim(),t=mfTel.value.trim();
+ if(!n||!t){toast('اكتب الاسم ورقم الهاتف');return}
+ const arr=getCustomMuftis();
+ arr.push({g:mfGroup.value,n,t,wa:mfWa.checked?1:0,call:mfCall.checked?1:0,nt:mfNote.value.trim()});
+ LS.setRaw('mai_muftis_custom',JSON.stringify(arr));
+ mfName.value='';mfTel.value='';mfNote.value='';
+ renderMuftiAdmin();toast('تمت الإضافة للدليل');
+}
+
+/* ══ إعدادات عامة ══ */
+function saveAdminCode(){
+ const v=newAdminCode.value.trim();
+ if(!v){toast('لم يتغيّر الرمز');return}
+ if(v.length<6){toast('الرمز يجب أن يكون 6 أحرف على الأقل');return;}
+ adminHash(v).then(h=>{LS.setRaw('mai_admin_code_hash',h);LS.del('mai_admin_code');newAdminCode.value='';toast('تم تغيير رمز الدخول');});
+}
+
+/* ══ تصدير/استيراد ══ */
+function exportConfig(){
+ const cfg={
+  instructions:instrState,sources:srcState,disabledFeatures,
+  muftisCustom:getCustomMuftis(),muftisHidden:getHiddenMuftis(),
+  adminCodeHash:LS.raw('mai_admin_code_hash')||null
+ };
+ const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='muslim-ai-admin-config.json';a.click();
+ toast('تم تصدير الإعدادات');
+}
+function importConfig(inp){
+ const f=inp.files[0];if(!f)return;
+ const r=new FileReader();
+ r.onload=()=>{try{const cfg=JSON.parse(r.result);
+  if(cfg.instructions){instrState={...DEFAULT_INSTR,...cleanInstr(cfg.instructions)};LS.setRaw('mai_admin_instructions',JSON.stringify(instrState));}
+  if(cfg.sources&&typeof cfg.sources==='object'){srcState=cfg.sources;LS.setRaw('mai_admin_sources_v4',JSON.stringify(srcState));}
+  if(Array.isArray(cfg.disabledFeatures)){disabledFeatures=cfg.disabledFeatures.slice(0,200).map(String);LS.setRaw('mai_feature_toggles',JSON.stringify(disabledFeatures));}
+  if(Array.isArray(cfg.muftisCustom))LS.setRaw('mai_muftis_custom',JSON.stringify(cfg.muftisCustom.slice(0,500)));
+  if(Array.isArray(cfg.muftisHidden))LS.setRaw('mai_muftis_hidden',JSON.stringify(cfg.muftisHidden.slice(0,200).map(String)));
+  if(cfg.adminCodeHash)LS.setRaw('mai_admin_code_hash',cfg.adminCodeHash);
+  if(cfg.adminCode){LS.del('mai_admin_code');console.warn('تجاهل رمز صريح في ملف الاستيراد');}
+  renderInstr();renderSrc();renderFeatGroups();renderMuftiAdmin();
+  toast('تم استيراد الإعدادات بنجاح');
+ }catch(e){toast('ملف غير صالح');}};
+ r.readAsText(f);inp.value='';
+}
+
+/* ══ نافذة التأكيد ══ */
+function confirmAction(action,text){
+ confirmText.textContent=text;s2Confirm.classList.add('open');
+ confirmYes.onclick=()=>{
+  if(action==='reset-app'){LS.del('mai_convs');toast('تم مسح كل المحادثات');}
+  if(action==='reset-instr'){instrState={...DEFAULT_INSTR};LS.del('mai_admin_instructions');renderInstr();toast('تم الاسترجاع للافتراضي');}
+  if(action==='reset-admin'){
+   ['mai_admin_instructions','mai_admin_sources_v4','mai_feature_toggles','mai_muftis_custom','mai_muftis_hidden','mai_admin_code'].forEach(k=>LS.del(k));
+   instrState={...DEFAULT_INSTR};srcState={...DEFAULT_SRC};disabledFeatures=[];
+   renderInstr();renderSrc();renderFeatGroups();renderMuftiAdmin();
+   toast('تم استرجاع كل إعدادات اللوحة');
+  }
+  s2Confirm.classList.remove('open');
+ };
+}
+</script>
+<script>
+/* ══ استيراد فهرس الشاملة الكامل ══ */
+function loadCatalog(inp){
+ const f=inp.files[0];if(!f)return;
+ const r=new FileReader();
+ r.onload=()=>{try{
+  let d;
+  try{ d=JSON.parse(r.result); }
+  catch(e){
+   const lines=r.result.split('\n').map(x=>x.trim()).filter(Boolean);
+   const arr=[];
+   for(const ln of lines){ try{ arr.push(JSON.parse(ln)); }catch(e2){} }
+   if(!arr.length){ toast('ملف غير صالح'); return; }
+   d=arr;
+  }
+  let cats=[],books=[];
+  if(Array.isArray(d)){books=d}
+  else if(d.books){books=d.books;if(d.categories)cats=d.categories}
+  else if(d.data&&Array.isArray(d.data)){books=d.data}
+  else if(Array.isArray(d.items)){books=d.items}
+  else if(d.audio||d.fatwa){
+   books=[];
+   (d.audio||[]).forEach(x=>books.push({n:x.title||('مقطع '+x.id),id:x.id,cat:'فتاوى ابن باز الصوتية',v:'https://binbaz.org.sa/audios/'+x.id+'/x'}));
+   (d.fatwa||[]).forEach(x=>books.push({n:x.title||('فتوى '+(x.reference||x.id)),id:x.reference||x.id,cat:'فتاوى ابن باز',v:'https://binbaz.org.sa/fatwas/'+(x.reference||x.id)}));
+  }
+  if(!books.length){toast('الملف لا يحتوي قائمة مصادر');return}
+  let parent='مصادر مستوردة';
+  if(d.audio||d.fatwa){parent='ابن باز';}
+  else{
+   const cc=books.map(b=>String(b.cat||b.category||''));
+   if(cc.some(c=>c.includes('ابن باز')))parent='ابن باز';
+   else if(cc.some(c=>c.includes('سؤال وجواب')))parent='الإسلام سؤال وجواب';
+   else if(cc.some(c=>c.includes('إسلام ويب')))parent='إسلام ويب';
+   else if(books[0]&&(books[0].pages!=null))parent='المكتبة الشاملة';
+  }
+  const catName=id=>{const c=cats.find(x=>x.id==id||x.i==id);return c?(c.name||c.n||String(id)):String(id)};
+  const out={};
+  function processBook(b){
+   const n=(b.n||b.name||b.title||b.t||'').toString().trim();if(!n)return;
+   const cat=b.cat||b.category||b.c||b.categoryId||b.category_id||'عام';
+   const cn=(typeof cat==='number')?catName(cat):String(b.category_name||b.catName||cat);
+   if(!out[cn]){out[cn]={name:cn,items:[],parent:parent};}else if(!out[cn].parent){out[cn].parent=parent;}
+   const id=b.id||b.book_id||b.bid||b.b;
+   out[cn].items.push({n,t:(b.audio?'صوتية':(id?'كتاب':'رابط')),v:(b.v||b.url||b.link||(id?('https://shamela.ws/book/'+id):'')),a:(b.a||b.author||''),ed:(b.ed||b.edition||''),id:(id?String(id):''),audio:(b.audio||''),on:true});
+  }
+  function finishImport(){
+   let added=0;
+   Object.entries(out).forEach(([k,f])=>{
+    const exKey=Object.keys(srcState).find(x=>srcState[x].name===f.name&&String(srcState[x].parent||'')===String(f.parent||''));
+    if(exKey){
+     const ex=srcState[exKey];
+     const seen=new Set(ex.items.map(i=>String(i.id||i.v||i.n)));
+     f.items.forEach(i=>{const kk=String(i.id||i.v||i.n);if(!seen.has(kk)){ex.items.push(i);seen.add(kk);added++;}});
+    } else {
+     let nk=k,c=2;while(srcState[nk]){nk=k+'_'+(c++);}
+     srcState[nk]=f;added+=f.items.length;
+    }
+   });
+   saveSrc(true);
+   srcFolders.classList.add('no-anim');renderSrc();setTimeout(()=>srcFolders.classList.remove('no-anim'),600);
+   const total=Object.values(srcState).reduce((s,x)=>s+x.items.length,0);
+   toast('اتضاف '+added.toLocaleString('ar-EG')+' مصدر — الإجمالي دلوقتي '+total.toLocaleString('ar-EG'));
+  }
+  let bi=0;
+  (function step(){
+   const end=Math.min(bi+3000,books.length);
+   for(;bi<end;bi++){processBook(books[bi]);}
+   if(bi<books.length){toast('جاري الاستيراد... '+bi.toLocaleString('ar-EG')+' / '+books.length.toLocaleString('ar-EG'));setTimeout(step,25);}
+   else{finishImport();}
+  })();
+ }catch(e){toast('ملف غير صالح')}};
+ r.readAsText(f);inp.value='';
+}
+function filterCat(q){
+ q=(q||'').trim();
+ document.querySelectorAll('.s2 .src-folder').forEach(f=>{
+  let vis=0;
+  f.querySelectorAll('.src-row').forEach(r=>{const show=!q||r.textContent.includes(q);r.style.display=show?'flex':'none';if(show)vis++});
+  f.style.display=(q&&!vis)?'none':'';
+  const c=f.querySelector('.src-count');if(c)c.textContent=(q?vis+' / ':'')+f.querySelectorAll('.src-row').length+' مصدر';
+ });
+}
+</script>
+<script>
+/* ══ تصدير الفهرس الحالي ══ */
+function exportCatalog(){
+ const cats=[];const books=[];
+ Object.values(srcState).forEach(f=>{f.items.forEach(it=>books.push({n:it.n,cat:f.name,v:it.v}))});
+ const blob=new Blob([JSON.stringify(books,null,1)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='shamela-catalog.json';a.click();
+ toast('تم تصدير '+books.length+' كتاب');
+}
+</script>
+<script>
+/* ══ خيارات مجلدات المصادر: التفاصيل / الأولوية / التصفية ══ */
+(function(){
+ var menuEl=null;
+ function ensureUI(){
+  if(menuEl)return;
+  var st=document.createElement('style');
+  st.textContent='.fopt-menu{position:fixed;z-index:470;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.28);padding:6px;display:none;min-width:215px}'
+  +'.fopt-menu button{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:9px;font-size:.82rem;text-align:right}'
+  +'.fopt-menu button:hover{background:var(--surface-2)}.fopt-menu button .material-symbols-outlined{font-size:18px;color:var(--text-2)}'
+  +'.fopt-menu .sep{height:1px;background:var(--border);margin:5px 8px}.s2 .src-folder.off{opacity:.55}.s2 .src-folder.off .src-folder-head b{text-decoration:line-through}.fopt-menu button.danger,.fopt-menu button.danger .material-symbols-outlined{color:var(--danger)}'
+  +'#foldPick{position:fixed;inset:0;z-index:480;background:rgba(0,0,0,.45);display:none;place-items:center;padding:20px}'
+  +'#foldPick.open{display:grid}#foldPick .card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;max-height:72vh;overflow-y:auto}'
+  +'#foldPick h4{font-size:.95rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}'
+  +'#foldPick .row{display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:11px;margin-bottom:7px;font-size:.84rem;text-align:right;background:var(--surface)}'
+  +'#foldPick .row:hover{border-color:var(--accent)}#foldPick .row.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-text);font-weight:600}'
+  +'#foldPick .row .mi{width:19px;height:19px;border:2px solid var(--border-strong);border-radius:6px;display:grid;place-items:center;flex-shrink:0;font-size:12px}'
+  +'#foldPick .row.sel .mi{background:var(--accent);border-color:var(--accent);color:#fff}'
+  +'#foldPick .acts{display:flex;gap:8px;margin-top:10px}#foldPick .acts button{flex:1;padding:10px;border-radius:10px;font-weight:600;font-size:.84rem}'
+  +'#foldPick .acts .p{background:var(--accent);color:#fff}#foldPick .acts .g{border:1px solid var(--border-strong);color:var(--text-2)}';
+  document.head.appendChild(st);
+  menuEl=document.createElement('div');menuEl.className='fopt-menu';
+  menuEl.innerHTML='<button data-fopt="rename"><span class="material-symbols-outlined">edit</span> إعادة تسمية المجلد</button>'
+   +'<button data-fopt="details"><span class="material-symbols-outlined">info</span> التفاصيل</button>'
+   +'<button data-fopt="instr"><span class="material-symbols-outlined">notes</span> التعليمات</button>'
+   +'<button data-fopt="priority"><span class="material-symbols-outlined">star</span> الأولوية</button>'
+   +'<button data-fopt="filter"><span class="material-symbols-outlined">filter_list</span> تصفية</button>'
+   +'<div class="sep"></div><button data-fopt="toggle"><span class="material-symbols-outlined" id="foptTgIc">toggle_off</span> <span id="foptTgTx">إيقاف المجلد</span></button>'
+   +'<button data-fopt="delete" class="danger"><span class="material-symbols-outlined">delete</span> حذف المجلد</button>';
+  document.body.appendChild(menuEl);
+  var pm=document.createElement('div');pm.id='foldPick';
+  pm.innerHTML='<div class="card"><h4><span class="material-symbols-outlined" style="color:var(--accent)">folder_open</span><span id="fpTitle"></span></h4><div id="fpBody"></div><div class="acts"><button class="p" id="fpSave">تطبيق</button><button class="g" id="fpCancel">إلغاء</button></div></div>';
+  document.body.appendChild(pm);
+  document.getElementById('fpCancel').addEventListener('click',closePick);
+  pm.addEventListener('click',function(e){if(e.target===pm)closePick();});
+ }
+ var curFi=null,pickSel=[];
+ function closeMenu(){if(menuEl)menuEl.style.display='none';}
+ function closePick(){var pm=document.getElementById('foldPick');if(pm)pm.classList.remove('open');}
+ function fkCur(){return Object.keys(srcState)[+curFi];}
+ function openMenu(fi,btn){
+  ensureUI();curFi=fi;closePick();
+  var fk=Object.keys(srcState)[+fi];if(!srcState[fk])return;
+  var _off=srcState[fk].on===false;
+  document.getElementById('foptTgIc').textContent=_off?'toggle_on':'toggle_off';
+  document.getElementById('foptTgTx').textContent=_off?'تفعيل المجلد':'إيقاف المجلد';
+  menuEl.style.display='block';
+  var r=btn.getBoundingClientRect(),w=menuEl.offsetWidth,h=menuEl.offsetHeight;
+  var x=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8);
+  var y=r.bottom+6;if(y+h>innerHeight-8)y=Math.max(8,r.top-h-6);
+  menuEl.style.left=x+'px';menuEl.style.top=y+'px';
+ }
+ function showDetails(){
+  closeMenu();var f=srcState[fkCur()];if(!f)return;
+  document.getElementById('fpTitle').textContent='تفاصيل المجلد';
+  document.getElementById('fpBody').innerHTML='<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px;font-size:.88rem;line-height:2;word-break:break-word"><b>الاسم الكامل:</b><br>'+esc(f.name)+'<br><b>عدد المصادر:</b> '+f.items.length+'</div>';
+  var sv=document.getElementById('fpSave');sv.textContent='إغلاق';sv.onclick=closePick;
+  document.getElementById('foldPick').classList.add('open');
+ }
+ function showInstr(){
+  closeMenu();var f=srcState[fkCur()];if(!f)return;
+  document.getElementById('fpTitle').textContent='تعليمات المجلد';
+  document.getElementById('fpBody').innerHTML='<div style="font-size:.74rem;color:var(--text-3);margin-bottom:10px">تعليمات خاصة تُرفق بهذا المجلد وتلتزم بها أنظمة البحث عند ربط السيرفر:</div>'
+   +'<textarea id="fpInstr" maxlength="2000" placeholder="مثال: يُستعان بهذا المجلد في الفتاوى فقط، ويُرجّح فيه قول شيخ الإسلام ابن تيمية..." style="width:100%;min-height:140px;border:1px solid var(--border-strong);background:var(--surface-2);border-radius:11px;padding:12px;font-family:inherit;font-size:.86rem;line-height:1.9;resize:vertical;outline:none;color:var(--text)">'+esc(f.instr||'')+'</textarea>';
+  document.getElementById('fpSave').textContent='حفظ';
+  document.getElementById('fpSave').onclick=function(){
+   var fk=fkCur();if(!srcState[fk])return closePick();
+   var v=document.getElementById('fpInstr').value.trim();
+   if(v)srcState[fk].instr=v.slice(0,2000);else delete srcState[fk].instr;
+   saveSrc(true);closePick();toast(v?'تم حفظ تعليمات المجلد':'تم مسح التعليمات');
+  };
+  document.getElementById('foldPick').classList.add('open');
+  setTimeout(function(){var t=document.getElementById('fpInstr');if(t)t.focus();},80);
+ }
+ function doToggle(){
+  closeMenu();var fk=fkCur(),f=srcState[fk];if(!f)return;
+  f.on=!(f.on!==false);
+  saveSrc(true);renderSrc();toast(f.on===false?'تم إيقاف المجلد':'تم تفعيل المجلد');
+ }
+ function showPriority(){
+  closeMenu();var f=srcState[fkCur()];if(!f)return;
+  document.getElementById('fpTitle').textContent='التعليمات والأولوية';
+  var body=document.getElementById('fpBody');
+  if(!f.items.length){body.innerHTML='<div style="text-align:center;color:var(--text-3);font-size:.82rem;padding:18px">لا مصادر في هذا المجلد</div>';document.getElementById('fpSave').textContent='إغلاق';document.getElementById('fpSave').onclick=closePick;document.getElementById('foldPick').classList.add('open');return;}
+  pickSel=[f.prio];
+  body.innerHTML='<div style="font-size:.74rem;color:var(--text-3);margin-bottom:10px">اختر المصدر الذي تُعطى له أولوية البحث:</div>'
+   +f.items.map(function(it,i){return '<button class="row'+(i===f.prio?' sel':'')+'" data-pi="'+i+'"><span class="mi">'+(i===f.prio?'✓':'')+'</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(it.n)+'</span></button>';}).join('')
+   +'<button class="row" data-pi="-1"><span class="mi"></span>إزالة الأولوية</button>';
+  body.querySelectorAll('[data-pi]').forEach(function(b){b.addEventListener('click',function(){
+   pickSel=[+b.dataset.pi];
+   body.querySelectorAll('.row').forEach(function(r2){r2.classList.remove('sel');r2.querySelector('.mi').textContent='';});
+   b.classList.add('sel');b.querySelector('.mi').textContent='✓';
+  });});
+  document.getElementById('fpSave').textContent='حفظ';
+  document.getElementById('fpSave').onclick=function(){
+   var fk=fkCur();if(!srcState[fk])return closePick();
+   srcState[fk].prio=pickSel[0]===-1?null:pickSel[0];
+   saveSrc(true);renderSrc();closePick();toast(pickSel[0]===-1?'تمت إزالة الأولوية':'تم تعيين المصدر ذو الأولوية');
+  };
+  document.getElementById('foldPick').classList.add('open');
+ }
+ function showFilter(){
+  closeMenu();var f=srcState[fkCur()];if(!f)return;
+  document.getElementById('fpTitle').textContent='تصفية أنواع المصادر';
+  var types=[];f.items.forEach(function(it){if(!types.includes(it.t))types.push(it.t);});
+  var body=document.getElementById('fpBody');
+  if(!types.length){body.innerHTML='<div style="text-align:center;color:var(--text-3);font-size:.82rem;padding:18px">لا مصادر للتصفية</div>';document.getElementById('fpSave').textContent='إغلاق';document.getElementById('fpSave').onclick=closePick;document.getElementById('foldPick').classList.add('open');return;}
+  pickSel=(f.typeFilter&&f.typeFilter.length?f.typeFilter.filter(function(t){return types.includes(t);}):types.slice());
+  if(!pickSel.length)pickSel=types.slice();
+  var labels={'رابط':'روابط','ملف':'ملفات','API':'واجهات API'};
+  body.innerHTML='<div style="font-size:.74rem;color:var(--text-3);margin-bottom:10px">اختر الأنواع المعروضة (اختيار الكل = إظهار كل شيء):</div>'
+   +types.map(function(t){return '<button class="row'+(pickSel.includes(t)?' sel':'')+'" data-pt="'+esc(t)+'"><span class="mi">'+(pickSel.includes(t)?'✓':'')+'</span><span style="flex:1;text-align:right">'+(labels[t]||esc(t))+'</span><span style="font-size:.68rem;color:var(--text-3)">'+f.items.filter(function(x){return x.t===t;}).length+'</span></button>';}).join('');
+  body.querySelectorAll('[data-pt]').forEach(function(b){b.addEventListener('click',function(){
+   var t=b.dataset.pt,ix=pickSel.indexOf(t);
+   if(ix>-1){pickSel.splice(ix,1);b.classList.remove('sel');b.querySelector('.mi').textContent='';}
+   else{pickSel.push(t);b.classList.add('sel');b.querySelector('.mi').textContent='✓';}
+  });});
+  document.getElementById('fpSave').textContent='تطبيق';
+  document.getElementById('fpSave').onclick=function(){
+   var fk=fkCur();if(!srcState[fk])return closePick();
+   if(pickSel.length===types.length)delete srcState[fk].typeFilter;
+   else srcState[fk].typeFilter=pickSel.slice();
+   saveSrc(true);renderSrc();closePick();toast('تم تحديث التصفية');
+  };
+  document.getElementById('foldPick').classList.add('open');
+ }
+ function doDelete(){
+  closeMenu();var f=srcState[fkCur()];if(!f)return;
+  var cf=document.getElementById('confirmText');
+  if(!cf)return;
+  cf.textContent='حذف مجلد "'+f.name+'" وكل مصادره نهائيًا؟';
+  document.getElementById('confirmYes').onclick=function(){
+   var fk=fkCur();delete srcState[fk];saveSrc(true);renderSrc();
+   document.getElementById('s2Confirm').classList.remove('open');toast('حُذف المجلد');
+  };
+  document.getElementById('s2Confirm').classList.add('open');
+ }
+ document.addEventListener('click',function(e){
+  var fb=e.target.closest('[data-folderopts]');
+  if(fb){openMenu(fb.dataset.folderopts,fb);return;}
+  var fo=e.target.closest('[data-fopt]');
+  if(fo){
+   var a=fo.dataset.fopt;
+   if(a==='rename'){var _f=srcState[fkCur()];if(_f){var _nn=prompt('الاسم الجديد للمجلد:',_f.name);if(_nn&&_nn.trim()){_f.name=_nn.trim().slice(0,80);saveSrc(true);renderSrc();toast('تمت إعادة التسمية');}}return;}
+   if(a==='details')showDetails();
+   else if(a==='instr')showInstr();
+   else if(a==='priority')showPriority();
+   else if(a==='toggle')doToggle();
+   else if(a==='filter')showFilter();
+   else if(a==='delete')doDelete();
+   return;
+  }
+  if(menuEl&&menuEl.style.display==='block'&&!e.target.closest('.fopt-menu'))closeMenu();
+ });
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMenu();}});
+ window.addEventListener('scroll',function(){closeMenu();},{capture:true});
+})();
+</script>
+<script>
+/* ══ التفويض المركزي للأحداث ══ */
+(function(){
+ var A={
+  'brand-exit':function(){brandExit();},
+  'nav-sec':function(el){switchNavSec(el.dataset.sec);},
+  'close-sidebar':function(){closeSidebar();},
+  'open-sidebar':function(){openSidebar();},
+  'open-modal':function(el){openModal(el.dataset.m);},
+  'close-modal':function(el){closeModal(el.dataset.m);},
+  'theme-toggle':function(){setTheme(document.documentElement.dataset.theme==='light'?'dark':'light');},
+  'refresh-dash':function(){renderDash();toast('تم تحديث البيانات');},
+  'export-convs':function(){exportConvsCsv();},
+  'export-logs':function(){exportLogs();},
+  'export-report':function(){toast('تم تصدير التقرير');},
+  'export-catalog':function(){exportCatalog();},
+  'export-config':function(){exportConfig();},
+  'toggle-routing':function(el){el.classList.toggle('on');toast(el.classList.contains('on')?'التوجيه التلقائي مفعّل':'التوجيه التلقائي متوقف');audit('تعديل','توجيه النماذج');},
+  'save-all-prompts':function(){toast('تم حفظ جميع الأوامر');audit('تعديل','أوامر النماذج');},
+  'toggle-theme-lock':function(el){toggleThemeLock(el);},
+  'toggle-maint':function(el){toggleMaint(el);},
+  'toggle-streaming':function(el){el.classList.toggle('on');},
+  'add-sugg':function(){addSugg();},
+  'add-mufti':function(){addMufti();},
+  'add-mufti-s2':function(){addMuftiS2();},
+  'add-instruction':function(){addInstruction();},
+  'save-instructions':function(){saveInstructions();},
+  'save-admin-code':function(){saveAdminCode();},
+  'pick-catalog':function(){document.getElementById('catalogFile').click();},
+  'pick-import':function(){document.getElementById('importFile2').click();},
+  's2-close':function(){document.getElementById('s2Confirm').classList.remove('open');},
+  'save-model':function(){saveModel();},
+  'save-source':function(){saveSource();},
+  'save-plan':function(){savePlan();},
+  'invite-admin':function(){inviteAdmin();},
+  'enable-maint':function(){enableMaint();},
+  'conv-quality':function(el){setConvQuality(el.dataset.q);},
+  'confirm':function(el){confirmAction(el.dataset.act,el.dataset.txt);},
+  'go':function(el){go(el.dataset.v);},
+  'view-user':function(el){viewUser(+el.dataset.id);},
+  'ban-user':function(el){banUser(+el.dataset.id);},
+  'disable-user':function(el){disableUser(+el.dataset.id);},
+  'conv-filter':function(el){convFilter=el.dataset.f;renderConvs();},
+  'review-conv':function(el){reviewConv(+el.dataset.id);},
+  'toggle-model':function(el){toggleModel(+el.dataset.i);},
+  'default-model':function(el){setDefaultModel(+el.dataset.i);},
+  'edit-model':function(el){editModel(+el.dataset.i);},
+  'del-source':function(el){var i=+el.dataset.i;var nm=SOURCES[i]&&SOURCES[i].name;SOURCES.splice(i,1);renderKB();audit('حذف مصدر',nm||'');},
+  'save-prompt':function(el){var i=+el.dataset.i;PROMPTS[i].txt=document.getElementById('pr'+i).value;toast('تم حفظ أمر الوضع');audit('تعديل prompt',PROMPTS[i].mode);},
+  'edit-plan':function(el){editPlan(+el.dataset.i);},
+  'fb-filter':function(el){fbFilter=el.dataset.f;renderFeedback();},
+  'close-report':function(el){var i=+el.dataset.gi;FEEDBACK[i].st='مقروء';renderFeedback();audit('مراجعة بلاغ',FEEDBACK[i].q);},
+  'toggle-feature':function(el){toggleFeature(el.dataset.id,el);},
+  'del-sugg':function(el){delSugg(+el.dataset.i);},
+  'del-mufti':function(el){delMufti(+el.dataset.i);},
+  'edit-role':function(el){toast('تعديل صلاحيات '+el.dataset.name);},
+  'del-team':function(el){var i=+el.dataset.i;var nm=TEAM[i]&&TEAM[i].name;TEAM.splice(i,1);renderTeam();audit('إزالة مدير',nm||'');},
+  'log-filter':function(el){logFilter=el.dataset.f;renderLogs();}
+ };
+ document.addEventListener('click',function(e){
+  var el=e.target.closest('[data-action]');
+  if(!el)return;
+  var fn=A[el.dataset.action];
+  if(fn)fn(el,e);
+ });
+ /* المعالجات التي كانت inline */
+ document.addEventListener('input',function(e){
+  if(e.target.id==='userSearch')renderUsers();
+  if(e.target.id==='catSearch')filterCat(e.target.value);
+ });
+ document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter')return;
+  if(e.target.id==='newSugg')addSugg();
+  if(e.target.id==='newMufti')addMufti();
+ });
+ document.addEventListener('change',function(e){
+  if(e.target.id==='catalogFile')loadCatalog(e.target);
+  if(e.target.id==='importFile2')importConfig(e.target);
+ });
+})();
+</script>
+<script>
+/* ══ وحدة حماية لوحة التحكم: تجزئة الرمز + قفل الخمول ══ */
+async function adminHash(v){
+ var s=String(v);
+ if(window.crypto&&crypto.subtle&&crypto.subtle.digest){
+  var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join('');
+ }
+ var h1=0x811c9dc5;
+ for(var i=0;i<s.length;i++){h1=Math.imul(h1^s.charCodeAt(i),0x01000193)>>>0;}
+ return 'fb-'+h1.toString(16)+'-'+s.length;
+}
+(function(){
+ var IDLE=10*60*1000,t=null,lockEl=null,fails=0;
+ function buildLock(){
+  lockEl=document.createElement('div');
+  lockEl.style.cssText='position:fixed;inset:0;z-index:9999;display:none;place-items:center;background:rgba(0,0,0,.75);backdrop-filter:blur(8px)';
+  lockEl.innerHTML='<div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;width:min(360px,90vw);text-align:center">'
+   +'<h3 style="font-size:1rem;margin-bottom:8px">انتهت الجلسة — أدخل رمز الدخول</h3>'
+   +'<input id="lockCode" type="password" dir="ltr" placeholder="••••••" style="width:100%;border:1px solid var(--border-strong);background:var(--surface-2);border-radius:11px;padding:12px;margin:10px 0;font-size:1rem;outline:none">'
+   +'<button id="lockBtn" style="width:100%;background:var(--accent);color:#fff;border-radius:11px;padding:12px;font-weight:600">فتح اللوحة</button>'
+   +'<div id="lockMsg" style="font-size:.74rem;color:var(--danger);min-height:18px;margin-top:6px"></div></div>';
+  document.body.appendChild(lockEl);
+  document.getElementById('lockBtn').addEventListener('click',tryUnlock);
+  document.getElementById('lockCode').addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock();});
+ }
+ function lock(){
+  if(!lockEl)buildLock();
+  if(!LS.raw('mai_admin_code_hash'))lockEl.querySelector('h3').textContent='أنشئ رمز دخول (6+ أحرف) للوحة التحكم';
+  lockEl.style.display='grid';
+  var c=document.getElementById('lockCode');c.value='';
+  setTimeout(function(){c.focus();},80);
+ }
+ function tryUnlock(){
+  var v=document.getElementById('lockCode').value;
+  var msg=document.getElementById('lockMsg');
+  adminHash(v).then(function(h){
+   var stored=LS.raw('mai_admin_code_hash');
+   if(!stored){
+    if(v.trim().length<6){msg.textContent='الرمز 6 أحرف على الأقل';return;}
+    LS.setRaw('mai_admin_code_hash',h);LS.del('mai_admin_code');
+    lockEl.style.display='none';reset();return;
+   }
+   if(h===stored){fails=0;lockEl.style.display='none';reset();}
+   else{fails++;msg.textContent='رمز غير صحيح'+(fails>=3?' — انتظر قليلاً':'');if(fails>=3)setTimeout(function(){fails=0;},15000);}
+  });
+ }
+ function reset(){clearTimeout(t);t=setTimeout(lock,IDLE);}
+ ['click','keydown','pointermove','scroll'].forEach(function(ev){
+  document.addEventListener(ev,function(){if(!lockEl||lockEl.style.display!=='grid')reset();},{passive:true});
+ });
+ document.addEventListener('visibilitychange',function(){if(document.hidden)reset();});
+ reset();
+})();
+</script>
+<script>
+/* ══ قايمة خيارات المصدر (المجلد الرئيسي) ══ */
+var goptMenu=null,goptParent=null;
+function ensureGopt(){
+ if(goptMenu)return;
+ var st=document.createElement('style');
+ st.textContent='.gopt-menu{position:fixed;z-index:475;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.28);padding:6px;display:none;min-width:205px}'
+ +'.gopt-menu button{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:9px;font-size:.82rem;text-align:right}.gopt-menu button:hover{background:var(--surface-2)}.gopt-menu button .material-symbols-outlined{font-size:18px;color:var(--text-2)}.gopt-menu button.danger,.gopt-menu button.danger .material-symbols-outlined{color:var(--danger)}'
+ +'.src-group-head{cursor:pointer;user-select:none;-webkit-user-select:none}.src-group-head:hover{border-color:var(--accent)}';
+ document.head.appendChild(st);
+ goptMenu=document.createElement('div');goptMenu.className='gopt-menu';
+ goptMenu.innerHTML='<button data-gopt="rename"><span class="material-symbols-outlined">edit</span> إعادة تسمية المصدر</button>'
+ +'<button data-gopt="toggle"><span class="material-symbols-outlined">toggle_off</span> <span id="goptTgTx">إيقاف الكل</span></button>'
+ +'<button data-gopt="details"><span class="material-symbols-outlined">info</span> التفاصيل</button>'
+ +'<div style="height:1px;background:var(--border);margin:5px 8px"></div>'
+ +'<button data-gopt="delete" class="danger"><span class="material-symbols-outlined">delete</span> حذف المصدر كاملاً</button>';
+ document.body.appendChild(goptMenu);
+ goptMenu.addEventListener('click',function(e){
+  var b=e.target.closest('[data-gopt]');if(!b)return;
+  var a=b.dataset.gopt;closeGopt();
+  var keys=Object.keys(srcState).filter(k=>String(srcState[k].parent||'مصادر')===goptParent);
+  if(a==='rename'){var nn=prompt('الاسم الجديد للمصدر:',goptParent);if(nn&&nn.trim()){var old=goptParent;keys.forEach(k=>{srcState[k].parent=nn.trim().slice(0,60);});if(openGroups.has(old)){openGroups.delete(old);openGroups.add(nn.trim().slice(0,60));saveGroups();}saveSrc(true);renderSrc();toast('تمت إعادة التسمية');}}
+  if(a==='toggle'){var anyOn=keys.some(k=>srcState[k].on!==false);keys.forEach(k=>{srcState[k].on=!anyOn;});saveSrc(true);renderSrc();toast(anyOn?'تم إيقاف كل مجلدات المصدر':'تم تفعيل كل مجلدات المصدر');}
+  if(a==='details'){var c2=keys.reduce((s,k)=>s+srcState[k].items.length,0);toast('«'+goptParent+'» — '+keys.length+' مجلد — '+c2.toLocaleString('ar-EG')+' مصدر');}
+  if(a==='delete'){confirmText.textContent='حذف المصدر "'+goptParent+'" وكل ما فيه ('+keys.length+' مجلد) نهائياً؟';s2Confirm.classList.add('open');confirmYes.onclick=function(){keys.forEach(k=>{delete srcState[k];});openGroups.delete(goptParent);saveGroups();saveSrc(true);renderSrc();s2Confirm.classList.remove('open');toast('حُذف المصدر');};}
+ });
+}
+function openGroupMenu(p,btn){ensureGopt();goptParent=p;var keys=Object.keys(srcState).filter(k=>String(srcState[k].parent||'مصادر')===p);document.getElementById('goptTgTx').textContent=keys.some(k=>srcState[k].on!==false)?'إيقاف الكل':'تفعيل الكل';goptMenu.style.display='block';var r=btn.getBoundingClientRect(),w=goptMenu.offsetWidth,h=goptMenu.offsetHeight;var x=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8);var y=r.bottom+6;if(y+h>innerHeight-8)y=Math.max(8,r.top-h-6);goptMenu.style.left=x+'px';goptMenu.style.top=y+'px';}
+function closeGopt(){if(goptMenu)goptMenu.style.display='none';}
+document.addEventListener('click',function(e){if(goptMenu&&goptMenu.style.display==='block'&&!e.target.closest('.gopt-menu')&&!e.target.closest('[data-grpopts]'))closeGopt();});
+</script>
+<script src="sync.js"></script>
+</body>
+</html>

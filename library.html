@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta name="theme-color" id="metaThemeColor" content="#131615">
+<!--
+  ملاحظة إنتاجية (CSP):
+  القيمة الحالية مصممة للعمل كملف واحد أثناء التطوير. عند النشر، انقل السكربت
+  والأنماط إلى ملفات خارجية واستخدم nonce بدلاً من 'unsafe-inline'.
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; base-uri 'none'; form-action 'self'">
+<title>المكتبة — مسلم AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
+:root{--bg:#f6f7f6;--sidebar:#eff1ef;--surface:#fff;--surface-2:#f0f2f0;--surface-3:#e7eae7;--border:#e2e5e2;--border-strong:#cfd4cf;--text:#1b1e1c;--text-2:#5f665f;--text-3:#91978f;--accent:#157a55;--accent-hover:#0f6646;--accent-soft:#e3f1ea;--accent-text:#0d5c3f;--danger:#b3423a;--gold:#c9a227;--shadow:0 1px 3px rgba(15,25,20,.06);color-scheme:light}
+[data-theme="dark"]{--bg:#131615;--sidebar:#0e1110;--surface:#1a1e1c;--surface-2:#212624;--surface-3:#2a302d;--border:#262c29;--border-strong:#37403c;--text:#e7e9e7;--text-2:#a2a8a2;--text-3:#6f766f;--accent:#3fb984;--accent-hover:#57c795;--accent-soft:rgba(63,185,132,.13);--accent-text:#72d3a6;--shadow:0 1px 3px rgba(0,0,0,.35);color-scheme:dark}
+*{margin:0;padding:0;box-sizing:border-box}
+::selection{background:rgba(63,185,132,.5);color:#fff}
+body,input,button,textarea{font-family:'Quicksand','IBM Plex Sans Arabic',sans-serif}
+body{background:var(--bg);color:var(--text);font-size:15px;min-height:100vh}
+*{scrollbar-width:none}
+*::-webkit-scrollbar{width:0;height:0;display:none}
+button{cursor:pointer;border:none;background:none;color:inherit;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+.material-symbols-outlined{font-size:22px;line-height:1;user-select:none}
+
+
+/* ══ القائمة الجانبية — نفس تطبيق مسلم AI ══ */
+.app{display:flex;height:100vh;height:100dvh}
+.sidebar{width:280px;background:var(--sidebar);border-left:1px solid var(--border);display:flex;flex-direction:column;padding:14px 12px;flex-shrink:0;z-index:100;transition:background-color .3s,border-color .3s}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 10px;font-weight:700;font-size:1.05rem;user-select:none;color:var(--text);text-decoration:none;border-radius:12px;transition:background-color .2s}
+.brand:hover{background:var(--surface-2)}
+.brand-mark{width:36px;height:36px;display:grid;place-items:center;color:var(--accent)}
+.brand small{display:block;font-size:.66rem;font-weight:400;color:var(--text-3)}
+.brand-spacer{flex:1}
+.lib-frame{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:12px 4px 4px;background:var(--surface)}
+.lib-frame-sep{height:1px;background:var(--border);margin:0 12px}
+.lib-link{display:flex;align-items:center;gap:10px;padding:10px 12px;color:var(--text-2);font-size:.86rem;font-weight:600;text-decoration:none;transition:all .22s ease}
+.lib-link:hover{background:var(--surface-2);color:var(--text)}
+.lib-link .material-symbols-outlined:first-child{font-size:18px;color:var(--accent)}
+.lib-link .lib-spacer{flex:1}
+.lib-link.active{background:var(--accent-soft);color:var(--accent-text)}
+.sb-label{font-size:.7rem;color:var(--text-3);padding:10px 12px 6px;font-weight:600}
+.sb-bottom{border-top:1px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.theme-seg{position:relative;display:flex;background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:3px}
+.theme-seg button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 4px;font-size:.8rem;color:var(--text-2);position:relative;z-index:1;transition:color .2s}
+.theme-seg button.active{color:var(--text);font-weight:600}
+.theme-seg .material-symbols-outlined{font-size:15px}
+.seg-thumb{position:absolute;top:3px;bottom:3px;width:calc(50% - 3px);background:var(--surface);border:1px solid var(--border-strong);border-radius:9px;transition:right .3s;pointer-events:none}
+.user-row{display:flex;align-items:center;gap:6px}
+.user-chip{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;flex:1;min-width:0;text-decoration:none;color:var(--text);transition:background-color .2s}
+.user-chip:hover{background:var(--surface-2)}
+.icon-pair{display:flex;align-items:center;border:1px solid var(--border);border-radius:12px;overflow:hidden;flex-shrink:0}
+.settings-btn{display:grid;place-items:center;width:38px;height:38px;color:var(--text-2);text-decoration:none;flex-shrink:0}
+.icon-pair .settings-btn{background:#1b1e1c;color:#fff}
+[data-theme="dark"] .icon-pair .settings-btn{background:#fff;color:#111}
+.icon-pair .settings-btn:hover{filter:brightness(1.15)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:600;font-size:.85rem;flex-shrink:0}
+.u-name{font-size:.86rem;font-weight:600}
+.u-plan{font-size:.7rem;color:var(--text-3)}
+.main{flex:1;min-width:0;height:100vh;height:100dvh;overflow-y:auto}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.3s;z-index:90}
+.overlay.show{opacity:1;pointer-events:auto}
+.burger{display:none;color:var(--text-2);padding:6px}
+@media(max-width:920px){
+ .sidebar{position:fixed;top:0;bottom:0;right:0;transform:translateX(100%);transition:transform .35s;box-shadow:0 0 40px rgba(0,0,0,.3)}
+ .sidebar.open{transform:none}
+ .burger{display:grid}
+}
+
+/* ══ الشريط العلوي ══ */
+.topbar{position:sticky;top:0;z-index:50;height:58px;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.tb-btn{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;color:var(--text-2);flex-shrink:0;text-decoration:none}
+.tb-btn:hover{background:var(--surface-2);color:var(--accent)}
+.tb-title{font-weight:700;font-size:1rem;flex:1;text-align:center}
+.tb-spacer{width:38px;flex-shrink:0}
+
+/* ══ شريط البحث ══ */
+.search-wrap{padding:10px 14px 0;width:100%}
+.search-box{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-strong);border-radius:12px;padding:0 12px;transition:.25s}
+.search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.search-box input{flex:1;border:none;background:none;outline:none;padding:11px 2px;font-size:.9rem;color:var(--text);font-family:inherit;min-width:0}
+.search-box .material-symbols-outlined{font-size:19px;color:var(--text-3);flex-shrink:0}
+
+/* ══ تبويبات المكتبة في القائمة الجانبية ══ */
+.side-tabs{display:flex;flex-direction:column;gap:4px;padding:0 4px;flex:1;overflow-y:auto}
+.side-tabs .tab{flex-shrink:0;display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:10px;font-size:.86rem;color:var(--text-2);text-align:right;transition:all .22s ease;animation:popIn .28s ease both}
+.side-tabs .tab:hover{background:var(--surface-2);color:var(--text)}
+.side-tabs .tab.active{background:var(--surface-3);color:var(--text);font-weight:600}
+.side-tabs .tab .material-symbols-outlined{font-size:17px;flex-shrink:0}
+.side-tabs .tab .cnt{margin-inline-start:auto;font-size:.66rem;background:var(--surface-3);border-radius:50px;padding:1px 8px;color:var(--text-3);font-variant-numeric:tabular-nums}
+.side-tabs .tab.active .cnt{background:var(--surface);color:var(--text-2)}
+
+.conv-fade{position:sticky;height:26px;z-index:3;pointer-events:none;opacity:0;transition:opacity .25s;flex-shrink:0}
+.conv-fade.show{opacity:1}
+.conv-fade-top{top:0;margin-bottom:-30px;background:linear-gradient(to bottom,var(--sidebar),transparent)}
+.conv-fade-bottom{bottom:0;margin-top:-30px;background:linear-gradient(to top,var(--sidebar),transparent)}
+
+/* ══ المحتوى ══ */
+.wrap{max-width:820px;margin:0 auto;padding:12px 14px 60px}
+.sec-head{display:flex;align-items:center;gap:8px;padding:14px 4px 10px;font-size:.78rem;font-weight:700;color:var(--text-3)}
+.sec-head .material-symbols-outlined{font-size:17px;color:var(--accent)}
+
+/* بطاقات العناصر */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;transition:all .25s ease;animation:popIn .3s ease both;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.18);border-color:var(--accent)}
+.card .c-ic{width:38px;height:38px;border-radius:11px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;margin-bottom:10px}
+.card .c-ic .material-symbols-outlined{font-size:19px}
+.card .c-title{font-weight:700;font-size:.88rem;line-height:1.8;margin-bottom:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card .c-sub{font-size:.72rem;color:var(--text-3);line-height:1.8;margin-bottom:10px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card .c-foot{display:flex;gap:6px}
+.card.fav-card{display:block;text-decoration:none;color:inherit;cursor:pointer}
+.card.fav-card .c-title,.card.fav-card .c-sub{text-decoration:none;color:inherit}
+.mini-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 6px;border-radius:9px;border:1px solid var(--border);font-size:.72rem;color:var(--text-2);transition:all .2s ease;background:none}
+.mini-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mini-btn.del:hover{border-color:var(--danger);color:var(--danger)}
+.mini-btn .material-symbols-outlined{font-size:15px}
+
+/* ══ اسم الإنشاء + وسم الذكاء الاصطناعي + قائمة النقاط ══ */
+.c-name-row{display:flex;align-items:flex-start;gap:4px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
+.c-name{flex:1;min-width:0}
+.c-name-t{font-size:.82rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.7}
+.c-name-t .pin-ic{font-size:13px;color:var(--accent);vertical-align:-2px;margin-inline-end:2px}
+.dots-btn{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;color:var(--text-3);flex-shrink:0;transition:all .2s ease;margin-top:-2px}
+.dots-btn:hover{background:var(--surface-2);color:var(--accent)}
+.dots-btn .material-symbols-outlined{font-size:19px}
+
+/* قائمة الخيارات المنبثقة */
+.ctx{position:fixed;z-index:400;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.28);padding:6px;display:none;min-width:215px;animation:popIn .18s ease}
+.ctx.show{display:block}
+.ctx button{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:9px;font-size:.82rem;font-weight:500;color:var(--text);text-align:right;transition:background-color .15s}
+.ctx button:hover{background:var(--surface-2)}
+.ctx button .material-symbols-outlined{font-size:18px;color:var(--text-2);flex-shrink:0}
+.ctx button:hover .material-symbols-outlined{color:var(--accent)}
+.ctx-sep{height:1px;background:var(--border);margin:5px 8px}
+
+/* الحالة الفارغة */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:56px 20px;color:var(--text-3)}
+.empty .e-ic{width:58px;height:58px;border-radius:18px;background:var(--surface-2);display:grid;place-items:center;color:var(--accent)}
+.empty .e-ic .material-symbols-outlined{font-size:26px}
+.empty .e-t{font-size:.95rem;font-weight:700;color:var(--text-2)}
+.empty .e-d{font-size:.78rem;line-height:2;max-width:300px}
+.empty a{color:var(--accent-text);font-weight:600;text-decoration:none}
+
+.sub-label{display:flex;align-items:center;gap:8px;padding:16px 4px 10px;font-weight:700;font-size:.92rem}
+.sub-label .material-symbols-outlined{font-size:19px;color:var(--accent)}
+.sub-label .more{margin-inline-start:auto;font-size:.72rem;color:var(--text-3);font-weight:400;display:flex;align-items:center;gap:2px}
+
+/* المودال */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;place-items:center;padding:18px}
+.modal.open{display:grid;animation:fadeIn .22s ease}
+.modal-card{width:100%;max-width:560px;max-height:86vh;overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px;animation:msgIn .3s ease}
+.modal-card h3{font-size:1rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.modal-card h3 .material-symbols-outlined{color:var(--accent);font-size:20px}
+.m-meta{font-size:.72rem;color:var(--text-3);margin:-6px 0 12px}
+.m-body{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:16px;font-size:.86rem;line-height:2.1;white-space:pre-wrap;word-break:break-word}
+.m-row{display:flex;gap:8px;margin-top:14px}
+.m-btn{flex:1;padding:11px;border-radius:11px;font-size:.84rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px}
+.m-btn .material-symbols-outlined{font-size:16px}
+.m-btn.pri{background:var(--accent);color:#fff}
+.m-btn.ghost{border:1px solid var(--border-strong);color:var(--text-2)}
+.m-btn:hover{filter:brightness(1.08)}
+.rn-input{width:100%;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:11px;padding:12px 14px;font-size:.9rem;color:var(--text);outline:none;font-family:inherit;transition:border-color .2s}
+.rn-input:focus{border-color:var(--accent)}
+
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--text);color:var(--bg);padding:12px 24px;border-radius:12px;font-size:.85rem;z-index:500;transition:.35s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+@keyframes popIn{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:none}}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media(max-width:560px){.cards{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="Muslim.html" title="الصفحة الرئيسية">
+      <div class="brand-mark"><svg viewBox="0 0 675 675" width="22" height="22" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="50" stroke-dasharray="300" d="m337.5 630c-161.75 0-292.5-130.75-292.5-292.5 0-161.75 130.75-292.5 292.5-292.5 161.75 0 292.5 130.75 292.5 292.5 0 161.75-130.75 292.5-292.5 292.5z"/></svg></div>
+      <div>مسلم AI<small>مساعدك الشرعي الذكي</small></div>
+      <div class="brand-spacer"></div>
+    </a>
+    <div class="lib-frame">
+      <a class="lib-link" href="quraan.html">
+        <span class="material-symbols-outlined">menu_book</span>
+        <span>القرآن</span><span class="lib-spacer"></span>
+        <span class="material-symbols-outlined" style="font-size:17px">chevron_left</span>
+      </a>
+      <div class="lib-frame-sep"></div>
+      <a class="lib-link active" href="library.html">
+        <span class="material-symbols-outlined">auto_awesome_mosaic</span>
+        <span>المكتبة</span><span class="lib-spacer"></span>
+        <span class="material-symbols-outlined" style="font-size:17px">chevron_left</span>
+      </a>
+      <div class="lib-frame-sep"></div>
+      <a class="lib-link" href="community.html">
+        <span class="material-symbols-outlined">diversity_3</span>
+        <span>المجتمع</span><span class="lib-spacer"></span>
+        <span class="material-symbols-outlined" style="font-size:17px">chevron_left</span>
+      </a>
+    </div>
+    <div class="sb-label">أقسام المكتبة</div>
+    <nav class="side-tabs" id="tabs"></nav>
+    <div class="sb-bottom">
+      <div class="theme-seg" id="themeSeg">
+        <button data-action="theme" data-t="light"><span class="material-symbols-outlined">light_mode</span> فاتح</button>
+        <button data-action="theme" data-t="dark"><span class="material-symbols-outlined">dark_mode</span> داكن</button>
+        <div class="seg-thumb" id="segThumb"></div>
+      </div>
+      <div class="user-row">
+        <a class="user-chip" href="setting.html"><div class="avatar" id="sbAvatar">ع</div>
+          <div><div class="u-name" id="sbName">عبدالله</div><div class="u-plan">حسابي</div></div></a>
+        <div class="icon-pair">
+          <a class="settings-btn" href="Muslim.html" title="محادثة جديدة"><span class="material-symbols-outlined">add</span></a>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="overlay" id="overlay" data-action="close-sidebar"></div>
+
+  <main class="main">
+<header class="topbar">
+  <button class="burger tb-btn" style="width:auto" data-action="open-sidebar"><span class="material-symbols-outlined">dock_to_left</span></button>
+  <div class="tb-title">المكتبة الشاملة</div>
+  <a class="tb-btn" href="Muslim.html" title="مسلم AI" style="color:var(--accent)"><svg viewBox="0 0 675 675" width="22" height="22" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="50" stroke-dasharray="300" d="m337.5 630c-161.75 0-292.5-130.75-292.5-292.5 0-161.75 130.75-292.5 292.5-292.5 161.75 0 292.5 130.75 292.5 292.5 0 161.75-130.75 292.5-292.5 292.5z"/></svg></a>
+</header>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <span class="material-symbols-outlined">search</span>
+    <input id="q" placeholder="ابحث في مكتبتك..." maxlength="80">
+    <button class="tb-btn" style="width:30px;height:30px" data-action="clear-search" title="مسح البحث"><span class="material-symbols-outlined" style="font-size:17px">close</span></button>
+  </div>
+</div>
+
+<div class="wrap" id="view"></div>
+
+<!-- مودال عرض الكتاب -->
+<div class="modal" id="bookModal"><div class="modal-card">
+  <h3><span class="material-symbols-outlined">auto_stories</span> <span id="bmTitle" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span></h3>
+  <div class="m-meta" id="bmMeta"></div>
+  <div class="m-body" id="bmBody"></div>
+  <div class="m-row">
+    <button class="m-btn pri" data-action="book-download"><span class="material-symbols-outlined">download</span> تحميل نص</button>
+    <button class="m-btn ghost" data-action="book-copy"><span class="material-symbols-outlined">content_copy</span> نسخ</button>
+    <button class="m-btn ghost" data-action="book-close">إغلاق</button>
+  </div>
+</div></div>
+
+<!-- مودال إعادة التسمية -->
+<div class="modal" id="renameModal"><div class="modal-card" style="max-width:420px">
+  <h3><span class="material-symbols-outlined">edit</span> إعادة تسمية</h3>
+  <div style="margin-top:6px">
+    <input id="rnInput" class="rn-input" maxlength="80" placeholder="الاسم الجديد">
+  </div>
+  <div class="m-row">
+    <button class="m-btn pri" data-action="rename-save"><span class="material-symbols-outlined">check</span> حفظ</button>
+    <button class="m-btn ghost" data-action="rename-close">إلغاء</button>
+  </div>
+</div></div>
+
+<!-- قائمة خيارات النقاط الثلاث -->
+<div class="ctx" id="ctx"></div>
+
+<div class="toast" id="toastEl"></div>
+  </main>
+</div>
+
+<script>
+'use strict';
+/* ════════════════════════════════════════════════════════════════════
+   صفحة المكتبة — الإصدار المعاد هيكلته
+   أبرز التغييرات عن النسخة السابقة:
+   1)  لا معالجات أحداث مضمّنة (onclick/onfocus) — تفويض مركزي واحد
+       عبر data-action بنفس نمط باقي التطبيق.
+   2)  دالة esc() تهرب علامات الاقتباس أيضًا — إغلاق ثغرة XSS في السمات
+       (كانت تُستخدم في data-mkey وغيرها).
+   3)  إصلاح روابط مكسورة: زر «+» وأزرار «فتح المحادثة» كانت تشير إلى
+       index.html غير الموجودة — أصبحت Muslim.html.
+   4)  توافق النشر للمجتمع: البيانات تُمرَّر عبر sessionStorage بمفتاح
+       mai_pub_draft مع ?pub=1 — وهو ما تتوقعه صفحة المجتمع الجديدة.
+   5)  حذف زر «محادثة جديدة» الكبير من القائمة الجانبية (اتساقًا مع
+       صفحة المجتمع).
+   6)  تطهير البيانات الواردة من التخزين المحلي قبل العرض.
+   7)  إضافة CSP، وحدود أقصى للحقول، وإغلاق النوافذ بمفتاح Escape.
+   الألوان: مطابقة تمامًا للواجهة الرئيسية ولم تُمس.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── أدوات عامة ──────────────────────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const ESC={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+/** تهريب HTML كامل يشمل علامات الاقتباس — آمن للنصوص والسمات معًا. */
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>ESC[c]);
+
+const LS={
+ get(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}},
+ set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){toast('مساحة التخزين ممتلئة');return false;}},
+ raw(k){try{return localStorage.getItem(k);}catch(e){return null;}},
+ setRaw(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+};
+
+let toastT=null;
+function toast(msg){const el=$('toastEl');el.textContent=String(msg).slice(0,140);
+ el.classList.add('show');clearTimeout(toastT);
+ toastT=setTimeout(()=>el.classList.remove('show'),2400);}
+
+function fmtTs(t){const n=+t;return new Date(Number.isFinite(n)?n:Date.now())
+ .toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'});}
+
+/* ── الثيم — مزامنة مع الواجهة الرئيسية عبر مفتاح mai-theme ──────── */
+const root=document.documentElement;
+function setTheme(t){
+ root.dataset.theme=t;LS.setRaw('mai-theme',t);
+ $('metaThemeColor').setAttribute('content',t==='dark'?'#131615':'#157a55');
+ document.querySelectorAll('.theme-seg button').forEach(b=>b.classList.toggle('active',b.dataset.t===t));
+ const th=$('segThumb');if(th)th.style.right=t==='light'?'3px':'50%';
+}
+
+/* ── القائمة الجانبية ────────────────────────────────────────────── */
+function openSidebar(){$('sidebar').classList.add('open');$('overlay').classList.add('show');}
+function closeSidebar(){$('sidebar').classList.remove('open');$('overlay').classList.remove('show');}
+
+(function fillUser(){
+ const u=LS.get('mai_user',null);
+ if(u&&typeof u.name==='string'&&u.name.trim()){
+  $('sbName').textContent=u.name.trim();
+  $('sbAvatar').textContent=(u.name.trim()[0])||'ع';
+ }
+})();
+
+/* ── جمع المحتوى من التطبيق (مع تطهير البيانات) ────────────────────── */
+const convs=(()=>{const a=LS.get('mai_convs',[]);return Array.isArray(a)?a:[];})();
+let myBooks=(()=>{const a=LS.get('mai_books',[]);return Array.isArray(a)?a:[];})();
+let community=(()=>{const a=LS.get('mai_community_saved',[]);return Array.isArray(a)?a:[];})();
+
+function asArray(v){return Array.isArray(v)?v:[];}
+function asStr(v,m){return String(v??'').slice(0,m);}
+
+/** خطط تعليمية مستخرجة من رسائل المحادثات (timeline). */
+const plans=[];
+convs.forEach(c=>{
+ const cid=c&&c.id,ct=c&&c.title;
+ asArray(c&&c.messages).forEach(m=>{
+  if(m&&Array.isArray(m.timeline)){
+   plans.push({convId:cid,convTitle:asStr(ct,120),levels:m.timeline,ts:+m.ts||+cid||Date.now()});
+  }});
+});
+
+/** اختبارات مستخرجة من رسائل المحادثات (quiz). */
+const quizzes=[];
+convs.forEach(c=>{
+ const cid=c&&c.id,ct=c&&c.title;
+ asArray(c&&c.messages).forEach(m=>{
+  if(m&&Array.isArray(m.quiz)){
+   quizzes.push({convId:cid,convTitle:asStr(ct,120),qs:m.quiz.slice(0,100),
+    cfg:(m.quizCfg&&typeof m.quizCfg==='object')?{topic:asStr(m.quizCfg.topic,60),diff:asStr(m.quizCfg.diff,20)}:{},ts:+m.ts||+cid||Date.now()});
+  }});
+});
+
+/** رسائل مفضلة (نجمة) من المحادثات. */
+const favs=[];
+convs.forEach(c=>{
+ const cid=c&&c.id,ct=c&&c.title;
+ asArray(c&&c.messages).forEach(m=>{
+  if(m&&m.role==='ai'&&m.fav){
+   favs.push({convId:cid,convTitle:asStr(ct,120),content:asStr(m.content,8000),ts:+m.ts||+cid||Date.now()});
+  }});
+});
+
+/* ── التثبيت وإعادة التسمية (محفوظان محليًا) ─────────────────────── */
+const pins=(()=>{const a=LS.get('mai_pins',[]);return Array.isArray(a)?a:[];})();
+const renames=(()=>{const o=LS.get('mai_renames',{});return (o&&typeof o==='object'&&!Array.isArray(o))?o:{};})();
+
+function itemKey(type,it){return type+'|'+(it&&it.convId||'')+'|'+(it&&it.ts||'');}
+function isPinned(type,it){return pins.includes(itemKey(type,it));}
+function dispName(type,it,def){
+ const v=renames[itemKey(type,it)];
+ return (typeof v==='string'&&v.trim())?v:def;
+}
+function savePins(){LS.set('mai_pins',pins);}
+function saveRenames(){LS.set('mai_renames',renames);}
+function pinSort(type,arr){return [...arr].sort((a,b)=>(isPinned(type,b)?1:0)-(isPinned(type,a)?1:0));}
+
+/* ── التبويبات ───────────────────────────────────────────────────── */
+const TABS=[
+ {id:'all',t:'الكل',ic:'apps'},
+ {id:'books',t:'كتبي',ic:'auto_stories',n:myBooks.length},
+ {id:'plans',t:'الخطط التعليمية',ic:'timeline',n:plans.length},
+ {id:'quizzes',t:'الاختبارات',ic:'quiz',n:quizzes.length},
+ {id:'favs',t:'المفضلة',ic:'star',n:favs.length},
+ {id:'community',t:'من المجتمع',ic:'diversity_3',n:community.length}];
+let curTab='all';
+
+function renderTabs(){
+ $('tabs').innerHTML=TABS.map(t=>`<button class="tab${curTab===t.id?' active':''}" data-action="tab" data-tab="${t.id}">
+  <span class="material-symbols-outlined" style="font-size:16px">${t.ic}</span>${t.t}
+  ${t.n!=null?`<span class="cnt">${t.n}</span>`:''}</button>`).join('');}
+
+/* ── مكوّنات العرض ───────────────────────────────────────────────── */
+function cardHTML(o){
+ return `<div class="card"${o.open?` data-openconv="${o.open}" style="cursor:pointer"`:''}>
+  ${o.ic?`<div class="c-ic"><span class="material-symbols-outlined">${o.ic}</span></div>`:''}
+  <div class="c-title">${esc(o.title)}</div>
+  <div class="c-sub">${esc(o.sub||'')}</div>
+  <div class="c-foot">${o.actions||''}</div>${o.foot||''}</div>`;}
+
+/* تذييل الإنشاء: الاسم + التثبيت + قائمة النقاط الثلاث */
+function aiFoot(type,it,def){
+ const k=itemKey(type,it),pin=isPinned(type,it);
+ return `<div class="c-name-row">
+  <div class="c-name">
+   <div class="c-name-t">${pin?'<span class="material-symbols-outlined pin-ic">keep</span>':''}${esc(dispName(type,it,def))}</div>
+  </div>
+  <button class="dots-btn" data-action="ctx-open" data-mtype="${type}" data-mkey="${esc(k)}" title="خيارات"><span class="material-symbols-outlined">more_vert</span></button>
+ </div>`;}
+
+function emptyHTML(ic,t,d){
+ return `<div class="empty"><div class="e-ic"><span class="material-symbols-outlined">${ic}</span></div>
+  <div class="e-t">${t}</div><div class="e-d">${d}</div></div>`;}
+
+function secLabel(ic,t,tabId){
+ const extra=tabId?`<span class="more">عرض الكل <span class="material-symbols-outlined" style="font-size:15px">chevron_left</span></span>`:'';
+ return `<div class="sub-label" style="cursor:${tabId?'pointer':'default'}" ${tabId?`data-action="goto" data-goto="${tabId}"`:''}><span class="material-symbols-outlined">${ic}</span>${t}${extra}</div>`;}
+
+/* ── عرض كل تبويب ────────────────────────────────────────────────── */
+function bookMeta(b){
+ return (b.pages?b.pages+' صفحة — ':'')+(b.chapters?b.chapters+' فصول — ':'')+fmtTs(b.ts);
+}
+
+function viewBooks(qv){
+ const list=pinSort('book',qv?myBooks.filter(b=>(asStr(b.title,300)+' '+asStr(b.content,300)).includes(qv)):myBooks);
+ if(!list.length)return emptyHTML('auto_stories','لا توجد كتب بعد','الكتب التي ينشئها التطبيق بطلب منك ستُحفظ هنا تلقائيًا — جرّب أداة «إنشاء كتاب» من علامة الزائد في المحادثة');
+ return `<div class="cards">${list.map(b=>{
+  const i=myBooks.indexOf(b);
+  return cardHTML({ic:'auto_stories',title:dispName('book',b,asStr(b.title,120)||'كتاب بدون عنوان'),
+   sub:bookMeta(b),
+   actions:`<button class="mini-btn" data-action="book-open" data-idx="${i}"><span class="material-symbols-outlined">visibility</span> عرض</button>
+    <button class="mini-btn del" data-action="book-del" data-idx="${i}"><span class="material-symbols-outlined">delete</span></button>`,
+   foot:aiFoot('book',b,asStr(b.title,120)||'كتاب بدون عنوان')});}).join('')}</div>`;}
+
+function viewPlans(qv){
+ const list=pinSort('plan',qv?plans.filter(p=>(p.convTitle+' '+JSON.stringify(p.levels)).includes(qv)):plans);
+ if(!list.length)return emptyHTML('timeline','لا توجد خطط تعليمية','خططك التعليمية من وضع «التعلّم» ستظهر هنا — اسأل المساعد: علّمني الفقه مثلاً');
+ return `<div class="cards">${list.map(p=>{
+  const items=asArray(p.levels).reduce((a,l)=>a+asArray(l&&l.items).length,0);
+  const names=asArray(p.levels).map(l=>l&&l.name).filter(Boolean).join(' ← ');
+  return cardHTML({ic:'timeline',open:p.convId,title:dispName('plan',p,p.convTitle||'خطة تعليمية'),
+   sub:(names||'خطة تعليمية')+' — '+items+' محطات',
+   actions:`<button class="mini-btn" data-action="open-conv" data-cid="${esc(p.convId)}"><span class="material-symbols-outlined">open_in_new</span> فتح المحادثة</button>`,
+   foot:aiFoot('plan',p,p.convTitle||'خطة تعليمية')});}).join('')}</div>`;}
+
+function viewQuizzes(qv){
+ const list=pinSort('quiz',qv?quizzes.filter(z=>(z.convTitle+' '+(z.cfg.topic||'')).includes(qv)):quizzes);
+ if(!list.length)return emptyHTML('quiz','لا توجد اختبارات','الاختبارات التي ينشئها التطبيق من أداة «أسئلة» ستُحفظ هنا');
+ return `<div class="cards">${list.map(z=>cardHTML({ic:'',open:z.convId,
+   title:dispName('quiz',z,'اختبار '+((z.cfg&&z.cfg.topic)||z.convTitle||'عام')),
+   sub:z.qs.length+' سؤال — مستوى '+(z.cfg.diff||'متوسط')+' — '+fmtTs(z.ts),
+   actions:`<button class="mini-btn" data-action="open-conv" data-cid="${esc(z.convId)}"><span class="material-symbols-outlined">open_in_new</span> فتح</button>`,
+   foot:aiFoot('quiz',z,'اختبار '+((z.cfg&&z.cfg.topic)||z.convTitle||'عام'))})).join('')}</div>`;}
+
+function viewFavs(qv){
+ const list=qv?favs.filter(f=>(f.convTitle+' '+f.content).includes(qv)):favs;
+ if(!list.length)return emptyHTML('star','لا توجد رسائل مفضلة','اضغط زر النجمة أسفل أي رد لإضافته هنا');
+ return `<div class="cards">${list.map(f=>`
+  <a class="card fav-card" href="Muslim.html?open=${encodeURIComponent(f.convId)}">
+   <div class="c-title">${esc(f.convTitle||'رسالة مفضلة')}</div>
+   <div class="c-sub">${esc(f.content.replace(/\n+/g,' ').slice(0,160))}</div>
+  </a>`).join('')}</div>`;}
+
+function viewCommunity(qv){
+ const list=qv?community.filter(x=>(asStr(x.title,300)+' '+asStr(x.text,300)).includes(qv)):community;
+ if(!list.length)return emptyHTML('diversity_3','لا توجد محفوظات من المجتمع','أي منشور أو سؤال تحفظه من صفحة المجتمع سيظهر هنا');
+ return `<div class="cards">${list.map((x,i)=>cardHTML({ic:x.ic||'bookmark',
+   title:asStr(x.title,120)||'محفوظ',
+   sub:asStr(x.text,300).replace(/\n+/g,' ').slice(0,140),
+   actions:`<button class="mini-btn del" data-action="comm-del" data-idx="${i}"><span class="material-symbols-outlined">delete</span> إزالة</button>`})).join('')}</div>`;}
+
+function viewAll(qv){
+ let h='';
+ if(myBooks.length&&(!qv||myBooks.some(b=>(asStr(b.title,300)+' '+asStr(b.content,300)).includes(qv))))
+  h+=secLabel('auto_stories','كتبي','books')+`<div class="cards">${pinSort('book',qv?myBooks.filter(b=>(asStr(b.title,300)+' '+asStr(b.content,300)).includes(qv)):myBooks.slice(0,4)).map(b=>cardHTML({ic:'auto_stories',title:dispName('book',b,asStr(b.title,120)||'كتاب بدون عنوان'),sub:fmtTs(b.ts),actions:`<button class="mini-btn" data-action="book-open" data-idx="${myBooks.indexOf(b)}"><span class="material-symbols-outlined">visibility</span> عرض</button>`,foot:aiFoot('book',b,asStr(b.title,120)||'كتاب بدون عنوان')})).join('')}</div>`;
+ if(plans.length&&(!qv||plans.some(p=>(p.convTitle+' '+JSON.stringify(p.levels)).includes(qv))))
+  h+=secLabel('timeline','الخطط التعليمية','plans')+`<div class="cards">${pinSort('plan',qv?plans.filter(p=>(p.convTitle+' '+JSON.stringify(p.levels)).includes(qv)):plans.slice(0,4)).map(p=>cardHTML({ic:'timeline',open:p.convId,title:dispName('plan',p,p.convTitle||'خطة تعليمية'),sub:asArray(p.levels).map(l=>l&&l.name).filter(Boolean).join(' ← '),actions:`<button class="mini-btn" data-action="open-conv" data-cid="${esc(p.convId)}"><span class="material-symbols-outlined">open_in_new</span> فتح</button>`,foot:aiFoot('plan',p,p.convTitle||'خطة تعليمية')})).join('')}</div>`;
+ if(quizzes.length&&(!qv||quizzes.some(z=>(z.convTitle+' '+(z.cfg.topic||'')).includes(qv))))
+  h+=secLabel('quiz','الاختبارات','quizzes')+`<div class="cards">${pinSort('quiz',qv?quizzes.filter(z=>(z.convTitle+' '+(z.cfg.topic||'')).includes(qv)):quizzes.slice(0,4)).map(z=>cardHTML({ic:'',open:z.convId,title:dispName('quiz',z,'اختبار '+((z.cfg&&z.cfg.topic)||z.convTitle)),sub:z.qs.length+' سؤال — '+fmtTs(z.ts),actions:`<button class="mini-btn" data-action="open-conv" data-cid="${esc(z.convId)}"><span class="material-symbols-outlined">open_in_new</span> فتح</button>`,foot:aiFoot('quiz',z,'اختبار '+((z.cfg&&z.cfg.topic)||z.convTitle))})).join('')}</div>`;
+ if(favs.length&&(!qv||favs.some(f=>(f.convTitle+' '+f.content).includes(qv))))
+  h+=secLabel('star','المفضلة','favs')+`<div class="cards">${(qv?favs.filter(f=>(f.convTitle+' '+f.content).includes(qv)):favs.slice(0,4)).map(f=>`<a class="card fav-card" href="Muslim.html?open=${encodeURIComponent(f.convId)}"><div class="c-title">${esc(f.convTitle)}</div><div class="c-sub">${esc(f.content.replace(/\n+/g,' ').slice(0,140))}</div></a>`).join('')}</div>`;
+ if(community.length&&(!qv||community.some(x=>(asStr(x.title,300)+' '+asStr(x.text,300)).includes(qv))))
+  h+=secLabel('diversity_3','محفوظات المجتمع','community')+`<div class="cards">${(qv?community.filter(x=>(asStr(x.title,300)+' '+asStr(x.text,300)).includes(qv)):community.slice(0,4)).map(x=>cardHTML({ic:x.ic||'bookmark',title:asStr(x.title,120),sub:asStr(x.text,300).slice(0,120),actions:''})).join('')}</div>`;
+ return h;}
+
+/* ── الرسم ───────────────────────────────────────────────────────── */
+function updateTabsFades(){
+ const ft=$('tabs').querySelector('.conv-fade-top'),fb=$('tabs').querySelector('.conv-fade-bottom');
+ if(!ft||!fb)return;
+ ft.classList.toggle('show',$('tabs').scrollTop>0.5);
+ fb.classList.toggle('show',($('tabs').scrollHeight-$('tabs').scrollTop-$('tabs').clientHeight)>8);}
+
+function render(){
+ renderTabs();
+ if(!$('tabs').querySelector('.conv-fade-top')){
+  const ft=document.createElement('div');ft.className='conv-fade conv-fade-top';
+  const fb=document.createElement('div');fb.className='conv-fade conv-fade-bottom';
+  $('tabs').prepend(ft);$('tabs').append(fb);}
+ updateTabsFades();
+ const qv=$('q').value.trim();
+ let h='';
+ if(curTab==='all')h=viewAll(qv);
+ else if(curTab==='books')h=viewBooks(qv);
+ else if(curTab==='plans')h=viewPlans(qv);
+ else if(curTab==='quizzes')h=viewQuizzes(qv);
+ else if(curTab==='favs')h=viewFavs(qv);
+ else if(curTab==='community')h=viewCommunity(qv);
+ $('view').innerHTML=h||emptyHTML('search','لا توائج مطابقة','جرّب كلمة بحث أخرى');}
+
+/* ── مودال عرض الكتاب ────────────────────────────────────────────── */
+let curBook=null;
+function openBook(b){
+ if(!b)return;
+ curBook=b;
+ $('bmTitle').textContent=dispName('book',b,asStr(b.title,120)||'كتاب');
+ $('bmMeta').textContent=fmtTs(b.ts)+(b.pages?' — '+b.pages+' صفحة':'')+(b.chapters?' — '+b.chapters+' فصول':'');
+ $('bmBody').textContent=asStr(b.content,20000);
+ $('bookModal').classList.add('open');
+}
+function closeBook(){$('bookModal').classList.remove('open');curBook=null;}
+function downloadBook(){
+ if(!curBook)return;
+ try{
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([curBook.content||''],{type:'text/plain;charset=utf-8'}));
+  a.download=(dispName('book',curBook,curBook.title)||'كتاب')+'.txt';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),30000);
+  toast('تم التحميل');
+ }catch(e){toast('تعذّر التحميل');}
+}
+function copyBook(){
+ if(!curBook)return;
+ if(navigator.clipboard&&navigator.clipboard.writeText)
+  navigator.clipboard.writeText(curBook.content||'').then(()=>toast('تم النسخ')).catch(()=>toast('تعذّر النسخ'));
+ else toast('النسخ غير مدعوم في هذا المتصفح');
+}
+
+/* ── إعادة التسمية ───────────────────────────────────────────────── */
+let rnCur=null;
+function openRename(type,key){
+ rnCur={type,key};
+ $('rnInput').value=dispName(type,findItem(type,key)?findItem(type,key).it:{},defTitleOf(type,(findItem(type,key)||{}).it||{}));
+ $('renameModal').classList.add('open');
+ setTimeout(()=>{$('rnInput').focus();$('rnInput').select();},80);
+}
+function saveRename(){
+ if(!rnCur)return;
+ const n=$('rnInput').value.trim().slice(0,80);
+ if(n){renames[rnCur.key]=n;saveRenames();render();toast('تمت إعادة التسمية');}
+ $('renameModal').classList.remove('open');rnCur=null;
+}
+function closeRename(){$('renameModal').classList.remove('open');rnCur=null;}
+
+/* ── النشر في المجتمع (عبر sessionStorage كما تتوقعه صفحة المجتمع) ──── */
+function publishBook(i){
+ const b=myBooks[i];if(!b)return;
+ try{
+  sessionStorage.setItem('mai_pub_draft',JSON.stringify({
+   type:'book',
+   title:dispName('book',b,asStr(b.title,120)||'كتاب'),
+   content:asStr(b.content,4000)
+  }));
+ }catch(e){toast('تعذّر تجهيز المنشور');return;}
+ location.href='community.html?pub=1';
+}
+function publishQuiz(i){
+ const z=quizzes[i];if(!z)return;
+ const qs=z.qs.slice(0,10).map((x,j)=>(j+1)+') '+(x&&x.q||'')).join('\n');
+ try{
+  sessionStorage.setItem('mai_pub_draft',JSON.stringify({
+   type:'quiz',
+   title:'اختبار: '+((z.cfg&&z.cfg.topic)||z.convTitle),
+   content:qs+'\n\n(كامل الاختبار في المحادثة)',
+   quizData:z.qs,
+   cfg:z.cfg
+  }));
+ }catch(e){toast('تعذّر تجهيز المنشور');return;}
+ location.href='community.html?pub=1';
+}
+
+/* ── قائمة النقاط الثلاث ─────────────────────────────────────────── */
+let ctxCur=null;
+function closeCtx(){$('ctx').classList.remove('show');ctxCur=null;}
+function findItem(type,key){
+ const arr=type==='book'?myBooks:type==='plan'?plans:quizzes;
+ for(let i=0;i<arr.length;i++){if(itemKey(type,arr[i])===key)return{it:arr[i],idx:i};}
+ return null;}
+function defTitleOf(type,it){
+ if(!it)return'عنصر';
+ if(type==='book')return asStr(it.title,120)||'كتاب بدون عنوان';
+ if(type==='plan')return it.convTitle||'خطة تعليمية';
+ return 'اختبار '+((it.cfg&&it.cfg.topic)||it.convTitle||'عام');}
+
+function openCtx(btn){
+ const type=btn.dataset.mtype,key=btn.dataset.mkey;
+ const f=findItem(type,key);if(!f)return;
+ ctxCur={type,key,it:f.it,idx:f.idx};
+ const pin=isPinned(type,f.it);
+ const shareable=(type==='book'||type==='quiz');
+ $('ctx').innerHTML=`
+  <button data-action="ctx-cmd" data-cact="open"><span class="material-symbols-outlined">visibility</span> عرض في المحادثة</button>
+  <button data-action="ctx-cmd" data-cact="rename"><span class="material-symbols-outlined">edit</span> إعادة تسمية</button>
+  <button data-action="ctx-cmd" data-cact="pin"><span class="material-symbols-outlined">${pin?'keep_off':'keep'}</span> ${pin?'إلغاء التثبيت':'تثبيت'}</button>
+  ${shareable?`<div class="ctx-sep"></div><button data-action="ctx-cmd" data-cact="share"><span class="material-symbols-outlined">share</span> مشاركة في المجتمع</button>`:''}
+  <button data-action="ctx-cmd" data-cact="link"><span class="material-symbols-outlined">link</span> نسخ الرابط</button>`;
+ $('ctx').classList.add('show');
+ const r=btn.getBoundingClientRect(),w=$('ctx').offsetWidth,h=$('ctx').offsetHeight;
+ let x=r.left-w-6;
+ if(x<8)x=Math.min(r.right+6,innerWidth-w-8);
+ let y=r.bottom+6;
+ if(y+h>innerHeight-8)y=Math.max(8,r.top-h-6);
+ $('ctx').style.left=x+'px';$('ctx').style.top=y+'px';}
+
+function ctxCommand(act){
+ if(!ctxCur)return;
+ const {type,key,it,idx}=ctxCur;
+ closeCtx();
+ if(act==='open'){
+  if(it.convId){location.href='Muslim.html?open='+encodeURIComponent(it.convId);}
+  else openBook(it);
+ }else if(act==='rename'){
+  openRename(type,key);
+ }else if(act==='pin'){
+  const i=pins.indexOf(key);
+  if(i>-1){pins.splice(i,1);toast('تم إلغاء التثبيت');}
+  else{pins.push(key);toast('تم التثبيت — سيظهر أولاً');}
+  savePins();render();
+ }else if(act==='share'){
+  if(type==='book')publishBook(idx);else publishQuiz(idx);
+ }else if(act==='link'){
+  const url=location.href.split('?')[0]+'?'+type+'='+encodeURIComponent(key);
+  if(navigator.clipboard&&navigator.clipboard.writeText)
+   navigator.clipboard.writeText(url).then(()=>toast('تم نسخ الرابط')).catch(()=>toast('تعذّر النسخ'));
+  else toast('النسخ غير مدعوم في هذا المتصفح');
+ }
+}
+
+/* ── خريطة الإجراءات المركزية (تفويض أحداث واحد) ─────────────────── */
+const ACTIONS={
+ 'theme':el=>setTheme(el.dataset.t),
+ 'open-sidebar':()=>openSidebar(),
+ 'close-sidebar':()=>closeSidebar(),
+ 'clear-search':()=>{$('q').value='';render();},
+ 'tab':el=>{curTab=el.dataset.tab;closeCtx();render();},
+ 'goto':el=>{curTab=el.dataset.goto;render();window.scrollTo({top:0,behavior:'smooth'});},
+ 'book-open':el=>openBook(myBooks[+el.dataset.idx]),
+ 'book-del':el=>{
+  const i=+el.dataset.idx;if(!myBooks[i])return;
+  myBooks.splice(i,1);LS.set('mai_books',myBooks);render();toast('تم حذف الكتاب');},
+ 'open-conv':el=>{location.href='Muslim.html?open='+encodeURIComponent(el.dataset.cid);},
+ 'comm-del':el=>{
+  const i=+el.dataset.idx;if(!community[i])return;
+  community.splice(i,1);LS.set('mai_community_saved',community);render();toast('تمت الإزالة');},
+ 'ctx-open':el=>openCtx(el),
+ 'ctx-cmd':el=>ctxCommand(el.dataset.cact),
+ 'book-download':()=>downloadBook(),
+ 'book-copy':()=>copyBook(),
+ 'book-close':()=>closeBook(),
+ 'rename-save':()=>saveRename(),
+ 'rename-close':()=>closeRename()
+};
+
+/* ── المستمع المركزي الواحد ──────────────────────────────────────── */
+document.addEventListener('click',e=>{
+ /* إغلاق قائمة النقاط عند النقر خارجها */
+ if($('ctx').classList.contains('show')&&!e.target.closest('#ctx')&&!e.target.closest('.dots-btn'))closeCtx();
+ const actEl=e.target.closest('[data-action]');
+ if(actEl){const fn=ACTIONS[actEl.dataset.action];if(fn){fn(actEl,e);return;}}
+ /* النقر على خلفية المودال يغلقه */
+ const m=e.target.closest('.modal');
+ if(m&&e.target===m){closeBook();closeRename();}
+ /* فتح المحادثة من بطاقة قابلة للنقر */
+ const oc=e.target.closest('[data-openconv]');
+ if(oc&&!e.target.closest('.dots-btn')&&!e.target.closest('.mini-btn')){
+  location.href='Muslim.html?open='+encodeURIComponent(oc.dataset.openconv);
+ }
+});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Enter'&&e.target===$('rnInput')){saveRename();return;}
+ if(e.key==='Escape'){closeCtx();closeBook();closeRename();closeSidebar();}
+});
+$('tabs').addEventListener('scroll',updateTabsFades);
+$('q').addEventListener('input',render);
+window.addEventListener('scroll',()=>{if($('ctx').classList.contains('show'))closeCtx();},{capture:true});
+
+/* ── الإقلاع ─────────────────────────────────────────────────────── */
+(function init(){
+ setTheme(LS.raw('mai-theme')||'dark');
+ render();
+})();
+</script>
+<script src="sync.js"></script>
+</body>
+</html>
