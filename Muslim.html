@@ -14,19 +14,12 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://verses.quran.foundation; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self'; frame-src 'self' data:; base-uri 'none'; form-action 'self'">
 <title>مسلم AI — مساعدك الشرعي الذكي</title>
   <script>
-window.__errs=[];
 window.addEventListener('error',function(e){
-  var m;
-  if(e.message){m='MSG: '+e.message+' @ line '+(e.lineno||'?');}
-  else{m='RES: '+(((e.target&&(e.target.src||e.target.href))||'unknown').split('/').pop());}
-  window.__errs.push(m);
+  if(e.message){document.title='LINE '+(e.lineno||'?')+' :: '+e.message.slice(0,50);}
+  else{document.title='RES-FAIL :: '+(((e.target&&(e.target.src||e.target.href))||'unknown').split('/').pop());}
 },true);
-window.addEventListener('load',function(){setTimeout(function(){
-  var lp=document.getElementById('loginPage'),ap=document.getElementById('app');
-  var stuck=lp&&ap&&lp.hidden&&ap.hidden;
-  document.title=(stuck?'STUCK':'OK-UNHIDED')+' >> '+window.__errs.join(' | ').slice(0,160);
-},3000);});
 </script>
+
 
 
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
