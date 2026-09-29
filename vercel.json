@@ -4,7 +4,10 @@
     {
       "src": "server.js",
       "use": "@vercel/node",
-      "config": { "maxDuration": 60 }
+      "config": {
+        "maxDuration": 60,
+        "includeFiles": ["*.html", "*.js", "data/**"]
+      }
     }
   ],
   "rewrites": [{ "source": "/(.*)", "destination": "server.js" }]
