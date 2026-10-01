@@ -56,7 +56,7 @@ const REFERRAL_CATEGORIES = [
   { id: 'sihr', label: 'السحر والمس', re: /سحر|مسّني/ },
   { id: 'medical', label: 'المسائل الطبية المعقدة', re: /إجهاض|موت دماغي|نقل أعضاء/ },
 ];
-const REFERRAL_MESSAGE = 'عذراً، هذه المسألة تتطلب دراسة شخصية وسماع التفاصيل من عالم مختص. ننصحك بالتواصل المباشر مع الجهات الإفتائية المعتمدة.';
+const REFERRAL_MESSAGE = 'عذراً، هذه المسألة تتطلب دراسة شخصية وسماع التفاصيل من عالم مختص. ننصحك بالتواصل المباشر مع العلماء والمفتين.';
 const DISCLAIMER = 'هذا النظام للمساعدة والمعرفة العامة فقط، ولا يُعتبر بديلاً عن الفتوى الشرعية الصادرة من العلماء المختصين.';
 const NO_DOC_ANSWER = 'لا تتوفر إجابة موثقة لهذا السؤال';
 function detectReferral(t) { if (!t) return null; for (const c of REFERRAL_CATEGORIES) if (c.re.test(t)) return c; return null; }
@@ -65,7 +65,7 @@ const INJECTION_RE = /(system\s*prompt|ignore\s+(all|previous)\s+instructions|DA
 function cleanStr(v, max = 4000) { return String(v ?? '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').slice(0, max).trim(); }
 const MAX_MSG = 20, MAX_MSG_LEN = 8000;
 function validHistory(m) { return Array.isArray(m) && m.length <= MAX_MSG && m.every(x => x && (x.role === 'user' || x.role === 'assistant') && typeof x.content === 'string' && x.content.length <= MAX_MSG_LEN); }
-const ALLOWED_MODES = new Set(['fatwa','smart','debate','halal','learn','fin','hadith-check','hadith-explain','tafsir','irab','quiz','book','content-check','sharp-reply','did-say','dawah','deep-search','img','needmore']);
+const ALLOWED_MODES = new Set(['fatwa','smart','debate','halal','learn','fin','hadith-check','hadith-explain','tafsir','irab','quiz','book','content-check','sharp-reply','did-say','dawah','deep-search']);
 const SOURCE_SCOPES = {
   'ibn-baz': 'الشيخ ابن باز — فتاوى نور على الدرب واللجنة الدائمة',
   'islamqa': 'موقع الإسلام سؤال وجواب',
@@ -74,7 +74,7 @@ const SOURCE_SCOPES = {
   'all': 'جميع المصادر المعتمدة: ابن باز، الإسلام سؤال وجواب، المكتبة الشاملة، إسلام ويب',
 };
 function sourcesInstruction(scope) {
-  return 'الزم المصادر التالية حصرياً ولا تجب إلا منها: ' + (SOURCE_SCOPES[scope] || SOURCE_SCOPES.all) + '. إن لم تجد الإجابة فاكتب حرفياً: "' + NO_DOC_ANSWER + '" ولا تخترع إجابة.';
+  return 'الزم المصادر التالية حصرياً ولا تجب إلا منها: ' + (SOURCE_SCOPES[scope] || SOURCE_SCOPES.all) + '. إن لم تجد الإجابة فاكتب حرف X فقط.';
 }
 
 app.get('/api/models', lightLimiter, (req, res) => res.json([
@@ -84,25 +84,44 @@ app.get('/api/models', lightLimiter, (req, res) => res.json([
 ]));
 
 const PROVIDERS = [
-  { name: 'primary', key: LLM_API_KEY, base: LLM_BASE_URL, model: LLM_MODEL },
   { name: 'gemini', key: process.env.GEMINI_API_KEY || '', base: 'https://generativelanguage.googleapis.com/v1beta/openai/', model: process.env.GEMINI_MODEL || 'gemini-2.5-flash' },
 ];
+
 async function callOne(p, messages, opts) {
   const ctrl = new AbortController();
   const to = setTimeout(() => ctrl.abort(), 55000);
   try {
-    const r = await fetch(p.base.replace(/\/$/, '') + '/chat/completions', {
+    console.log('Provider:', p.name, 'Key exists:', !!p.key, 'Model:', p.model);
+    
+    const url = p.base.replace(/\/$/, '') + '/chat/completions';
+    console.log('Calling URL:', url);
+    
+    const r = await fetch(url, {
       method: 'POST', signal: ctrl.signal,
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + p.key },
       body: JSON.stringify({ model: p.model, messages, temperature: 0.2, max_tokens: opts.maxTokens || 3000 }),
     });
-    if (!r.ok) throw new Error(p.name + ' ' + r.status);
+    
+    console.log('Response status:', r.status);
+    
+    if (!r.ok) {
+      const errText = await r.text();
+      console.error('API Error Response:', errText.slice(0, 500));
+      throw new Error(p.name + ' ' + r.status);
+    }
+    
     const d = await r.json();
     const answer = d && d.choices && d.choices[0] && d.choices[0].message ? (d.choices[0].message.content || '') : '';
     if (!answer) throw new Error(p.name + ' empty');
     return { answer, sources: [], grounded: true };
-  } finally { clearTimeout(to); }
+  } catch (e) {
+    console.error('provider failed:', e.message);
+    throw e;
+  } finally { 
+    clearTimeout(to); 
+  }
 }
+
 async function callLLM(messages, opts = {}) {
   const alive = PROVIDERS.filter(p => p.key);
   if (!alive.length) return { answer: NO_DOC_ANSWER, sources: [], grounded: true };
@@ -144,32 +163,35 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
     const history = b.messages.map(m => ({ role: m.role, content: m.content.slice(0, MAX_MSG_LEN) }));
     let out;
     try { out = await callLLM([sys].concat(history), { maxTokens: mode === 'quiz' ? 4000 : 3000 }); }
-    catch (e2) { console.error('Chat error:', e2); return res.json({ answer: 'خطأ: ' + e2.message, sources: [], grounded: true }); }
+    catch (e2) { console.error('Chat call failed:', e2.message); return res.json({ answer: NO_DOC_ANSWER, sources: [], grounded: true }); }
     const answer = cleanStr(out.answer, 12000);
     if (!answer || answer.length < 3) return res.json({ answer: NO_DOC_ANSWER, sources: [], grounded: true });
     res.json({ answer, sources: (out.sources || []).slice(0, 8), grounded: out.grounded !== false, disclaimer: DISCLAIMER, ...(mode === 'quiz' ? { quiz: safeParseQuiz(answer) } : {}) });
   } catch (e) { console.error('chat error:', e.message); res.status(500).json({ error: 'تعذر توليد الإجابة' }); }
 });
+
 function safeParseQuiz(text) {
   try {
     const m = text.match(/\[[\s\S]*\]/);
     const arr = m ? JSON.parse(m[0]) : JSON.parse(text);
     if (!Array.isArray(arr)) return [];
-    return arr.slice(0, 60).map(q => ({ q: cleanStr(q.q || q.question, 500), choices: Array.isArray(q.choices) ? q.choices.slice(0, 8).map(c => cleanStr(c, 200)) : [], a: cleanStr(q.a || q.answer, 1000) }));
+    return arr.slice(0, 60).map(q => ({ q: cleanStr(q.q || q.question, 500), choices: Array.isArray(q.choices) ? q.choices.slice(0, 8).map(c => cleanStr(c, 200)) : [], a: cleanStr(q.a || q.answer, 200) }));
   } catch (e) { return []; }
 }
+
 app.post('/api/name', lightLimiter, async (req, res) => {
   try {
     if (!validHistory(req.body && req.body.messages)) return res.status(400).json({ error: 'صيغة غير صالحة' });
-    const out = await callLLM([{ role: 'system', content: 'أعطِ عنواناً لمحادثة شرعية في 6 كلمات كحد أقصى — نص عربي فقط.' }, ...req.body.messages.slice(-4)], { maxTokens: 40 });
+    const out = await callLLM([{ role: 'system', content: 'أعطِ عنواناً لمحادثة شرعية في 6 كلمات كحد أقصى — نص عربي فقط.' }, ...req.body.messages.slice(-5)]);
     res.json({ name: cleanStr(out.answer, 60).replace(/["«»]/g, '') || 'محادثة جديدة' });
   } catch (e) { res.status(500).json({ error: 'تعذر التسمية' }); }
 });
+
 app.post('/api/tafsir', lightLimiter, async (req, res) => {
   const text = cleanStr(req.body && req.body.text, 500);
   if (!text) return res.status(400).json({ error: 'نص غير صالح' });
   try {
-    const out = await callLLM([{ role: 'system', content: sourcesInstruction('shamela') + ' اشرح النص من كتب التفسير المعتمدة فقط.' }, { role: 'user', content: text }], { maxTokens: 1200 });
+    const out = await callLLM([{ role: 'system', content: sourcesInstruction('shamela') + ' اشرح النص من كتب التفسير المعتمدة فقط.' }, { role: 'user', content: text }]);
     res.json({ answer: cleanStr(out.answer, 4000), source: 'المكتبة الشاملة' });
   } catch (e) { res.status(500).json({ error: 'تعذر جلب الشرح' }); }
 });
@@ -181,6 +203,7 @@ function adminAuth(req, res, next) {
   if (!exp || exp < Date.now()) return res.status(401).json({ error: 'غير مصرح' });
   next();
 }
+
 app.post('/api/admin/login', adminLimiter, (req, res) => {
   const code = cleanStr(req.body && req.body.code, 100);
   if (!ADMIN_CODE || !code) return res.status(401).json({ error: 'رمز الدخول غير صحيح' });
@@ -190,6 +213,7 @@ app.post('/api/admin/login', adminLimiter, (req, res) => {
   adminSessions.set(token, Date.now() + 7200000);
   res.json({ token, expiresIn: 7200 });
 });
+
 app.get('/api/admin/sources', adminAuth, (req, res) => res.json(ADMIN_SOURCES));
 app.post('/api/admin/sources', adminAuth, (req, res) => {
   const b = req.body;
@@ -251,6 +275,7 @@ app.post('/api/auth/register', lightLimiter, (req, res) => {
   DB.users[email] = { name, salt, hash: h, created: Date.now(), data: {} };
   dbSave(); res.json({ token: signTok(email) });
 });
+
 app.post('/api/auth/login', lightLimiter, (req, res) => {
   const email = cleanStr(req.body && req.body.email, 120).toLowerCase();
   const u = DB.users[email];
@@ -260,6 +285,7 @@ app.post('/api/auth/login', lightLimiter, (req, res) => {
   if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return res.status(401).json({ error: 'بريد أو كلمة مرور غير صحيحة' });
   res.json({ token: signTok(email), name: u.name });
 });
+
 app.get('/api/data', userAuth, (req, res) => res.json({ data: DB.users[req.userEmail].data || {} }));
 app.put('/api/data', userAuth, (req, res) => {
   const b = req.body;
@@ -270,18 +296,21 @@ app.put('/api/data', userAuth, (req, res) => {
   for (const k of Object.keys(b)) { if (k.indexOf('mai_') === 0 && !SKIP_KEYS.has(k) && !GLOBAL_KEYS.has(k)) { u.data[k] = b[k]; n++; } }
   dbSave(); res.json({ ok: true, saved: n });
 });
+
 app.get('/api/community', lightLimiter, (req, res) => res.json({ posts: DB.community.slice(0, 500) }));
 app.put('/api/community', userAuth, (req, res) => {
   const posts = req.body && req.body.posts;
   if (!Array.isArray(posts)) return res.status(400).json({ error: 'صيغة غير صالحة' });
-  DB.community = posts.slice(0, 500).map(p => ({ id: +p.id || Date.now(), type: cleanStr(p.type, 20), title: cleanStr(p.title, 120), content: cleanStr(p.content, 8000), author: cleanStr(p.author, 60), ts: +p.ts || Date.now(), mine: !!p.mine, up: Math.max(0, +p.up || 0), down: Math.max(0, +p.down || 0) }));
+  DB.community = posts.slice(0, 500).map(p => ({ id: +p.id || Date.now(), type: cleanStr(p.type, 20), title: cleanStr(p.title, 120), content: cleanStr(p.content, 8000), author: cleanStr(p.author, 120), ts: +p.ts || Date.now() }));
   dbSave(); res.json({ ok: true });
 });
+
 app.get('/api/global', lightLimiter, (req, res) => {
   const g = DB.global || {}; const out = {};
   GLOBAL_KEYS.forEach(k => { if (g[k] !== undefined) out[k] = g[k]; });
   res.json(out);
 });
+
 app.put('/api/global', adminAuth, (req, res) => {
   const b = req.body;
   if (!b || typeof b !== 'object' || Array.isArray(b)) return res.status(400).json({ error: 'صيغة غير صالحة' });
