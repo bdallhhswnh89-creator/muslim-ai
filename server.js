@@ -144,7 +144,7 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
     const history = b.messages.map(m => ({ role: m.role, content: m.content.slice(0, MAX_MSG_LEN) }));
     let out;
     try { out = await callLLM([sys].concat(history), { maxTokens: mode === 'quiz' ? 4000 : 3000 }); }
-    catch (e2) { return res.json({ answer: NO_DOC_ANSWER, sources: [], grounded: true }); }
+    catch (e2) { console.error('Chat error:', e2); return res.json({ answer: 'خطأ: ' + e2.message, sources: [], grounded: true }); }
     const answer = cleanStr(out.answer, 12000);
     if (!answer || answer.length < 3) return res.json({ answer: NO_DOC_ANSWER, sources: [], grounded: true });
     res.json({ answer, sources: (out.sources || []).slice(0, 8), grounded: out.grounded !== false, disclaimer: DISCLAIMER, ...(mode === 'quiz' ? { quiz: safeParseQuiz(answer) } : {}) });
